@@ -35,16 +35,10 @@
         app:iconTint="@color/icon" />
 
     <Switch
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/settings_menu_buttons_height"
-        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
+        style="@style/ButtonSettingsScreenStyle"
         android:autoSizeTextType="none"
-        android:fontFamily="@font/ys_display_regular"
         android:switchMinWidth="38dp"
         android:text="@string/dark_theme"
-        android:textColor="@color/black"
-        android:textFontWeight="400"
-        android:textSize="@dimen/settings_text_size"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <Button
