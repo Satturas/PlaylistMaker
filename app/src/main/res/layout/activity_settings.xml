@@ -31,7 +31,7 @@
         app:icon="@drawable/arrow_back_vector"
         app:iconGravity="textStart"
         app:iconPadding="28dp"
-        app:iconTint="@color/icon" />
+        app:iconTint="?attr/colorOnPrimary" />
 
     <Switch
         style="@style/ButtonSettingsScreenStyle"

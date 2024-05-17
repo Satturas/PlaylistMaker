@@ -22,18 +22,24 @@
     <Button
         android:id="@+id/buttonSearch"
         style="@style/ButtonMainScreenStyle"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
         android:text="@string/search_text"
         app:icon="@drawable/search_vector" />
 
     <Button
         android:id="@+id/buttonMedia"
         style="@style/ButtonMainScreenStyle"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
         android:text="@string/media_text"
         app:icon="@drawable/media_vector" />
 
     <Button
         android:id="@+id/buttonSettings"
         style="@style/ButtonMainScreenStyle"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
         android:text="@string/settings_text"
         app:icon="@drawable/settings_vector" />
 
