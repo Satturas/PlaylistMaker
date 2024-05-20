@@ -6,14 +6,28 @@ import android.os.Bundle
 import android.widget.Button
 
 class SettingsActivity : AppCompatActivity() {
+    private fun String.shareTextToOtherApps() {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, this@shareTextToOtherApps)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
         val backFromSettingsButton = findViewById<Button>(R.id.buttonBackFromSettings)
-
         backFromSettingsButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        val shareButton = findViewById<Button>(R.id.buttonShareApp)
+        shareButton.setOnClickListener {
+            "https://practicum.yandex.ru/android-developer/".shareTextToOtherApps()
         }
     }
 }
