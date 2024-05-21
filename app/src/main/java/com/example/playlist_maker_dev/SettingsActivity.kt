@@ -35,6 +35,13 @@ class SettingsActivity : AppCompatActivity() {
         startActivity(shareIntent)
     }
 
+    private fun userAgreement() = startActivity(
+        Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(getString(R.string.user_agreement_link))
+        )
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -52,6 +59,11 @@ class SettingsActivity : AppCompatActivity() {
         val supportButton = findViewById<Button>(R.id.buttonWriteToSupport)
         supportButton.setOnClickListener {
             writeToSupport()
+        }
+
+        val agreementButton = findViewById<Button>(R.id.buttonUserAgreement)
+        agreementButton.setOnClickListener {
+            userAgreement()
         }
     }
 }
