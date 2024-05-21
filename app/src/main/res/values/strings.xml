@@ -1,12 +1,20 @@
 <resources>
+    <!--main screen start-->
     <string name="app_name">Playlist maker</string>
     <string name="search_text">Поиск</string>
     <string name="media_text">Медиатека</string>
     <string name="settings_text">Настройки</string>
+    <!--main screen end-->
+
+    <!--settings screen start-->
     <string name="dark_theme">Темная тема</string>
     <string name="share_app">Поделиться приложением</string>
     <string name="support">Написать в поддержку</string>
     <string name="user_agreement">Пользовательское соглашение</string>
     <string name="share_text">https://practicum.yandex.ru/android-developer/</string>
+    <string name="user_email">klintsov.p@mail.ru</string>
+    <string name="support_email_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="support_email_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <!--settings screen end-->
 
 </resources>

@@ -21,14 +21,14 @@ class SettingsActivity : AppCompatActivity() {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             data = Uri.parse("mailto:")
-            putExtra(Intent.EXTRA_EMAIL, "klintsov.p@mail.ru")
+            putExtra(Intent.EXTRA_EMAIL, getString(R.string.user_email))
             putExtra(
                 Intent.EXTRA_SUBJECT,
-                "Сообщение разработчикам и разработчицам приложения Playlist Maker"
+                getString(R.string.support_email_subject)
             )
             putExtra(
                 Intent.EXTRA_TEXT,
-                "Спасибо разработчикам и разработчицам за крутое приложение!"
+                getString(R.string.support_email_text)
             )
         }
         val shareIntent = Intent.createChooser(sendIntent, null)
@@ -46,7 +46,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val shareButton = findViewById<Button>(R.id.buttonShareApp)
         shareButton.setOnClickListener {
-            "https://practicum.yandex.ru/android-developer/".shareTextToOtherApps()
+            getString(R.string.share_text).shareTextToOtherApps()
         }
 
         val supportButton = findViewById<Button>(R.id.buttonWriteToSupport)
