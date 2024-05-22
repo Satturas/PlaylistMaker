@@ -6,5 +6,7 @@
     <color name="background_night_mode">#1A1B22</color>
     <color name="icon">#1A1B22</color>
     <color name="settings_icon">#AEAFB4</color>
+    <color name="search_field">#FFFFFFFF</color>
+    <color name="search_image">#1A1B22</color>
 
 </resources>
