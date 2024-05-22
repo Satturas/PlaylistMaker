@@ -6,8 +6,22 @@
         <item name="colorPrimaryVariant">@color/white</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/settings_icon</item>
+        <item name="colorSecondary">@color/background</item>
         <item name="colorSecondaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/settings_icon</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?android:attr/windowBackground</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="MainScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/background</item>
+        <item name="colorPrimaryVariant">@color/background</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/background</item>
+        <item name="colorSecondaryVariant">@color/background</item>
         <item name="colorOnSecondary">@color/settings_icon</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/background</item>
