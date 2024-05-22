@@ -8,5 +8,7 @@
     <color name="settings_icon">#AEAFB4</color>
     <color name="search_field">#FFFFFFFF</color>
     <color name="search_image">#1A1B22</color>
+    <color name="switch_track">#9FBBF3</color>
+    <color name="track">#3772E7</color>
 
 </resources>

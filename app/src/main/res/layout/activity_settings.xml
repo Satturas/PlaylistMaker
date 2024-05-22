@@ -32,12 +32,15 @@
         app:iconPadding="28dp"
         app:iconTint="?attr/colorOnPrimary" />
 
-    <Switch
+    <com.google.android.material.switchmaterial.SwitchMaterial
         style="@style/ButtonSettingsScreenStyle"
         android:autoSizeTextType="none"
+        android:buttonTint="@color/black"
         android:switchMinWidth="38dp"
         android:text="@string/dark_theme"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        app:thumbTint="@color/track"
+        app:trackTint="@color/switch_track"
+        app:useMaterialThemeColors="false" />
 
     <Button
         android:id="@+id/buttonShareApp"

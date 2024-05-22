@@ -20,6 +20,7 @@
         android:foreground="?attr/selectableItemBackground"
         android:gravity="start|center_vertical"
         android:includeFontPadding="true"
+        android:paddingHorizontal="4dp"
         android:text="@string/search_text"
         android:textAllCaps="false"
         android:textFontWeight="500"
@@ -29,8 +30,7 @@
         app:icon="@drawable/arrow_back_vector"
         app:iconGravity="start"
         app:iconPadding="28dp"
-        app:iconTint="?attr/colorOnPrimary"
-        android:paddingHorizontal="4dp"/>
+        app:iconTint="?attr/colorOnPrimary" />
 
     <LinearLayout
         android:id="@+id/search_field"
@@ -52,18 +52,27 @@
             android:id="@+id/inputEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:autofillHints="true"
+            android:background="@null"
             android:hint="@string/search_text"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_gravity="center_vertical"
             android:paddingHorizontal="8dp"
             android:textColor="@color/black"
             android:textColorHint="@color/search_image"
             android:textCursorDrawable="@drawable/cursor_vector"
-            android:textSize="16sp"
-            android:background="@null"/>
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/search_delete_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/search_delete_text_icon"
+            android:src="@drawable/delete_icon_vector"
+            android:visibility="gone" />
 
     </LinearLayout>
 </LinearLayout>

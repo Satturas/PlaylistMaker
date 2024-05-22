@@ -8,4 +8,6 @@
     <color name="settings_icon">#AEAFB4</color>
     <color name="search_field">#E6E8EB</color>
     <color name="search_image">#AEAFB4</color>
+    <color name="switch_track">#E6E8EB</color>
+    <color name="track">#AEAFB4</color>
 </resources>
