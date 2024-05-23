@@ -48,7 +48,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val backFromSettingsButton = findViewById<Button>(R.id.buttonBackFromSettings)
         backFromSettingsButton.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            finish()
         }
 
         val shareButton = findViewById<Button>(R.id.buttonShareApp)

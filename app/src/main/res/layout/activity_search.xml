@@ -66,7 +66,7 @@
             android:textSize="16sp" />
 
         <ImageView
-            android:id="@+id/search_delete_image"
+            android:id="@+id/search_delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
