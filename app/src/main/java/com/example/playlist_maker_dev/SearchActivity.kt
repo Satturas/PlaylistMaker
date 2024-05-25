@@ -11,7 +11,6 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
 
-
 class SearchActivity : AppCompatActivity() {
 
     private var inputValue: CharSequence = SEARCH_DEF
@@ -28,7 +27,6 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        //val linearLayout = findViewById<LinearLayout>(R.id.search_field)
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.search_delete_button)
 
@@ -72,5 +70,4 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
-
 }
