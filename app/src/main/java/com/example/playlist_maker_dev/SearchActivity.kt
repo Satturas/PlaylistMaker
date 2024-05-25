@@ -8,25 +8,30 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+
+
 
 class SearchActivity : AppCompatActivity() {
+
+    private var inputValue: CharSequence = SEARCH_DEF
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        if (savedInstanceState != null) {
+            inputValue = savedInstanceState.getCharSequence(SEARCH_USER_INPUT, SEARCH_DEF)
+        }
 
         val backFromSettingsButton = findViewById<Button>(R.id.buttonBackFromSearch)
         backFromSettingsButton.setOnClickListener {
             finish()
         }
 
-        val linearLayout = findViewById<LinearLayout>(R.id.search_field)
+        //val linearLayout = findViewById<LinearLayout>(R.id.search_field)
         val inputEditText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.search_delete_button)
+
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
@@ -43,10 +48,21 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                // empty
+                inputValue = s.toString()
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putCharSequence(SEARCH_USER_INPUT, inputValue)
+    }
+
+    companion object {
+        const val SEARCH_USER_INPUT = "SEARCH_USER_INPUT"
+        val SEARCH_DEF: CharSequence = ""
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
