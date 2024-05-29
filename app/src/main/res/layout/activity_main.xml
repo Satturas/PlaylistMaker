@@ -22,6 +22,10 @@
     <Button
         android:id="@+id/buttonSearch"
         style="@style/ButtonMainScreenStyle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
+        android:layout_weight="1"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:text="@string/search_text"
@@ -30,6 +34,10 @@
     <Button
         android:id="@+id/buttonMedia"
         style="@style/ButtonMainScreenStyle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
+        android:layout_weight="1"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:text="@string/media_text"
@@ -38,6 +46,10 @@
     <Button
         android:id="@+id/buttonSettings"
         style="@style/ButtonMainScreenStyle"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
+        android:layout_weight="1"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:text="@string/settings_text"

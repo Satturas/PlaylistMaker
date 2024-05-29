@@ -18,7 +18,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun writeToSupport() {
-        val sendIntent: Intent = Intent().apply {
+        Intent().apply {
             action = Intent.ACTION_SEND
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, getString(R.string.user_email))
@@ -30,9 +30,9 @@ class SettingsActivity : AppCompatActivity() {
                 Intent.EXTRA_TEXT,
                 getString(R.string.support_email_text)
             )
+            val shareIntent = Intent.createChooser(this, null)
+            startActivity(shareIntent)
         }
-        val shareIntent = Intent.createChooser(sendIntent, null)
-        startActivity(shareIntent)
     }
 
     private fun userAgreement() = startActivity(

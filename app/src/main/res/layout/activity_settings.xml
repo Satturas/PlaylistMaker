@@ -33,6 +33,10 @@
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         style="@style/ButtonSettingsScreenStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_menu_buttons_height"
+        android:gravity="start|center_vertical"
+        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
         android:autoSizeTextType="none"
         android:buttonTint="@color/black"
         android:switchMinWidth="38dp"
@@ -44,18 +48,30 @@
     <Button
         android:id="@+id/buttonShareApp"
         style="@style/ButtonSettingsScreenStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_menu_buttons_height"
+        android:gravity="start|center_vertical"
+        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
         android:text="@string/share_app"
         app:icon="@drawable/share_vector" />
 
     <Button
         android:id="@+id/buttonWriteToSupport"
         style="@style/ButtonSettingsScreenStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_menu_buttons_height"
+        android:gravity="start|center_vertical"
+        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
         android:text="@string/support"
         app:icon="@drawable/support_vector" />
 
     <Button
         android:id="@+id/buttonUserAgreement"
         style="@style/ButtonSettingsScreenStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_menu_buttons_height"
+        android:gravity="start|center_vertical"
+        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
         android:text="@string/user_agreement"
         app:icon="@drawable/forward_arrow_vector" />
 
