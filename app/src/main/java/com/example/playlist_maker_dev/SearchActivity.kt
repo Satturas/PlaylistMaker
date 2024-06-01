@@ -9,11 +9,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 
 
 class SearchActivity : AppCompatActivity() {
 
     private var inputValue: CharSequence = SEARCH_DEF
+    private lateinit var inputEditText: EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -27,9 +29,8 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        val inputEditText = findViewById<EditText>(R.id.inputEditText)
+        inputEditText = findViewById<EditText>(R.id.inputEditText)
         val clearButton = findViewById<ImageView>(R.id.search_delete_button)
-
 
         clearButton.setOnClickListener {
             inputEditText.setText("")
@@ -42,7 +43,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = clearButtonVisibility(s)
+                clearButton.isVisible = clearButtonVisibility(s)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -58,16 +59,16 @@ class SearchActivity : AppCompatActivity() {
         outState.putCharSequence(SEARCH_USER_INPUT, inputValue)
     }
 
-    companion object {
-        const val SEARCH_USER_INPUT = "SEARCH_USER_INPUT"
-        val SEARCH_DEF: CharSequence = ""
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        inputValue = savedInstanceState.getString(SEARCH_USER_INPUT).toString()
+        inputEditText.setText(inputValue)
     }
 
-    private fun clearButtonVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()) {
-            View.GONE
-        } else {
-            View.VISIBLE
-        }
+    private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
+
+    private companion object {
+        private const val SEARCH_USER_INPUT = "SEARCH_USER_INPUT"
+        private val SEARCH_DEF: CharSequence = ""
     }
 }
