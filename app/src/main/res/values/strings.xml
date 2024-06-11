@@ -21,6 +21,9 @@
     <!--search screen start-->
     <string name="search_text_icon">search_text_icon</string>
     <string name="search_delete_text_icon">search_delete_text_icon</string>
+    <string name="separator_band_length">Separator_band_length</string>
+    <string name="track_cover">Track_cover</string>
+    <string name="forward_arrow">forward_arrow</string>
     <!--search screen end-->
 
 
