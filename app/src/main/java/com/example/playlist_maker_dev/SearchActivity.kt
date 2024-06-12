@@ -62,8 +62,8 @@ class SearchActivity : AppCompatActivity() {
                 ),
                 Track(
                     "Billie Jean",
-                    "Billie Jean",
-                    "Billie Jean",
+                    "Michael Jackson",
+                    "4:35",
                     "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
                 ),
                 Track(
