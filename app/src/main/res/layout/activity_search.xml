@@ -80,7 +80,7 @@
         android:id="@+id/rvTracks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
+        android:layout_marginVertical="@dimen/side_padding"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="10"
         tools:listitem="@layout/track_item" />
