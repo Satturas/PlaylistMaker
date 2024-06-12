@@ -11,6 +11,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import androidx.constraintlayout.widget.Group;
 
 
 class SearchActivity : AppCompatActivity() {
