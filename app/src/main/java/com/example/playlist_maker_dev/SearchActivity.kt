@@ -3,7 +3,6 @@ package com.example.playlist_maker_dev
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
@@ -11,8 +10,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import androidx.constraintlayout.widget.Group;
-
+import com.bumptech.glide.Glide
 
 class SearchActivity : AppCompatActivity() {
 
