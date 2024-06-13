@@ -28,4 +28,5 @@
         <item name="iconGravity">end</item>
         <item name="iconTint">?attr/colorOnSecondary</item>
     </style>
+
 </resources>

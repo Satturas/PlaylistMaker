@@ -7,4 +7,5 @@
     <dimen name="main_menu_buttons_icon_padding">8dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
     <dimen name="settings_menu_buttons_height">61dp</dimen>
+    <dimen name="search_margin_4">4dp</dimen>
 </resources>
