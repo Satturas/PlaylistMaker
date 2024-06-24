@@ -62,7 +62,7 @@ class SearchActivity : AppCompatActivity() {
         val clearButton = findViewById<ImageView>(R.id.search_delete_button)
 
         clearButton.setOnClickListener {
-            inputEditText.setText("")
+            inputEditText.setText(getString(R.string.emptyString))
             inputEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
         }
 
@@ -125,7 +125,6 @@ class SearchActivity : AppCompatActivity() {
             }
             true
         }
-        false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

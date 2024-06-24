@@ -26,6 +26,7 @@
     <string name="forward_arrow">forward_arrow</string>
     <string name="nothing_found">Ничего не нашлось</string>
     <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="emptyString" />
     <!--search screen end-->
 
 
