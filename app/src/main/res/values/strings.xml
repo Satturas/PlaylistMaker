@@ -24,6 +24,8 @@
     <string name="separator_band_length">Separator_band_length</string>
     <string name="track_cover">Track_cover</string>
     <string name="forward_arrow">forward_arrow</string>
+    <string name="nothing_found">Ничего не нашлось</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
     <!--search screen end-->
 
 

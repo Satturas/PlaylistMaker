@@ -4,16 +4,19 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-data class Track (
+data class Track(
     val trackName: String,
     val artistName: String,
     val trackTime: String,
-    val artworkUrl100: String?) {
+    val artworkUrl100: String?
+) {
 }
 
-class TrackResponse(val searchType: String,
-                     val expression: String,
-                     val results: List<Track>)
+class TrackResponse(
+    val searchType: String,
+    val expression: String,
+    val results: List<Track>
+)
 
 interface ITunesApi {
     @GET("/search?entity=song")
