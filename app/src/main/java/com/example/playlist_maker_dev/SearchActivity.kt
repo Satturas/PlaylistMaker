@@ -36,8 +36,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderMessage: TextView
     private lateinit var trackList: RecyclerView
 
-    private var inputValue: CharSequence = SEARCH_DEF//
-    private lateinit var inputEditText: EditText//
+    private var inputValue: CharSequence = SEARCH_DEF
 
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter(mutableListOf())
@@ -60,15 +59,13 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val clearButton = findViewById<ImageView>(R.id.search_delete_button)
-
         clearButton.setOnClickListener {
-            inputEditText.setText(getString(R.string.emptyString))
-            inputEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
+            queryInput.setText(getString(R.string.emptyString))
+            queryInput.onEditorAction(EditorInfo.IME_ACTION_DONE)
         }
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // empty
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -79,7 +76,7 @@ class SearchActivity : AppCompatActivity() {
                 inputValue = s.toString()
             }
         }
-        inputEditText.addTextChangedListener(simpleTextWatcher)
+        queryInput.addTextChangedListener(simpleTextWatcher)
 
         adapter.tracks = tracks
         trackList.adapter = adapter
@@ -120,7 +117,6 @@ class SearchActivity : AppCompatActivity() {
                             }
 
                         })
-
                 }
             }
             true
@@ -135,7 +131,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         inputValue = savedInstanceState.getString(SEARCH_USER_INPUT).toString()
-        inputEditText.setText(inputValue)
+        queryInput.setText(inputValue)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
