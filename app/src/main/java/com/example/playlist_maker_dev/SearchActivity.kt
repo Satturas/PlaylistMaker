@@ -40,8 +40,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var inputEditText: EditText//
 
     private val tracks = ArrayList<Track>()
-    private val adapter = TrackAdapter()
-
+    private val adapter = TrackAdapter(mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
