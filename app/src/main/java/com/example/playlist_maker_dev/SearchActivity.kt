@@ -78,6 +78,8 @@ class SearchActivity : AppCompatActivity() {
             placeholderImageNothingFound.visibility = View.GONE
             placeholderImageNoInternet.visibility = View.GONE
             placeholderButtonReload.visibility = View.GONE
+            tracks.clear()
+            adapter.notifyDataSetChanged()
         }
 
         val simpleTextWatcher = object : TextWatcher {

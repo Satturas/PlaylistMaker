@@ -2,10 +2,10 @@ package com.example.playlist_maker_dev
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 class TrackAdapter(var tracks: List<Track>) : RecyclerView.Adapter<TrackViewHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder =
         TrackViewHolder(parent)

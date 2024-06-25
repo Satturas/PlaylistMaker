@@ -33,10 +33,10 @@ class TrackViewHolder(parent: ViewGroup) :
             .placeholder(R.drawable.vector_cover_placeholder)
             .transform(RoundedCorners(dpToPx(2.0f, itemView.context)))
             .into(ivCover)
-
         tvTrack.text = item.trackName
         tvArtist.text = item.artistName
-        tvLength.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis.toLong())
+        tvLength.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis.toLong())
     }
 }
 
