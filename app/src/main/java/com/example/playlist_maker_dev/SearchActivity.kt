@@ -39,7 +39,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var queryInput: EditText
     private lateinit var placeholderMessage: TextView
     private lateinit var trackList: RecyclerView
-    private lateinit var placeholderImage: ImageView
+    private lateinit var placeholderImageNothingFound: ImageView
+    private lateinit var placeholderImageNoInternet: ImageView
     private var inputValue: CharSequence = SEARCH_DEF
 
     private val tracks = ArrayList<Track>()
@@ -52,7 +53,8 @@ class SearchActivity : AppCompatActivity() {
         placeholderMessage = findViewById(R.id.placeholderMessage)
         queryInput = findViewById(R.id.inputEditText)
         trackList = findViewById(R.id.rvTracks)
-        placeholderImage = findViewById(R.id.search_nothing_found)
+        placeholderImageNothingFound = findViewById(R.id.search_nothing_found)
+        placeholderImageNoInternet = findViewById(R.id.search_no_internet)
 
         if (savedInstanceState != null) {
             inputValue = savedInstanceState.getCharSequence(SEARCH_USER_INPUT, SEARCH_DEF)
@@ -70,7 +72,8 @@ class SearchActivity : AppCompatActivity() {
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(clearButton.getWindowToken(), 0)
             placeholderMessage.visibility = View.GONE
-            placeholderImage.visibility = View.GONE
+            placeholderImageNothingFound.visibility = View.GONE
+            placeholderImageNoInternet.visibility = View.GONE
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -152,7 +155,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
-            placeholderImage.visibility = View.VISIBLE
+            placeholderImageNothingFound.visibility = View.VISIBLE
             placeholderMessage.visibility = View.VISIBLE
             tracks.clear()
             adapter.notifyDataSetChanged()
@@ -163,7 +166,7 @@ class SearchActivity : AppCompatActivity() {
             }
         } else {
             placeholderMessage.visibility = View.GONE
-            placeholderImage.visibility = View.GONE
+            placeholderImageNothingFound.visibility = View.GONE
         }
     }
 }
