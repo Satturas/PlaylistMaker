@@ -1,10 +1,13 @@
 package com.example.playlist_maker_dev
 
+import android.content.Context
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -62,6 +65,8 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             queryInput.setText(getString(R.string.emptyString))
             queryInput.onEditorAction(EditorInfo.IME_ACTION_DONE)
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(clearButton.getWindowToken(), 0)
         }
 
         val simpleTextWatcher = object : TextWatcher {
