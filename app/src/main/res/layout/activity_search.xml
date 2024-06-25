@@ -99,21 +99,11 @@
             android:layout_marginTop="102dp">
 
             <ImageView
-                android:id="@+id/search_nothing_found"
+                android:id="@+id/placeholderImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:contentDescription="@string/search_delete_text_icon"
-                android:src="@drawable/vector_nothing_found"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/search_no_internet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:contentDescription="@string/search_delete_text_icon"
-                android:src="@drawable/vector_search_no_internet"
                 android:visibility="gone" />
 
             <TextView

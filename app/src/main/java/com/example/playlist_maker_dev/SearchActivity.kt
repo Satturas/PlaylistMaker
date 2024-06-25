@@ -39,8 +39,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var queryInput: EditText
     private lateinit var placeholderMessage: TextView
     private lateinit var trackList: RecyclerView
-    private lateinit var placeholderImageNothingFound: ImageView
-    private lateinit var placeholderImageNoInternet: ImageView
+    private lateinit var placeholderImage: ImageView
     private lateinit var placeholderButtonReload: Button
     private var inputValue: CharSequence = SEARCH_DEF
 
@@ -54,8 +53,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderMessage = findViewById(R.id.placeholderMessage)
         queryInput = findViewById(R.id.inputEditText)
         trackList = findViewById(R.id.rvTracks)
-        placeholderImageNothingFound = findViewById(R.id.search_nothing_found)
-        placeholderImageNoInternet = findViewById(R.id.search_no_internet)
+        placeholderImage = findViewById(R.id.placeholderImage)
         placeholderButtonReload = findViewById(R.id.buttonReload)
 
         if (savedInstanceState != null) {
@@ -75,8 +73,7 @@ class SearchActivity : AppCompatActivity() {
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(clearButton.getWindowToken(), 0)
             placeholderMessage.visibility = View.GONE
-            placeholderImageNothingFound.visibility = View.GONE
-            placeholderImageNoInternet.visibility = View.GONE
+            placeholderImage.visibility = View.GONE
             placeholderButtonReload.visibility = View.GONE
             tracks.clear()
             adapter.notifyDataSetChanged()
@@ -126,27 +123,29 @@ class SearchActivity : AppCompatActivity() {
         private val SEARCH_DEF: CharSequence = ""
     }
 
-    private fun showMessage(text: String, additionalMessage: String, cause: String) {
+    private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
-            placeholderMessage.visibility = View.VISIBLE
-
-            if (cause == "NoInternet") {
-                placeholderImageNothingFound.visibility = View.GONE
-                placeholderImageNoInternet.visibility = View.VISIBLE
-                placeholderButtonReload.visibility = View.VISIBLE
-                val reloadButton = findViewById<Button>(R.id.buttonReload)
-                reloadButton.setOnClickListener {
-                    placeholderImageNoInternet.visibility = View.GONE
-                    placeholderButtonReload.visibility = View.GONE
-                    placeholderMessage.visibility = View.GONE
-                    findTrack()
-                }
-                val inputMethodManager =
-                    getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                inputMethodManager?.hideSoftInputFromWindow(queryInput.getWindowToken(), 0)
-            } else {
-                placeholderImageNothingFound.visibility = View.VISIBLE
+            if (text == getString(R.string.nothing_found)) {
+                placeholderImage.setImageResource(R.drawable.vector_nothing_found)
             }
+            if (text == getString(R.string.something_went_wrong)) {
+                placeholderImage.setImageResource(R.drawable.vector_search_no_internet)
+                placeholderButtonReload.visibility = View.VISIBLE
+            }
+            placeholderMessage.visibility = View.VISIBLE
+            placeholderImage.visibility = View.VISIBLE
+
+            val reloadButton = findViewById<Button>(R.id.buttonReload)
+            reloadButton.setOnClickListener {
+                placeholderImage.visibility = View.GONE
+                placeholderButtonReload.visibility = View.GONE
+                placeholderMessage.visibility = View.GONE
+                findTrack()
+            }
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(queryInput.getWindowToken(), 0)
+
             tracks.clear()
             adapter.notifyDataSetChanged()
             placeholderMessage.text = text
@@ -156,8 +155,7 @@ class SearchActivity : AppCompatActivity() {
             }
         } else {
             placeholderMessage.visibility = View.GONE
-            placeholderImageNothingFound.visibility = View.GONE
-            placeholderImageNoInternet.visibility = View.GONE
+            placeholderImage.visibility = View.GONE
         }
     }
 
@@ -177,15 +175,14 @@ class SearchActivity : AppCompatActivity() {
                                 adapter.notifyDataSetChanged()
                             }
                             if (tracks.isEmpty()) {
-                                showMessage(getString(R.string.nothing_found), "", "")
+                                showMessage(getString(R.string.nothing_found), "")
                             } else {
-                                showMessage("", "", "")
+                                showMessage("", "")
                             }
                         } else {
                             showMessage(
                                 getString(R.string.something_went_wrong),
-                                response.code().toString(),
-                                "NoInternet"
+                                response.code().toString()
                             )
                         }
                     }
@@ -193,8 +190,7 @@ class SearchActivity : AppCompatActivity() {
                     override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
                         showMessage(
                             getString(R.string.something_went_wrong),
-                            t.message.toString(),
-                            "NoInternet"
+                            t.message.toString()
                         )
                     }
 

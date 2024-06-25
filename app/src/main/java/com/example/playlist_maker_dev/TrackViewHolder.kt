@@ -29,8 +29,8 @@ class TrackViewHolder(parent: ViewGroup) :
         Glide
             .with(itemView)
             .load(item.artworkUrl100)
-            .centerCrop()
             .placeholder(R.drawable.vector_cover_placeholder)
+            .centerCrop()
             .transform(RoundedCorners(dpToPx(2.0f, itemView.context)))
             .into(ivCover)
         tvTrack.text = item.trackName
