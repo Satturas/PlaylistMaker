@@ -106,8 +106,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
 
-
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putCharSequence(SEARCH_USER_INPUT, inputValue)
@@ -135,7 +133,7 @@ class SearchActivity : AppCompatActivity() {
                 placeholderImageNoInternet.visibility = View.VISIBLE
                 placeholderButtonReload.visibility = View.VISIBLE
                 val reloadButton = findViewById<Button>(R.id.buttonReload)
-                reloadButton.setOnClickListener{
+                reloadButton.setOnClickListener {
                     placeholderImageNoInternet.visibility = View.GONE
                     placeholderButtonReload.visibility = View.GONE
                     placeholderMessage.visibility = View.GONE
@@ -162,46 +160,46 @@ class SearchActivity : AppCompatActivity() {
     }
 
 
-        private fun findTrack() {
-            if (queryInput.text.isNotEmpty()) {
-                iTunesService.findTrack(queryInput.text.toString())
-                    .enqueue(object : Callback<TrackResponse> {
-                        override fun onResponse(
-                            call: Call<TrackResponse>,
-                            response: Response<TrackResponse>
-                        ) {
-                            if (response.code() == 200) {
-                                tracks.clear()
-                                if (response.body()?.results?.isNotEmpty() == true) {
-                                    tracks.addAll(response.body()?.results!!)
-                                    adapter.notifyDataSetChanged()
-                                }
-                                if (tracks.isEmpty()) {
-                                    showMessage(getString(R.string.nothing_found), "", "")
-                                } else {
-                                    showMessage("", "", "")
-                                }
-                            } else {
-                                showMessage(
-                                    getString(R.string.something_went_wrong),
-                                    response.code().toString(),
-                                    "NoInternet"
-                                )
+    private fun findTrack() {
+        if (queryInput.text.isNotEmpty()) {
+            iTunesService.findTrack(queryInput.text.toString())
+                .enqueue(object : Callback<TrackResponse> {
+                    override fun onResponse(
+                        call: Call<TrackResponse>,
+                        response: Response<TrackResponse>
+                    ) {
+                        if (response.code() == 200) {
+                            tracks.clear()
+                            if (response.body()?.results?.isNotEmpty() == true) {
+                                tracks.addAll(response.body()?.results!!)
+                                adapter.notifyDataSetChanged()
                             }
-                        }
-
-                        override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                            if (tracks.isEmpty()) {
+                                showMessage(getString(R.string.nothing_found), "", "")
+                            } else {
+                                showMessage("", "", "")
+                            }
+                        } else {
                             showMessage(
                                 getString(R.string.something_went_wrong),
-                                t.message.toString(),
+                                response.code().toString(),
                                 "NoInternet"
                             )
                         }
+                    }
 
-                    })
-            }
+                    override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                        showMessage(
+                            getString(R.string.something_went_wrong),
+                            t.message.toString(),
+                            "NoInternet"
+                        )
+                    }
+
+                })
         }
     }
+}
 
 
 
