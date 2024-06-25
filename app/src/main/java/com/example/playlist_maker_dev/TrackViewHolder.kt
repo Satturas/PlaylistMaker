@@ -11,6 +11,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TrackViewHolder(parent: ViewGroup) :
     RecyclerView.ViewHolder(
@@ -34,7 +36,7 @@ class TrackViewHolder(parent: ViewGroup) :
 
         tvTrack.text = item.trackName
         tvArtist.text = item.artistName
-        tvLength.text = item.trackTime
+        tvLength.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis.toLong())
     }
 }
 
