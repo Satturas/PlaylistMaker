@@ -99,47 +99,14 @@ class SearchActivity : AppCompatActivity() {
 
         queryInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (queryInput.text.isNotEmpty()) {
-                    iTunesService.findTrack(queryInput.text.toString())
-                        .enqueue(object : Callback<TrackResponse> {
-                            override fun onResponse(
-                                call: Call<TrackResponse>,
-                                response: Response<TrackResponse>
-                            ) {
-                                if (response.code() == 200) {
-                                    tracks.clear()
-                                    if (response.body()?.results?.isNotEmpty() == true) {
-                                        tracks.addAll(response.body()?.results!!)
-                                        adapter.notifyDataSetChanged()
-                                    }
-                                    if (tracks.isEmpty()) {
-                                        showMessage(getString(R.string.nothing_found), "", "")
-                                    } else {
-                                        showMessage("", "", "")
-                                    }
-                                } else {
-                                    showMessage(
-                                        getString(R.string.something_went_wrong),
-                                        response.code().toString(),
-                                        "NoInternet"
-                                    )
-                                }
-                            }
-
-                            override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                                showMessage(
-                                    getString(R.string.something_went_wrong),
-                                    t.message.toString(),
-                                    "NoInternet"
-                                )
-                            }
-
-                        })
-                }
+                findTrack()
             }
             true
         }
     }
+
+
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -164,8 +131,16 @@ class SearchActivity : AppCompatActivity() {
             placeholderMessage.visibility = View.VISIBLE
 
             if (cause == "NoInternet") {
+                placeholderImageNothingFound.visibility = View.GONE
                 placeholderImageNoInternet.visibility = View.VISIBLE
                 placeholderButtonReload.visibility = View.VISIBLE
+                val reloadButton = findViewById<Button>(R.id.buttonReload)
+                reloadButton.setOnClickListener{
+                    placeholderImageNoInternet.visibility = View.GONE
+                    placeholderButtonReload.visibility = View.GONE
+                    placeholderMessage.visibility = View.GONE
+                    findTrack()
+                }
                 val inputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 inputMethodManager?.hideSoftInputFromWindow(queryInput.getWindowToken(), 0)
@@ -185,7 +160,49 @@ class SearchActivity : AppCompatActivity() {
             placeholderImageNoInternet.visibility = View.GONE
         }
     }
-}
+
+
+        private fun findTrack() {
+            if (queryInput.text.isNotEmpty()) {
+                iTunesService.findTrack(queryInput.text.toString())
+                    .enqueue(object : Callback<TrackResponse> {
+                        override fun onResponse(
+                            call: Call<TrackResponse>,
+                            response: Response<TrackResponse>
+                        ) {
+                            if (response.code() == 200) {
+                                tracks.clear()
+                                if (response.body()?.results?.isNotEmpty() == true) {
+                                    tracks.addAll(response.body()?.results!!)
+                                    adapter.notifyDataSetChanged()
+                                }
+                                if (tracks.isEmpty()) {
+                                    showMessage(getString(R.string.nothing_found), "", "")
+                                } else {
+                                    showMessage("", "", "")
+                                }
+                            } else {
+                                showMessage(
+                                    getString(R.string.something_went_wrong),
+                                    response.code().toString(),
+                                    "NoInternet"
+                                )
+                            }
+                        }
+
+                        override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                            showMessage(
+                                getString(R.string.something_went_wrong),
+                                t.message.toString(),
+                                "NoInternet"
+                            )
+                        }
+
+                    })
+            }
+        }
+    }
+
 
 
 
