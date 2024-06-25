@@ -78,6 +78,7 @@
 
     </LinearLayout>
 
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -91,16 +92,36 @@
             tools:itemCount="10"
             tools:listitem="@layout/track_item" />
 
-        <TextView
-            android:id="@+id/placeholderMessage"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:text="@string/nothing_found"
-            android:visibility="gone"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="102dp">
+
+            <ImageView
+                android:id="@+id/search_nothing_found"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="@string/search_delete_text_icon"
+                android:src="@drawable/vector_nothing_found"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/placeholderMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/nothing_found"
+                android:textAlignment="center"
+                android:textColor="?attr/colorOnTertiary"
+                android:layout_marginTop="16dp"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                android:textFontWeight="400"
+                android:fontFamily="@font/ys_display_medium"
+                android:visibility="gone" />
+
+        </LinearLayout>
     </FrameLayout>
 </LinearLayout>

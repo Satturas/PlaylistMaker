@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -38,7 +39,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var queryInput: EditText
     private lateinit var placeholderMessage: TextView
     private lateinit var trackList: RecyclerView
-
+    private lateinit var placeholderImage: ImageView
     private var inputValue: CharSequence = SEARCH_DEF
 
     private val tracks = ArrayList<Track>()
@@ -51,6 +52,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderMessage = findViewById(R.id.placeholderMessage)
         queryInput = findViewById(R.id.inputEditText)
         trackList = findViewById(R.id.rvTracks)
+        placeholderImage = findViewById(R.id.search_nothing_found)
 
         if (savedInstanceState != null) {
             inputValue = savedInstanceState.getCharSequence(SEARCH_USER_INPUT, SEARCH_DEF)
@@ -67,6 +69,8 @@ class SearchActivity : AppCompatActivity() {
             queryInput.onEditorAction(EditorInfo.IME_ACTION_DONE)
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(clearButton.getWindowToken(), 0)
+            placeholderMessage.visibility = View.GONE
+            placeholderImage.visibility = View.GONE
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -148,6 +152,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
+            placeholderImage.visibility = View.VISIBLE
             placeholderMessage.visibility = View.VISIBLE
             tracks.clear()
             adapter.notifyDataSetChanged()
@@ -158,6 +163,7 @@ class SearchActivity : AppCompatActivity() {
             }
         } else {
             placeholderMessage.visibility = View.GONE
+            placeholderImage.visibility = View.GONE
         }
     }
 }
