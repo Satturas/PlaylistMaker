@@ -41,6 +41,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackList: RecyclerView
     private lateinit var placeholderImageNothingFound: ImageView
     private lateinit var placeholderImageNoInternet: ImageView
+    private lateinit var placeholderButtonReload: Button
     private var inputValue: CharSequence = SEARCH_DEF
 
     private val tracks = ArrayList<Track>()
@@ -55,6 +56,7 @@ class SearchActivity : AppCompatActivity() {
         trackList = findViewById(R.id.rvTracks)
         placeholderImageNothingFound = findViewById(R.id.search_nothing_found)
         placeholderImageNoInternet = findViewById(R.id.search_no_internet)
+        placeholderButtonReload = findViewById(R.id.buttonReload)
 
         if (savedInstanceState != null) {
             inputValue = savedInstanceState.getCharSequence(SEARCH_USER_INPUT, SEARCH_DEF)
@@ -75,6 +77,7 @@ class SearchActivity : AppCompatActivity() {
             placeholderMessage.visibility = View.GONE
             placeholderImageNothingFound.visibility = View.GONE
             placeholderImageNoInternet.visibility = View.GONE
+            placeholderButtonReload.visibility = View.GONE
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -162,6 +165,7 @@ class SearchActivity : AppCompatActivity() {
 
             if (cause == "NoInternet") {
                 placeholderImageNoInternet.visibility = View.VISIBLE
+                placeholderButtonReload.visibility = View.VISIBLE
                 val inputMethodManager =
                     getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
                 inputMethodManager?.hideSoftInputFromWindow(queryInput.getWindowToken(), 0)

@@ -94,7 +94,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_marginTop="102dp">
 
@@ -131,6 +131,24 @@
                 android:textFontWeight="400"
                 android:fontFamily="@font/ys_display_medium"
                 android:visibility="gone" />
+
+            <Button
+                android:id="@+id/buttonReload"
+                style="@style/Widget.AppCompat.Button.Small"
+                android:layout_width="91dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="24dp"
+                android:background="?attr/colorOnTertiary"
+                android:backgroundTint="?attr/colorOnTertiary"
+                android:fontFamily="@font/ys_display_medium"
+                android:foreground="?attr/selectableItemBackground"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/reload"
+                android:textAllCaps="false"
+                android:textFontWeight="500"
+                android:textSize="14sp"
+                app:cornerRadius="54dp"
+                android:visibility="visible"/>
 
         </LinearLayout>
     </FrameLayout>
