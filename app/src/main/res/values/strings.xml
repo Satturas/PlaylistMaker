@@ -25,10 +25,10 @@
     <string name="track_cover">Track_cover</string>
     <string name="forward_arrow">forward_arrow</string>
     <string name="nothing_found">Ничего не нашлось</string>
-    <string name="something_went_wrong">Проблемы со связью.\n\nЗагрузка не удалась. Проверьте\nподключение к интернету</string>
+    <string name="something_went_wrong">Проблемы со связью\n\nЗагрузка не удалась. Проверьте\nподключение к интернету</string>
     <string name="no_download">Загрузка не удалась. Проверьте</string>
     <string name="check_net">подключение к интернету</string>
-    <string name="reload">обновить</string>
+    <string name="reload">Обновить</string>
     <string name="emptyString" />
     <!--search screen end-->
 
