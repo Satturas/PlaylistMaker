@@ -69,7 +69,8 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             queryInput.setText(getString(R.string.emptyString))
             queryInput.onEditorAction(EditorInfo.IME_ACTION_DONE)
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(clearButton.getWindowToken(), 0)
             placeholderMessage.visibility = View.GONE
             placeholderImageNothingFound.visibility = View.GONE
@@ -109,14 +110,15 @@ class SearchActivity : AppCompatActivity() {
                                         adapter.notifyDataSetChanged()
                                     }
                                     if (tracks.isEmpty()) {
-                                        showMessage(getString(R.string.nothing_found), "")
+                                        showMessage(getString(R.string.nothing_found), "", "")
                                     } else {
-                                        showMessage("", "")
+                                        showMessage("", "", "")
                                     }
                                 } else {
                                     showMessage(
                                         getString(R.string.something_went_wrong),
-                                        response.code().toString()
+                                        response.code().toString(),
+                                        "NoInternet"
                                     )
                                 }
                             }
@@ -124,7 +126,8 @@ class SearchActivity : AppCompatActivity() {
                             override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
                                 showMessage(
                                     getString(R.string.something_went_wrong),
-                                    t.message.toString()
+                                    t.message.toString(),
+                                    "NoInternet"
                                 )
                             }
 
@@ -153,10 +156,18 @@ class SearchActivity : AppCompatActivity() {
         private val SEARCH_DEF: CharSequence = ""
     }
 
-    private fun showMessage(text: String, additionalMessage: String) {
+    private fun showMessage(text: String, additionalMessage: String, cause: String) {
         if (text.isNotEmpty()) {
-            placeholderImageNothingFound.visibility = View.VISIBLE
             placeholderMessage.visibility = View.VISIBLE
+
+            if (cause == "NoInternet") {
+                placeholderImageNoInternet.visibility = View.VISIBLE
+                val inputMethodManager =
+                    getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                inputMethodManager?.hideSoftInputFromWindow(queryInput.getWindowToken(), 0)
+            } else {
+                placeholderImageNothingFound.visibility = View.VISIBLE
+            }
             tracks.clear()
             adapter.notifyDataSetChanged()
             placeholderMessage.text = text
@@ -167,6 +178,7 @@ class SearchActivity : AppCompatActivity() {
         } else {
             placeholderMessage.visibility = View.GONE
             placeholderImageNothingFound.visibility = View.GONE
+            placeholderImageNoInternet.visibility = View.GONE
         }
     }
 }
