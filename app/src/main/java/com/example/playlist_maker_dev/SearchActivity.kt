@@ -39,7 +39,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val iTunesService = retrofit.create(ITunesApi::class.java)
     private var inputValue: CharSequence = SEARCH_DEF
-    private val tracks = ArrayList<Track>()
+    private val tracks = mutableListOf<Track>()
     private val adapter = TrackAdapter(mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
