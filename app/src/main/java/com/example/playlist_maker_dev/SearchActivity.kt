@@ -113,14 +113,18 @@ class SearchActivity : AppCompatActivity() {
         private val SEARCH_DEF: CharSequence = ""
     }
 
-    private fun showMessage(text: String, additionalMessage: String) {
+    private fun showMessage(text: String, additionalMessage: String, cause: ErrorCauses) {
         if (text.isNotEmpty()) {
-            if (text == getString(R.string.nothing_found)) {
-                binding.placeholderImage.setImageResource(R.drawable.vector_nothing_found)
-            }
-            if (text == getString(R.string.something_went_wrong)) {
-                binding.placeholderImage.setImageResource(R.drawable.vector_search_no_internet)
-                binding.buttonReload.visibility = View.VISIBLE
+            when (cause) {
+                ErrorCauses.NO_RESULTS ->
+                    binding.placeholderImage.setImageResource(R.drawable.vector_nothing_found)
+
+                ErrorCauses.NO_CONNECTION -> {
+                    binding.placeholderImage.setImageResource(R.drawable.vector_search_no_internet)
+                    binding.buttonReload.visibility = View.VISIBLE
+                }
+
+                else -> {}
             }
             binding.placeholderMessage.visibility = View.VISIBLE
             binding.placeholderImage.visibility = View.VISIBLE
@@ -164,14 +168,18 @@ class SearchActivity : AppCompatActivity() {
                                 adapter.notifyDataSetChanged()
                             }
                             if (tracks.isEmpty()) {
-                                showMessage(getString(R.string.nothing_found), "")
+                                showMessage(
+                                    getString(R.string.nothing_found),
+                                    "",
+                                    ErrorCauses.NO_RESULTS
+                                )
                             } else {
-                                showMessage("", "")
+                                showMessage("", "", ErrorCauses.EVERYTHING_GOOD)
                             }
                         } else {
                             showMessage(
                                 getString(R.string.something_went_wrong),
-                                response.code().toString()
+                                response.code().toString(), ErrorCauses.NO_CONNECTION
                             )
                         }
                     }
@@ -179,12 +187,16 @@ class SearchActivity : AppCompatActivity() {
                     override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
                         showMessage(
                             getString(R.string.something_went_wrong),
-                            t.message.toString()
+                            t.message.toString(), ErrorCauses.NO_CONNECTION
                         )
                     }
 
                 })
         }
+    }
+
+    enum class ErrorCauses {
+        NO_CONNECTION, NO_RESULTS, EVERYTHING_GOOD
     }
 }
 
