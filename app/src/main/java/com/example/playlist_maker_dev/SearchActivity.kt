@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Im
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -18,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
+import com.example.playlist_maker_dev.databinding.ActivitySettingsBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
 
     private val iTunesBaseUrl = "https://itunes.apple.com"
+    lateinit var binding: ActivitySearchBinding
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(iTunesBaseUrl)
@@ -34,27 +38,14 @@ class SearchActivity : AppCompatActivity() {
         .build()
 
     private val iTunesService = retrofit.create(ITunesApi::class.java)
-
-    private lateinit var searchButton: Button
-    private lateinit var queryInput: EditText
-    private lateinit var placeholderMessage: TextView
-    private lateinit var trackList: RecyclerView
-    private lateinit var placeholderImage: ImageView
-    private lateinit var placeholderButtonReload: Button
     private var inputValue: CharSequence = SEARCH_DEF
-
     private val tracks = ArrayList<Track>()
     private val adapter = TrackAdapter(mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
-
-        placeholderMessage = findViewById(R.id.placeholderMessage)
-        queryInput = findViewById(R.id.inputEditText)
-        trackList = findViewById(R.id.rvTracks)
-        placeholderImage = findViewById(R.id.placeholderImage)
-        placeholderButtonReload = findViewById(R.id.buttonReload)
+        binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
+        setContentView(binding.root)
 
         if (savedInstanceState != null) {
             inputValue = savedInstanceState.getCharSequence(SEARCH_USER_INPUT, SEARCH_DEF)
@@ -67,14 +58,14 @@ class SearchActivity : AppCompatActivity() {
 
         val clearButton = findViewById<ImageView>(R.id.search_delete_button)
         clearButton.setOnClickListener {
-            queryInput.setText(getString(R.string.emptyString))
-            queryInput.onEditorAction(EditorInfo.IME_ACTION_DONE)
+            binding.inputEditText.setText(getString(R.string.emptyString))
+            binding.inputEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(clearButton.getWindowToken(), 0)
-            placeholderMessage.visibility = View.GONE
-            placeholderImage.visibility = View.GONE
-            placeholderButtonReload.visibility = View.GONE
+            binding.placeholderMessage.visibility = View.GONE
+            binding.placeholderImage.visibility = View.GONE
+            binding.buttonReload.visibility = View.GONE
             tracks.clear()
             adapter.notifyDataSetChanged()
         }
@@ -91,19 +82,18 @@ class SearchActivity : AppCompatActivity() {
                 inputValue = s.toString()
             }
         }
-        queryInput.addTextChangedListener(simpleTextWatcher)
+        binding.inputEditText.addTextChangedListener(simpleTextWatcher)
 
         adapter.tracks = tracks
-        trackList.adapter = adapter
+        binding.rvTracks.adapter = adapter
 
-        queryInput.setOnEditorActionListener { _, actionId, _ ->
+        binding.inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 findTrack()
             }
             true
         }
     }
-
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -113,7 +103,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         inputValue = savedInstanceState.getString(SEARCH_USER_INPUT).toString()
-        queryInput.setText(inputValue)
+        binding.inputEditText.setText(inputValue)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
@@ -126,43 +116,42 @@ class SearchActivity : AppCompatActivity() {
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
             if (text == getString(R.string.nothing_found)) {
-                placeholderImage.setImageResource(R.drawable.vector_nothing_found)
+                binding.placeholderImage.setImageResource(R.drawable.vector_nothing_found)
             }
             if (text == getString(R.string.something_went_wrong)) {
-                placeholderImage.setImageResource(R.drawable.vector_search_no_internet)
-                placeholderButtonReload.visibility = View.VISIBLE
+                binding.placeholderImage.setImageResource(R.drawable.vector_search_no_internet)
+                binding.buttonReload.visibility = View.VISIBLE
             }
-            placeholderMessage.visibility = View.VISIBLE
-            placeholderImage.visibility = View.VISIBLE
+            binding.placeholderMessage.visibility = View.VISIBLE
+            binding.placeholderImage.visibility = View.VISIBLE
 
             val reloadButton = findViewById<Button>(R.id.buttonReload)
             reloadButton.setOnClickListener {
-                placeholderImage.visibility = View.GONE
-                placeholderButtonReload.visibility = View.GONE
-                placeholderMessage.visibility = View.GONE
+                binding.placeholderImage.visibility = View.GONE
+                binding.buttonReload.visibility = View.GONE
+                binding.placeholderMessage.visibility = View.GONE
                 findTrack()
             }
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(queryInput.getWindowToken(), 0)
+            inputMethodManager?.hideSoftInputFromWindow(binding.inputEditText.getWindowToken(), 0)
 
             tracks.clear()
             adapter.notifyDataSetChanged()
-            placeholderMessage.text = text
+            binding.placeholderMessage.text = text
             if (additionalMessage.isNotEmpty()) {
                 Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
                     .show()
             }
         } else {
-            placeholderMessage.visibility = View.GONE
-            placeholderImage.visibility = View.GONE
+            binding.placeholderMessage.visibility = View.GONE
+            binding.placeholderImage.visibility = View.GONE
         }
     }
 
-
     private fun findTrack() {
-        if (queryInput.text.isNotEmpty()) {
-            iTunesService.findTrack(queryInput.text.toString())
+        if (binding.inputEditText.text.isNotEmpty()) {
+            iTunesService.findTrack(binding.inputEditText.text.toString())
                 .enqueue(object : Callback<TrackResponse> {
                     override fun onResponse(
                         call: Call<TrackResponse>,
