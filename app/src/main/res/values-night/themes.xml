@@ -12,6 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?android:attr/windowBackground</item>
         <!-- Customize your theme here. -->
+        <item name="colorOnTertiary">@color/white</item>
+        <item name="colorOnTertiaryContainer">@color/icon</item>
     </style>
 
     <style name="MainScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
