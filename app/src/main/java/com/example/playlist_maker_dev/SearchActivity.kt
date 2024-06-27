@@ -1,5 +1,6 @@
 package com.example.playlist_maker_dev
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.provider.ContactsContract.CommonDataKinds.Im
@@ -42,6 +43,7 @@ class SearchActivity : AppCompatActivity() {
     private val tracks = mutableListOf<Track>()
     private val adapter = TrackAdapter(mutableListOf())
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
@@ -113,6 +115,7 @@ class SearchActivity : AppCompatActivity() {
         private val SEARCH_DEF: CharSequence = ""
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showMessage(text: String, additionalMessage: String, cause: ErrorCauses) {
         if (text.isNotEmpty()) {
             when (cause) {
@@ -157,14 +160,15 @@ class SearchActivity : AppCompatActivity() {
         if (binding.inputEditText.text.isNotEmpty()) {
             iTunesService.findTrack(binding.inputEditText.text.toString())
                 .enqueue(object : Callback<TrackResponse> {
+                    @SuppressLint("NotifyDataSetChanged")
                     override fun onResponse(
                         call: Call<TrackResponse>,
                         response: Response<TrackResponse>
                     ) {
                         if (response.code() == 200) {
                             tracks.clear()
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                tracks.addAll(response.body()?.results!!)
+                            if (!response.body()?.results.isNullOrEmpty()) {
+                                tracks.addAll(response.body()?.results ?: emptyList())
                                 adapter.notifyDataSetChanged()
                             }
                             if (tracks.isEmpty()) {
