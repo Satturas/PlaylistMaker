@@ -5,8 +5,10 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+
     private fun String.shareTextToOtherApps() {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
@@ -46,6 +48,13 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        themeSwitcher.isChecked =
+            (applicationContext as App).darkTheme
+        themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
+
         val backFromSettingsButton = findViewById<Button>(R.id.buttonBackFromSettings)
         backFromSettingsButton.setOnClickListener {
             finish()
@@ -66,4 +75,5 @@ class SettingsActivity : AppCompatActivity() {
             userAgreement()
         }
     }
+
 }
