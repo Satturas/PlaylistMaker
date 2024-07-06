@@ -30,6 +30,8 @@
     <string name="check_net">подключение к интернету</string>
     <string name="reload">Обновить</string>
     <string name="emptyString" />
+    <string name="you_have_searched">Вы искали</string>
+    <string name="clear_search_history">Очистить историю</string>
     <!--search screen end-->
 
 
