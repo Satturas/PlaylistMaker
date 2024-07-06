@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.example.playlist_maker_dev.App.Companion.PLAYLISTMAKER_PREFERENCES
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -46,15 +47,43 @@ class SearchActivity : AppCompatActivity() {
             inputValue = savedInstanceState.getCharSequence(SEARCH_USER_INPUT, SEARCH_DEF)
         }
 
+        val searchHistory = SearchHistory(
+            getSharedPreferences(
+                PLAYLISTMAKER_PREFERENCES,
+                MODE_PRIVATE
+            )
+        )
+
+        if (searchHistory.searchHistoryList.isEmpty()) {
+            binding.searchHistoryField.visibility = View.GONE
+        }
+
         val backFromSettingsButton = findViewById<Button>(R.id.buttonBackFromSearch)
         backFromSettingsButton.setOnClickListener {
             finish()
         }
 
+        binding.inputEditTextSearchTracks.setOnFocusChangeListener { _, hasFocus ->
+            binding.searchHistoryField.visibility =
+                if (hasFocus && binding.inputEditTextSearchTracks.text.isEmpty() && searchHistory.searchHistoryList.isNotEmpty()) View.VISIBLE else View.GONE
+        }
+        binding.inputEditTextSearchTracks.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                binding.searchHistoryField.visibility =
+                    if (binding.inputEditTextSearchTracks.hasFocus() && p0?.isEmpty() == true) View.VISIBLE else View.GONE
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
+
         val clearButton = findViewById<ImageView>(R.id.search_delete_button)
         clearButton.setOnClickListener {
-            binding.inputEditText.setText(getString(R.string.emptyString))
-            binding.inputEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
+            binding.inputEditTextSearchTracks.setText(getString(R.string.emptyString))
+            binding.inputEditTextSearchTracks.onEditorAction(EditorInfo.IME_ACTION_DONE)
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(clearButton.windowToken, 0)
@@ -77,12 +106,12 @@ class SearchActivity : AppCompatActivity() {
                 inputValue = s.toString()
             }
         }
-        binding.inputEditText.addTextChangedListener(simpleTextWatcher)
+        binding.inputEditTextSearchTracks.addTextChangedListener(simpleTextWatcher)
 
         adapter.tracks = tracks
         binding.rvTracks.adapter = adapter
 
-        binding.inputEditText.setOnEditorActionListener { _, actionId, _ ->
+        binding.inputEditTextSearchTracks.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 findTrack()
             }
@@ -98,7 +127,7 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         inputValue = savedInstanceState.getString(SEARCH_USER_INPUT).toString()
-        binding.inputEditText.setText(inputValue)
+        binding.inputEditTextSearchTracks.setText(inputValue)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
@@ -134,7 +163,10 @@ class SearchActivity : AppCompatActivity() {
             }
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(binding.inputEditText.windowToken, 0)
+            inputMethodManager?.hideSoftInputFromWindow(
+                binding.inputEditTextSearchTracks.windowToken,
+                0
+            )
 
             tracks.clear()
             adapter.notifyDataSetChanged()
@@ -150,8 +182,8 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun findTrack() {
-        if (binding.inputEditText.text.isNotEmpty()) {
-            iTunesService.findTrack(binding.inputEditText.text.toString())
+        if (binding.inputEditTextSearchTracks.text.isNotEmpty()) {
+            iTunesService.findTrack(binding.inputEditTextSearchTracks.text.toString())
                 .enqueue(object : Callback<TrackResponse> {
                     @SuppressLint("NotifyDataSetChanged")
                     override fun onResponse(

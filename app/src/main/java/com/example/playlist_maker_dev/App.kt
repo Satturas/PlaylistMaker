@@ -10,7 +10,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        sharedPreferences = getSharedPreferences(APP_THEME_MODE, MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
         darkTheme = sharedPreferences.getBoolean(KEY_THEME_MODE, false)
         switchTheme(darkTheme)
     }
@@ -28,7 +28,7 @@ class App : Application() {
     }
 
     companion object {
-        const val APP_THEME_MODE = "app_theme_mode"
+        const val PLAYLISTMAKER_PREFERENCES = "playlistmaker_preferences"
         const val KEY_THEME_MODE = "key_theme_mode"
     }
 }
