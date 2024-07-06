@@ -1,12 +1,14 @@
 package com.example.playlist_maker_dev
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import com.google.gson.Gson
 
 class SearchHistory(private val sharedPreferences: SharedPreferences) {
     val searchHistoryList = mutableListOf<Track>()
+    var searchHistoryAdapter = TrackAdapter(mutableListOf())
 
-    private fun addTrackToHistoryList(track: Track) {
+    fun addTrackToHistoryList(track: Track) {
         createTrackFromJson(sharedPreferences)?.let { searchHistoryList.add(it) }
 
     }
@@ -17,15 +19,21 @@ class SearchHistory(private val sharedPreferences: SharedPreferences) {
     }
 
 
-    private fun createJsonFromTrack(track: Track): String {
-        return Gson().toJson(track)
+    private fun createJsonFromTrack(tracks: MutableList<Track>): String {
+        return Gson().toJson(tracks)
     }
 
-    fun writeToSharedPreferences(){
-        val json = Gson().toJson(searchHistoryList)
+    fun writeToSharedPreferences(list: MutableList<Track>) {
         sharedPreferences.edit()
-            .putString(SEARCH_HISTORY_KEY, json)
+            .putString(SEARCH_HISTORY_KEY, createJsonFromTrack(list))
             .apply()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun clear() {
+        searchHistoryList.clear()
+        searchHistoryAdapter.tracks = searchHistoryList
+        searchHistoryAdapter.notifyDataSetChanged()
     }
 
 
