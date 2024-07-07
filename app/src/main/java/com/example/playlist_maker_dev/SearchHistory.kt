@@ -1,43 +1,34 @@
 package com.example.playlist_maker_dev
 
-import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import com.example.playlist_maker_dev.SearchActivity.Companion.SEARCH_TRACKS_HISTORY
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class SearchHistory(private val sharedPreferences: SharedPreferences) {
-    val searchHistoryList = mutableListOf<Track>()
-    var searchHistoryAdapter = TrackAdapter(mutableListOf())
-
-    fun addTrackToHistoryList(track: Track) {
-        createTrackFromJson(sharedPreferences)?.let { searchHistoryList.add(it) }
-
-    }
-
-    private fun createTrackFromJson(sharedPreferences: SharedPreferences): Track? {
-        val json = sharedPreferences.getString(SEARCH_HISTORY_KEY, null) ?: return null
-        return Gson().fromJson(json, Track::class.java)
-    }
-
 
     private fun createJsonFromTrack(tracks: MutableList<Track>): String {
         return Gson().toJson(tracks)
     }
 
+    private fun createTrackFromJson(json: String): MutableList<Track> {
+        val turnsType = object : TypeToken<MutableList<Track>>() {}.type
+        return Gson().fromJson(json, turnsType)
+    }
+
     fun writeToSharedPreferences(list: MutableList<Track>) {
         sharedPreferences.edit()
-            .putString(SEARCH_HISTORY_KEY, createJsonFromTrack(list))
+            .putString(SEARCH_TRACKS_HISTORY, createJsonFromTrack(list))
             .apply()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun clear() {
-        searchHistoryList.clear()
-        searchHistoryAdapter.tracks = searchHistoryList
-        searchHistoryAdapter.notifyDataSetChanged()
+    fun readFromSharedPreferences(): MutableList<Track> {
+        val tracksList = mutableListOf<Track>()
+        val tracksListString = sharedPreferences.getString(SEARCH_TRACKS_HISTORY, null)
+        if (tracksListString != null) {
+            tracksList.addAll(createTrackFromJson(tracksListString))
+        }
+        return tracksList
     }
 
-
-    companion object {
-        private const val SEARCH_HISTORY_KEY = "key_for_search_history"
-    }
 }

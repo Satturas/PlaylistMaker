@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 data class Track(
-    val trackID: Int,
+    val trackId: Int,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: String,
