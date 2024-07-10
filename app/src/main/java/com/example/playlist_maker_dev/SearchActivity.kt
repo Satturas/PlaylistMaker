@@ -116,6 +116,11 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.searchDeleteButton.isVisible = clearButtonVisibility(s)
+                if (s?.isEmpty() == true) {
+                    tracksList.clear()
+                    adapter.notifyDataSetChanged()
+                    showSearchHistory(historyOfTracksList.isNotEmpty())
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
