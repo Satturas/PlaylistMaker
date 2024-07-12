@@ -33,6 +33,7 @@
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         style="@style/ButtonSettingsScreenStyle"
+        android:id="@+id/themeSwitcher"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_menu_buttons_height"
         android:gravity="start|center_vertical"
