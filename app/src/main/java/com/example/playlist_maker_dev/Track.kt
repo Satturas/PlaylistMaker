@@ -10,8 +10,7 @@ data class Track(
     val artistName: String,
     val trackTimeMillis: String,
     val artworkUrl100: String?
-) {
-}
+):java.io.Serializable
 
 class TrackResponse(
     val results: List<Track>

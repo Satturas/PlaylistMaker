@@ -12,7 +12,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         sharedPreferences = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
-        if(!sharedPreferences.contains(KEY_THEME_MODE)) {
+        if (!sharedPreferences.contains(KEY_THEME_MODE)) {
             sharedPreferences.edit().putBoolean(KEY_THEME_MODE, isUsingNightModeResources()).apply()
         }
         darkTheme = sharedPreferences.getBoolean(KEY_THEME_MODE, false)
