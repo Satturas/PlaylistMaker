@@ -9,9 +9,12 @@ data class Track(
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: String,
-    val artworkUrl100: String?
-) {
-}
+    val artworkUrl100: String?,
+    val collectionName: String?,
+    val primaryGenreName: String,
+    val releaseDate: String?,
+    val country: String
+) : java.io.Serializable
 
 class TrackResponse(
     val results: List<Track>

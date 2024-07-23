@@ -32,8 +32,13 @@
     <string name="emptyString" />
     <string name="you_have_searched">Вы искали</string>
     <string name="clear_search_history">Очистить историю</string>
+    <string name="example_song_time">0:30</string>
+    <string name="song_length">Длительность</string>
+    <string name="album">Альбом</string>
+    <string name="year">Год</string>
+    <string name="genre">Жанр</string>
+    <string name="country">Страна</string>
     <!--search screen end-->
-
 
 
 </resources>
