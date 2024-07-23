@@ -222,9 +222,9 @@
         android:id="@+id/playButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:importantForAccessibility="no"
         android:padding="8dp"
-        android:layout_marginTop="30dp"
         app:layout_constraintBottom_toTopOf="@+id/songLengthTitle"
         app:layout_constraintEnd_toStartOf="@id/addToFavoriteButton"
         app:layout_constraintStart_toEndOf="@id/addPlaylistButton"
@@ -236,11 +236,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:importantForAccessibility="no"
-        app:layout_constraintVertical_bias="0.44"
         app:layout_constraintBottom_toTopOf="@id/songLengthTitle"
         app:layout_constraintEnd_toStartOf="@id/right_border"
         app:layout_constraintStart_toEndOf="@id/playButton"
         app:layout_constraintTop_toBottomOf="@id/bandTitle"
+        app:layout_constraintVertical_bias="0.44"
         app:srcCompat="@drawable/vector_add_favorite_button" />
 
     <TextView
@@ -252,7 +252,6 @@
         android:textColor="?attr/colorOnTertiary"
         android:textFontWeight="400"
         android:textSize="14sp"
-        android:visibility="gone"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@id/playButton"
@@ -298,12 +297,12 @@
         android:layout_height="56dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:layout_constraintVertical_chainStyle="spread_inside"
+        app:layout_constraintBottom_toTopOf="@id/imageCover"
+        app:layout_constraintEnd_toStartOf="@id/right_border"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/imageCover"
-        app:navigationIcon="@drawable/arrow_back_vector"
-        app:layout_constraintEnd_toStartOf="@id/right_border"/>
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        app:navigationIcon="@drawable/arrow_back_vector" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

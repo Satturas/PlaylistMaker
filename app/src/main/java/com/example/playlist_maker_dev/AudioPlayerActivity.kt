@@ -39,15 +39,14 @@ class AudioPlayerActivity : AppCompatActivity() {
 
             if (emptyTrack != null) {
                 binding.songTitle.text = emptyTrack.trackName
+                binding.bandTitle.text = emptyTrack.artistName
                 binding.songLength.text = SimpleDateFormat(
                     "mm:ss",
                     Locale.getDefault()
                 ).format(emptyTrack.trackTimeMillis.toLong())
 
                 if (emptyTrack.collectionName?.isNotEmpty() == true) {
-                    binding.bandTitle.text = emptyTrack.collectionName
                     binding.album.text = emptyTrack.collectionName
-                    binding.bandTitle.visibility = View.VISIBLE
                     binding.album.visibility = View.VISIBLE
                     binding.albumTitle.visibility = View.VISIBLE
                 }
