@@ -147,6 +147,7 @@ class SearchActivity : AppCompatActivity() {
             TrackAdapter.OnClickListener {
             override fun onClick(position: Int, track: Track) {
                 val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                intent.putExtra(AUDIO_PLAYER, track)
                 startActivity(intent)
             }
         })
@@ -155,6 +156,7 @@ class SearchActivity : AppCompatActivity() {
             TrackAdapter.OnClickListener {
             override fun onClick(position: Int, track: Track) {
                 val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                intent.putExtra(AUDIO_PLAYER, track)
                 startActivity(intent)
             }
         })
@@ -317,6 +319,7 @@ class SearchActivity : AppCompatActivity() {
         private const val SEARCH_USER_INPUT = "search_user_input"
         private val SEARCH_DEF: CharSequence = ""
         const val SEARCH_TRACKS_HISTORY = "search_track_history"
+        const val AUDIO_PLAYER = "track_for_player"
     }
 }
 

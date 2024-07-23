@@ -16,8 +16,9 @@ class TrackAdapter(var tracks: List<Track>, private val searchActivity: SearchAc
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
         holder.itemView.setOnClickListener {
-            searchActivity.updateHistoryOfTracksList(position)
+
             onClickListener?.onClick(position, tracks[position])
+            searchActivity.updateHistoryOfTracksList(position)
         }
     }
 
