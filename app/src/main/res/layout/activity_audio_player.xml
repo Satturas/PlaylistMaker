@@ -15,6 +15,13 @@
         app:layout_constraintGuide_begin="24dp" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.26" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/right_border"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,31 +29,247 @@
         app:layout_constraintGuide_end="24dp" />
 
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/arrow_back_vector" />
-
-    <ImageView
-        android:id="@+id/imageView"
+    <TextView
+        android:id="@+id/countryTitle"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:scaleType="centerCrop"
-        app:layout_constrainedHeight="true"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:gravity="center_vertical"
+        android:text="@string/country"
+        android:textColor="?attr/colorOnSecondary"
+        android:textFontWeight="400"
+        android:textSize="13sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/country"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/barrier"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/genre" />
+
+    <TextView
+        android:id="@+id/country"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:gravity="center_vertical|end"
+        android:text="Великобритания"
+        android:textColor="?attr/colorOnTertiary"
+        android:textFontWeight="400"
+        android:textSize="13sp"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@id/songTitle"
-        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toBottomOf="@id/genre" />
+
+    <TextView
+        android:id="@+id/genreTitle"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:gravity="center_vertical"
+        android:text="@string/genre"
+        android:textColor="?attr/colorOnSecondary"
+        android:textFontWeight="400"
+        android:textSize="13sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/genre"
+        app:layout_constraintBottom_toTopOf="@id/country"
+        app:layout_constraintEnd_toStartOf="@id/barrier"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/year" />
+
+    <TextView
+        android:id="@+id/genre"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:gravity="center_vertical|end"
+        android:text="Rock"
+        android:textColor="?attr/colorOnTertiary"
+        android:textFontWeight="400"
+        android:textSize="13sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/country"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toEndOf="@id/barrier"
+        app:layout_constraintTop_toBottomOf="@id/year" />
+
+    <TextView
+        android:id="@+id/yearTitle"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:gravity="center_vertical"
+        android:text="@string/year"
+        android:textColor="?attr/colorOnSecondary"
+        android:textFontWeight="400"
+        android:textSize="13sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/year"
+        app:layout_constraintBottom_toTopOf="@+id/genre"
+        app:layout_constraintEnd_toStartOf="@+id/barrier"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/album" />
+
+    <TextView
+        android:id="@+id/year"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:gravity="center_vertical|end"
+        android:text="1999"
+        android:textColor="?attr/colorOnTertiary"
+        android:textFontWeight="400"
+        android:textSize="13sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/genre"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toEndOf="@+id/yearTitle"
+        app:layout_constraintTop_toBottomOf="@id/album" />
+
+    <TextView
+        android:id="@+id/albumTitle"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:gravity="center_vertical"
+        android:text="@string/album"
+        android:textColor="?attr/colorOnSecondary"
+        android:textFontWeight="400"
+        android:textSize="13sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/album"
+        app:layout_constraintBottom_toTopOf="@+id/year"
+        app:layout_constraintEnd_toStartOf="@+id/barrier"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/songLengthTitle" />
+
+    <TextView
+        android:id="@+id/album"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:gravity="center_vertical|end"
+        android:text="Yesterday (Remastered 2009 long logfjgnjknj fg jfkfgjfghfgj gjfg fgj db)"
+        android:textColor="?attr/colorOnTertiary"
+        android:textFontWeight="400"
+        android:textSize="13sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/year"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toEndOf="@id/albumTitle"
+        app:layout_constraintTop_toBottomOf="@id/songLength" />
+
+    <TextView
+        android:id="@+id/songLengthTitle"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:gravity="center_vertical"
+        android:text="@string/song_length"
+        android:textColor="?attr/colorOnSecondary"
+        android:textFontWeight="400"
+        android:textSize="13sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/songLength"
+        app:layout_constraintBottom_toTopOf="@id/album"
+        app:layout_constraintEnd_toStartOf="@id/barrier"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/songTime" />
+
+    <TextView
+        android:id="@+id/songLength"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/ys_display_regular"
+        android:gravity="center_vertical|end"
+        android:text="5:35"
+        android:textColor="?attr/colorOnTertiary"
+        android:textFontWeight="400"
+        android:textSize="13sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/album"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@+id/barrier"
+        app:layout_constraintTop_toBottomOf="@id/songTime" />
+
+    <TextView
+        android:id="@+id/songTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/ys_display_medium"
+        android:text="@string/example_song_time"
+        android:textColor="?attr/colorOnTertiary"
+        android:textFontWeight="500"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/songLength"
         app:layout_constraintEnd_toStartOf="@+id/right_border"
         app:layout_constraintStart_toStartOf="@+id/left_border"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:srcCompat="@drawable/vector_cover_placeholder" />
+        app:layout_constraintTop_toBottomOf="@+id/playButton" />
+
+    <ImageView
+        android:id="@+id/addPlaylistButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toTopOf="@id/songLengthTitle"
+        app:layout_constraintEnd_toStartOf="@id/playButton"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/bandTitle"
+        app:layout_constraintVertical_bias="0.44"
+        app:srcCompat="@drawable/vector_add_button" />
+
+    <ImageView
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
+        android:padding="8dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/songLengthTitle"
+        app:layout_constraintEnd_toStartOf="@id/addToFavoriteButton"
+        app:layout_constraintStart_toEndOf="@id/addPlaylistButton"
+        app:layout_constraintTop_toBottomOf="@id/bandTitle"
+        app:srcCompat="@drawable/vector_play" />
+
+    <ImageView
+        android:id="@+id/addToFavoriteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
+        app:layout_constraintVertical_bias="0.44"
+        app:layout_constraintBottom_toTopOf="@id/songLengthTitle"
+        app:layout_constraintEnd_toStartOf="@id/right_border"
+        app:layout_constraintStart_toEndOf="@id/playButton"
+        app:layout_constraintTop_toBottomOf="@id/bandTitle"
+        app:srcCompat="@drawable/vector_add_favorite_button" />
+
+    <TextView
+        android:id="@+id/bandTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/ys_display_medium"
+        android:text="Yesterday (Remastered 2009 long logfjgnjknj gsdgsdg sdgsd gdsg sgs fg jfkdb)"
+        android:textColor="?attr/colorOnTertiary"
+        android:textFontWeight="400"
+        android:textSize="14sp"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/playButton"
+        app:layout_constraintEnd_toStartOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/songTitle" />
 
     <TextView
         android:id="@+id/songTitle"
@@ -62,225 +285,37 @@
         app:layout_constraintBottom_toTopOf="@id/bandTitle"
         app:layout_constraintEnd_toStartOf="@id/right_border"
         app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/imageCover" />
 
-    <TextView
-        android:id="@+id/bandTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/ys_display_medium"
-        android:text="Yesterday (Remastered 2009 long logfjgnjknj gsdgsdg sdgsd gdsg sgs fg jfkdb)"
-        android:textColor="?attr/colorOnTertiary"
-        android:textFontWeight="400"
-        android:textSize="14sp"
+    <ImageView
+        android:id="@+id/imageCover"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:scaleType="centerCrop"
+        app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@id/playButton"
-        app:layout_constraintEnd_toStartOf="@id/right_border"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/songTitle" />
-
-    <Button
-        android:id="@+id/addPlaylistButton"
-        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:layout_marginBottom="64dp"
-        app:icon="@drawable/vector_add_button"
-        app:iconTint="@null"
-        app:layout_constraintBaseline_toBaselineOf="@id/playButton"
-        app:layout_constraintBottom_toTopOf="@id/songTime"
-        app:layout_constraintEnd_toStartOf="@id/playButton"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/bandTitle" />
-
-    <Button
-        android:id="@+id/playButton"
-        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        app:icon="@drawable/vector_play"
-        app:layout_constraintBottom_toTopOf="@id/songTime"
-        app:layout_constraintEnd_toStartOf="@id/AddToFavoriteButton"
-        app:layout_constraintStart_toEndOf="@id/addPlaylistButton"
-        app:layout_constraintTop_toBottomOf="@+id/bandTitle" />
-
-    <Button
-        android:id="@+id/AddToFavoriteButton"
-        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        app:icon="@drawable/vector_add_favorite_button"
-        app:iconTint="@null"
-        app:layout_constraintBaseline_toBaselineOf="@id/playButton"
-        app:layout_constraintBottom_toTopOf="@id/songTime"
-        app:layout_constraintEnd_toStartOf="@+id/right_border"
-        app:layout_constraintStart_toEndOf="@id/playButton"
-        app:layout_constraintTop_toBottomOf="@+id/bandTitle" />
-
-    <TextView
-        android:id="@+id/songTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/ys_display_medium"
-        android:text="@string/example_song_time"
-        android:textColor="?attr/colorOnTertiary"
-        android:textFontWeight="500"
-        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/songTitle"
+        app:layout_constraintDimensionRatio="h,1:1"
         app:layout_constraintEnd_toStartOf="@+id/right_border"
         app:layout_constraintStart_toStartOf="@+id/left_border"
-        app:layout_constraintTop_toBottomOf="@+id/playButton" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:srcCompat="@drawable/vector_cover_placeholder" />
 
-    <TextView
-        android:id="@+id/songLengthTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/ys_display_regular"
-        android:text="@string/song_length"
-        android:textColor="?attr/colorOnSecondary"
-        android:textFontWeight="400"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/songTime" />
 
-    <TextView
-        android:id="@+id/songLength"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/ys_display_regular"
-        android:gravity="end"
-        android:text="5:35"
-        android:textColor="?attr/colorOnTertiary"
-        android:textFontWeight="400"
-        android:textSize="13sp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="@id/right_border"
-        app:layout_constraintTop_toBottomOf="@id/songTime" />
-
-    <TextView
-        android:id="@+id/albumTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/ys_display_regular"
-        android:text="@string/album"
-        android:textColor="?attr/colorOnSecondary"
-        android:textFontWeight="400"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/songLengthTitle" />
-
-    <TextView
-        android:id="@+id/album"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/ys_display_regular"
-        android:gravity="end"
-        android:text="Yesterday (Remastered 2009 long logfjgnjknj fg jfkfgjfghfgj gjfg fgj db)"
-        android:textColor="?attr/colorOnTertiary"
-        android:textFontWeight="400"
-        android:textSize="13sp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="@id/right_border"
-        app:layout_constraintStart_toEndOf="@id/albumTitle"
-        app:layout_constraintTop_toBottomOf="@id/songLength" />
+        android:layout_height="56dp"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/imageCover"
+        app:navigationIcon="@drawable/arrow_back_vector"
+        app:layout_constraintEnd_toStartOf="@id/right_border"/>
 
-    <TextView
-        android:id="@+id/yearTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/ys_display_regular"
-        android:text="@string/year"
-        android:textColor="?attr/colorOnSecondary"
-        android:textFontWeight="400"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/album" />
-
-    <TextView
-        android:id="@+id/year"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/ys_display_regular"
-        android:gravity="end"
-        android:text="@string/year"
-        android:textColor="?attr/colorOnTertiary"
-        android:textFontWeight="400"
-        android:textSize="13sp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="@id/right_border"
-        app:layout_constraintTop_toBottomOf="@id/album" />
-
-    <TextView
-        android:id="@+id/genreTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/ys_display_regular"
-        android:text="@string/genre"
-        android:textColor="?attr/colorOnSecondary"
-        android:textFontWeight="400"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/year" />
-
-    <TextView
-        android:id="@+id/genre"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/ys_display_regular"
-        android:gravity="end"
-        android:text="Rock"
-        android:textColor="?attr/colorOnTertiary"
-        android:textFontWeight="400"
-        android:textSize="13sp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toEndOf="@id/right_border"
-        app:layout_constraintStart_toEndOf="@id/genreTitle"
-        app:layout_constraintTop_toBottomOf="@id/year" />
-
-    <TextView
-        android:id="@+id/countryTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="20dp"
-        android:fontFamily="@font/ys_display_regular"
-        android:text="@string/country"
-        android:textColor="?attr/colorOnSecondary"
-        android:textFontWeight="400"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/genre" />
-
-    <TextView
-        android:id="@+id/country"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="20dp"
-        android:fontFamily="@font/ys_display_regular"
-        android:gravity="end"
-        android:text="Великобритания"
-        android:textColor="?attr/colorOnTertiary"
-        android:textFontWeight="400"
-        android:textSize="13sp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/right_border"
-        app:layout_constraintStart_toEndOf="@id/countryTitle"
-        app:layout_constraintTop_toBottomOf="@id/genre" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
