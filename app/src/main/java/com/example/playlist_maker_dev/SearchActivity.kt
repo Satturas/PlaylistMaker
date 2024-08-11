@@ -2,6 +2,7 @@ package com.example.playlist_maker_dev
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -141,6 +142,24 @@ class SearchActivity : AppCompatActivity() {
             }
             true
         }
+
+        adapter.setOnClickListener(object :
+            TrackAdapter.OnClickListener {
+            override fun onClick(position: Int, track: Track) {
+                val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                intent.putExtra(AUDIO_PLAYER, track)
+                startActivity(intent)
+            }
+        })
+
+        searchHistoryAdapter.setOnClickListener(object :
+            TrackAdapter.OnClickListener {
+            override fun onClick(position: Int, track: Track) {
+                val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                intent.putExtra(AUDIO_PLAYER, track)
+                startActivity(intent)
+            }
+        })
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -300,6 +319,7 @@ class SearchActivity : AppCompatActivity() {
         private const val SEARCH_USER_INPUT = "search_user_input"
         private val SEARCH_DEF: CharSequence = ""
         const val SEARCH_TRACKS_HISTORY = "search_track_history"
+        const val AUDIO_PLAYER = "track_for_player"
     }
 }
 
