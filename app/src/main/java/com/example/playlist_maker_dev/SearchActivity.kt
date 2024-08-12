@@ -44,6 +44,8 @@ class SearchActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { findTrack() }
+    private var isClickAllowed = true
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -145,18 +147,22 @@ class SearchActivity : AppCompatActivity() {
         adapter.setOnClickListener(object :
             TrackAdapter.OnClickListener {
             override fun onClick(position: Int, track: Track) {
-                val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
-                intent.putExtra(AUDIO_PLAYER, track)
-                startActivity(intent)
+                if (clickDebounce()) {
+                    val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                    intent.putExtra(AUDIO_PLAYER, track)
+                    startActivity(intent)
+                }
             }
         })
 
         searchHistoryAdapter.setOnClickListener(object :
             TrackAdapter.OnClickListener {
             override fun onClick(position: Int, track: Track) {
-                val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
-                intent.putExtra(AUDIO_PLAYER, track)
-                startActivity(intent)
+                if (clickDebounce()) {
+                    val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                    intent.putExtra(AUDIO_PLAYER, track)
+                    startActivity(intent)
+                }
             }
         })
     }
@@ -296,6 +302,15 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     private fun showSearchHistory(isVisible: Boolean) {
         if (isVisible) {
             binding.searchHistoryTitle.visibility = View.VISIBLE
@@ -331,6 +346,7 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_TRACKS_HISTORY = "search_track_history"
         const val AUDIO_PLAYER = "track_for_player"
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
 
