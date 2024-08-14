@@ -196,7 +196,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:fontFamily="@font/ys_display_medium"
-        android:text="@string/example_song_time"
+        android:text="@string/timer_00"
         android:textColor="?attr/colorOnTertiary"
         android:textFontWeight="500"
         android:textSize="14sp"

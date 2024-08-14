@@ -38,6 +38,7 @@
     <string name="year">Год</string>
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
+    <string name="timer_00">00:00</string>
     <!--search screen end-->
 
 
