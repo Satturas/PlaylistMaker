@@ -17,11 +17,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.example.playlist_maker_dev.Creator
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.SearchHistory
 import com.example.playlist_maker_dev.data.dto.TracksSearchResponse
 import com.example.playlist_maker_dev.data.network.ITunesApiService
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
+import com.example.playlist_maker_dev.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.ui.player.AudioPlayerActivity
 import retrofit2.Call
@@ -255,51 +257,42 @@ class SearchActivity : AppCompatActivity() {
             binding.searchHistoryTitle.visibility = View.GONE
             binding.rvHistorySearchTracks.visibility = View.GONE
             binding.buttonClearSearchHistory.visibility = View.GONE
-            iTunesService.searchTracks(binding.inputEditTextSearchTracks.text.toString())
-                .enqueue(object : Callback<TracksSearchResponse> {
-                    @SuppressLint("NotifyDataSetChanged")
-                    override fun onResponse(
-                        call: Call<TracksSearchResponse>, response: Response<TracksSearchResponse>
-                    ) {
+            Creator.provideTracksInteractor().searchTracks(binding.inputEditTextSearchTracks.text.toString(), object : TracksInteractor.TracksConsumer {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun consume(foundTracks: List<Track>) {
+                    runOnUiThread {
                         binding.progressBar.visibility = View.GONE
-                        if (response.code() == 200) {
-                            tracksList.clear()
-                            if (!response.body()?.results.isNullOrEmpty()) {
-                                tracksList.addAll(response.body()?.results ?: emptyList())
-                                adapter.notifyDataSetChanged()
-                            }
-                            if (tracksList.isEmpty()) {
-                                showMessage(
-                                    getString(R.string.nothing_found),
-                                    "",
-                                    ErrorCauses.NO_RESULTS
-                                )
-                                showSearchHistory(false)
-                            } else {
-                                showMessage("", "", ErrorCauses.EVERYTHING_GOOD)
-                            }
-                        } else {
+                        tracksList.clear()
+                        if (foundTracks.isNullOrEmpty()) {
+                            tracksList.addAll(foundTracks ?: emptyList())
+                            adapter.notifyDataSetChanged()
+                        }
+                        if (tracksList.isEmpty()) {
                             showMessage(
-                                getString(R.string.something_went_wrong),
-                                response.code().toString(),
-                                ErrorCauses.NO_CONNECTION
+                                getString(R.string.nothing_found),
+                                "",
+                                ErrorCauses.NO_RESULTS
                             )
                             showSearchHistory(false)
+                        } else {
+                            showMessage("", "", ErrorCauses.EVERYTHING_GOOD)
                         }
                     }
+                }
 
-                    override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
-                        binding.progressBar.visibility = View.GONE
-                        showMessage(
-                            getString(R.string.something_went_wrong),
-                            t.message.toString(),
-                            ErrorCauses.NO_CONNECTION
-                        )
-                        showSearchHistory(false)
-                    }
-                })
+                override fun onFailure(t: Throwable) {
+                    binding.progressBar.visibility = View.GONE
+                    showMessage(
+                        getString(R.string.something_went_wrong),
+                        t.message.toString(),
+                        ErrorCauses.NO_CONNECTION
+                    )
+                    showSearchHistory(false)
+                }
+            })
         }
     }
+
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
