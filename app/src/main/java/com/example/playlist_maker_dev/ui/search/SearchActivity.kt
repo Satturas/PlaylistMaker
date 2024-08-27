@@ -32,12 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
-
     private lateinit var binding: ActivitySearchBinding
-
-
-
-
     private var inputValue: CharSequence = SEARCH_DEF
     private val tracksList = mutableListOf<Track>()
     private var historyOfTracksList = mutableListOf<Track>()
