@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev
+package com.example.playlist_maker_dev.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,7 +17,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.example.playlist_maker_dev.R
+import com.example.playlist_maker_dev.SearchHistory
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
+import com.example.playlist_maker_dev.domain.models.ITunesApi
+import com.example.playlist_maker_dev.domain.models.Track
+import com.example.playlist_maker_dev.domain.models.TrackResponse
+import com.example.playlist_maker_dev.ui.player.AudioPlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

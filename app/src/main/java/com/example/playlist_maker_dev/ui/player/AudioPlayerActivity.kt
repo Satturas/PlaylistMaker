@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev
+package com.example.playlist_maker_dev.ui.player
 
 import android.media.MediaPlayer
 import android.os.Build
@@ -7,12 +7,15 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
+import com.example.playlist_maker_dev.domain.models.Track
+import com.example.playlist_maker_dev.ui.search.SearchActivity
+import com.example.playlist_maker_dev.ui.search.dpToPx
 import java.text.SimpleDateFormat
 import java.util.Locale
 

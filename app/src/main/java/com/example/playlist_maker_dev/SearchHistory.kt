@@ -1,7 +1,8 @@
 package com.example.playlist_maker_dev
 
 import android.content.SharedPreferences
-import com.example.playlist_maker_dev.SearchActivity.Companion.SEARCH_TRACKS_HISTORY
+import com.example.playlist_maker_dev.ui.search.SearchActivity.Companion.SEARCH_TRACKS_HISTORY
+import com.example.playlist_maker_dev.domain.models.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
