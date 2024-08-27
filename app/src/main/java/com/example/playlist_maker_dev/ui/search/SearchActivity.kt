@@ -19,10 +19,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.SearchHistory
+import com.example.playlist_maker_dev.data.dto.TracksSearchResponse
+import com.example.playlist_maker_dev.data.network.ITunesApiService
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
-import com.example.playlist_maker_dev.domain.models.ITunesApi
 import com.example.playlist_maker_dev.domain.models.Track
-import com.example.playlist_maker_dev.domain.models.TrackResponse
 import com.example.playlist_maker_dev.ui.player.AudioPlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,14 +32,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
-    private val iTunesBaseUrl = "https://itunes.apple.com"
+
     private lateinit var binding: ActivitySearchBinding
 
-    private val retrofit =
-        Retrofit.Builder().baseUrl(iTunesBaseUrl).addConverterFactory(GsonConverterFactory.create())
-            .build()
 
-    private val iTunesService = retrofit.create(ITunesApi::class.java)
+
+
     private var inputValue: CharSequence = SEARCH_DEF
     private val tracksList = mutableListOf<Track>()
     private var historyOfTracksList = mutableListOf<Track>()
@@ -262,11 +260,11 @@ class SearchActivity : AppCompatActivity() {
             binding.searchHistoryTitle.visibility = View.GONE
             binding.rvHistorySearchTracks.visibility = View.GONE
             binding.buttonClearSearchHistory.visibility = View.GONE
-            iTunesService.findTrack(binding.inputEditTextSearchTracks.text.toString())
-                .enqueue(object : Callback<TrackResponse> {
+            iTunesService.searchTracks(binding.inputEditTextSearchTracks.text.toString())
+                .enqueue(object : Callback<TracksSearchResponse> {
                     @SuppressLint("NotifyDataSetChanged")
                     override fun onResponse(
-                        call: Call<TrackResponse>, response: Response<TrackResponse>
+                        call: Call<TracksSearchResponse>, response: Response<TracksSearchResponse>
                     ) {
                         binding.progressBar.visibility = View.GONE
                         if (response.code() == 200) {
@@ -295,7 +293,7 @@ class SearchActivity : AppCompatActivity() {
                         }
                     }
 
-                    override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<TracksSearchResponse>, t: Throwable) {
                         binding.progressBar.visibility = View.GONE
                         showMessage(
                             getString(R.string.something_went_wrong),
