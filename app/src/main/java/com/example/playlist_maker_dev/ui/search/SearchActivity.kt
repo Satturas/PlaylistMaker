@@ -19,20 +19,27 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.playlist_maker_dev.Creator
 import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.SearchHistory
-import com.example.playlist_maker_dev.data.dto.TracksSearchResponse
-import com.example.playlist_maker_dev.data.network.ITunesApiService
+import com.example.playlist_maker_dev.data.repository.SearchHistoryRepositoryImpl
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
 import com.example.playlist_maker_dev.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.domain.models.Track
+import com.example.playlist_maker_dev.domain.usecase.GetHistoryOfTracksUseCase
+import com.example.playlist_maker_dev.domain.usecase.SaveHistoryOfTracksUseCase
 import com.example.playlist_maker_dev.ui.player.AudioPlayerActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
+
+    private val searchHistoryRepository by lazy { SearchHistoryRepositoryImpl(context = applicationContext) }
+    private val getHistoryOfTracksUseCase by lazy {
+        GetHistoryOfTracksUseCase(
+            searchHistoryRepository
+        )
+    }
+    private val saveHistoryOfTracksUseCase by lazy {
+        SaveHistoryOfTracksUseCase(
+            searchHistoryRepository
+        )
+    }
 
     private lateinit var binding: ActivitySearchBinding
     private var inputValue: CharSequence = SEARCH_DEF
@@ -40,7 +47,6 @@ class SearchActivity : AppCompatActivity() {
     private var historyOfTracksList = mutableListOf<Track>()
     private val adapter = TrackAdapter(mutableListOf(), this)
     private val searchHistoryAdapter = TrackAdapter(mutableListOf(), this)
-    private lateinit var searchHistory: SearchHistory
     private lateinit var inputEditTextSearchTracks: EditText
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { findTrack() }
@@ -60,12 +66,6 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        searchHistory = SearchHistory(
-            getSharedPreferences(
-                SEARCH_TRACKS_HISTORY, MODE_PRIVATE
-            )
-        )
-
         if (savedInstanceState != null) inputValue =
             savedInstanceState.getCharSequence(SEARCH_USER_INPUT, SEARCH_DEF)
 
@@ -74,7 +74,7 @@ class SearchActivity : AppCompatActivity() {
         binding.inputEditTextSearchTracks.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.inputEditTextSearchTracks.text.isNullOrEmpty()) {
                 if (historyOfTracksList.isEmpty()) {
-                    historyOfTracksList = searchHistory.readFromSharedPreferences()
+                    historyOfTracksList = getHistoryOfTracksUseCase.execute()
                     searchHistoryAdapter.tracks = historyOfTracksList
                     searchHistoryAdapter.notifyDataSetChanged()
                     showHistoryByEmptyOrNotList()
@@ -114,7 +114,7 @@ class SearchActivity : AppCompatActivity() {
         binding.buttonClearSearchHistory.setOnClickListener {
             historyOfTracksList.clear()
             searchHistoryAdapter.notifyDataSetChanged()
-            searchHistory.writeToSharedPreferences(historyOfTracksList)
+            saveHistoryOfTracksUseCase.execute(historyOfTracksList)
             showSearchHistory(false)
         }
 
@@ -183,14 +183,14 @@ class SearchActivity : AppCompatActivity() {
             }
             historyOfTracksList.add(0, tracksList[position])
             searchHistoryAdapter.notifyDataSetChanged()
-            searchHistory.writeToSharedPreferences(historyOfTracksList)
+            saveHistoryOfTracksUseCase.execute(historyOfTracksList)
         } else {
             if (historyOfTracksList.isNotEmpty()) {
                 val tempTrack = historyOfTracksList[position]
                 historyOfTracksList.removeAt(position)
                 historyOfTracksList.add(0, tempTrack)
                 searchHistoryAdapter.notifyDataSetChanged()
-                searchHistory.writeToSharedPreferences(historyOfTracksList)
+                saveHistoryOfTracksUseCase.execute(historyOfTracksList)
             }
         }
     }
@@ -256,39 +256,41 @@ class SearchActivity : AppCompatActivity() {
             binding.searchHistoryTitle.visibility = View.GONE
             binding.rvHistorySearchTracks.visibility = View.GONE
             binding.buttonClearSearchHistory.visibility = View.GONE
-            Creator.provideTracksInteractor().searchTracks(binding.inputEditTextSearchTracks.text.toString(), object : TracksInteractor.TracksConsumer {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun consume(foundTracks: List<Track>) {
-                    runOnUiThread {
-                        binding.progressBar.visibility = View.GONE
-                        tracksList.clear()
-                        if (!foundTracks.isNullOrEmpty()) {
-                            tracksList.addAll(foundTracks)
-                            adapter.notifyDataSetChanged()
-                        }
-                        if (tracksList.isEmpty()) {
-                            showMessage(
-                                getString(R.string.nothing_found),
-                                "",
-                                ErrorCauses.NO_RESULTS
-                            )
-                            showSearchHistory(false)
-                        } else {
-                            showMessage("", "", ErrorCauses.EVERYTHING_GOOD)
+            Creator.provideTracksInteractor().searchTracks(
+                binding.inputEditTextSearchTracks.text.toString(),
+                object : TracksInteractor.TracksConsumer {
+                    @SuppressLint("NotifyDataSetChanged")
+                    override fun consume(foundTracks: List<Track>) {
+                        runOnUiThread {
+                            binding.progressBar.visibility = View.GONE
+                            tracksList.clear()
+                            if (!foundTracks.isNullOrEmpty()) {
+                                tracksList.addAll(foundTracks)
+                                adapter.notifyDataSetChanged()
+                            }
+                            if (tracksList.isEmpty()) {
+                                showMessage(
+                                    getString(R.string.nothing_found),
+                                    "",
+                                    ErrorCauses.NO_RESULTS
+                                )
+                                showSearchHistory(false)
+                            } else {
+                                showMessage("", "", ErrorCauses.EVERYTHING_GOOD)
+                            }
                         }
                     }
-                }
 
-                override fun onFailure(t: Throwable) {
-                    binding.progressBar.visibility = View.GONE
-                    showMessage(
-                        getString(R.string.something_went_wrong),
-                        t.message.toString(),
-                        ErrorCauses.NO_CONNECTION
-                    )
-                    showSearchHistory(false)
-                }
-            })
+                    override fun onFailure(t: Throwable) {
+                        binding.progressBar.visibility = View.GONE
+                        showMessage(
+                            getString(R.string.something_went_wrong),
+                            t.message.toString(),
+                            ErrorCauses.NO_CONNECTION
+                        )
+                        showSearchHistory(false)
+                    }
+                })
         }
     }
 
