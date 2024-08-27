@@ -263,7 +263,7 @@ class SearchActivity : AppCompatActivity() {
                     runOnUiThread {
                         binding.progressBar.visibility = View.GONE
                         tracksList.clear()
-                        if (foundTracks.isNullOrEmpty()) {
+                        if (!foundTracks.isNullOrEmpty()) {
                             tracksList.addAll(foundTracks)
                             adapter.notifyDataSetChanged()
                         }

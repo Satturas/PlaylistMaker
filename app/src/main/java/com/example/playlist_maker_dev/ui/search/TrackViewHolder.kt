@@ -35,8 +35,7 @@ class TrackViewHolder(parent: ViewGroup) :
             .into(ivCover)
         tvTrack.text = item.trackName
         tvArtist.text = item.artistName
-        tvLength.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis.toLong())
+        tvLength.text = item.trackTimeMillis
     }
 }
 

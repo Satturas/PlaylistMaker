@@ -51,10 +51,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             if (emptyTrack != null) {
                 binding.songTitle.text = emptyTrack.trackName
                 binding.bandTitle.text = emptyTrack.artistName
-                binding.songLength.text = SimpleDateFormat(
-                    "mm:ss",
-                    Locale.getDefault()
-                ).format(emptyTrack.trackTimeMillis.toLong())
+                binding.songLength.text = emptyTrack.trackTimeMillis
 
                 if (emptyTrack.collectionName?.isNotEmpty() == true) {
                     binding.album.text = emptyTrack.collectionName
@@ -171,6 +168,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        private const val DELAY = 400L
+        private const val DELAY = 500L
     }
 }
