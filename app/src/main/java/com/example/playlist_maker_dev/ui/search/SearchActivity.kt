@@ -42,7 +42,6 @@ class SearchActivity : AppCompatActivity() {
     private val searchHistoryAdapter = TrackAdapter(mutableListOf(), this)
     private lateinit var searchHistory: SearchHistory
     private lateinit var inputEditTextSearchTracks: EditText
-
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { findTrack() }
     private var isClickAllowed = true

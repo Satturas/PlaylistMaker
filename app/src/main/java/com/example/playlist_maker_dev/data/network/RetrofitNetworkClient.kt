@@ -1,5 +1,6 @@
 package com.example.playlist_maker_dev.data.network
 
+import com.example.playlist_maker_dev.data.NetworkClient
 import com.example.playlist_maker_dev.data.dto.Response
 import com.example.playlist_maker_dev.data.dto.TracksSearchRequest
 import retrofit2.Retrofit
