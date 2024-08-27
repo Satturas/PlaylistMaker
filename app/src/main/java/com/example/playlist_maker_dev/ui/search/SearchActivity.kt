@@ -336,7 +336,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_USER_INPUT = "search_user_input"
         private val SEARCH_DEF: CharSequence = ""
-        const val SEARCH_TRACKS_HISTORY = "search_track_history"
         const val AUDIO_PLAYER = "track_for_player"
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L

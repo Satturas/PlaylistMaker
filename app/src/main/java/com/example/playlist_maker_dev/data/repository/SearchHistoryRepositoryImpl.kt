@@ -3,7 +3,6 @@ package com.example.playlist_maker_dev.data.repository
 import android.content.Context
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.domain.repository.SearchHistoryRepository
-import com.example.playlist_maker_dev.ui.search.SearchActivity.Companion.SEARCH_TRACKS_HISTORY
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
