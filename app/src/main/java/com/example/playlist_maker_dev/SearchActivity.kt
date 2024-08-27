@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -39,6 +41,11 @@ class SearchActivity : AppCompatActivity() {
     private val searchHistoryAdapter = TrackAdapter(mutableListOf(), this)
     private lateinit var searchHistory: SearchHistory
     private lateinit var inputEditTextSearchTracks: EditText
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { findTrack() }
+    private var isClickAllowed = true
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,6 +129,7 @@ class SearchActivity : AppCompatActivity() {
                     adapter.notifyDataSetChanged()
                     showSearchHistory(historyOfTracksList.isNotEmpty())
                 }
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -136,30 +144,32 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryAdapter.tracks = historyOfTracksList
         binding.rvHistorySearchTracks.adapter = searchHistoryAdapter
 
-        binding.inputEditTextSearchTracks.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                findTrack()
-            }
-            true
-        }
-
         adapter.setOnClickListener(object :
             TrackAdapter.OnClickListener {
             override fun onClick(position: Int, track: Track) {
-                val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
-                intent.putExtra(AUDIO_PLAYER, track)
-                startActivity(intent)
+                if (clickDebounce()) {
+                    val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                    intent.putExtra(AUDIO_PLAYER, track)
+                    startActivity(intent)
+                }
             }
         })
 
         searchHistoryAdapter.setOnClickListener(object :
             TrackAdapter.OnClickListener {
             override fun onClick(position: Int, track: Track) {
-                val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
-                intent.putExtra(AUDIO_PLAYER, track)
-                startActivity(intent)
+                if (clickDebounce()) {
+                    val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
+                    intent.putExtra(AUDIO_PLAYER, track)
+                    startActivity(intent)
+                }
             }
         })
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -242,12 +252,17 @@ class SearchActivity : AppCompatActivity() {
 
     private fun findTrack() {
         if (binding.inputEditTextSearchTracks.text.isNotEmpty()) {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.searchHistoryTitle.visibility = View.GONE
+            binding.rvHistorySearchTracks.visibility = View.GONE
+            binding.buttonClearSearchHistory.visibility = View.GONE
             iTunesService.findTrack(binding.inputEditTextSearchTracks.text.toString())
                 .enqueue(object : Callback<TrackResponse> {
                     @SuppressLint("NotifyDataSetChanged")
                     override fun onResponse(
                         call: Call<TrackResponse>, response: Response<TrackResponse>
                     ) {
+                        binding.progressBar.visibility = View.GONE
                         if (response.code() == 200) {
                             tracksList.clear()
                             if (!response.body()?.results.isNullOrEmpty()) {
@@ -275,6 +290,7 @@ class SearchActivity : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                        binding.progressBar.visibility = View.GONE
                         showMessage(
                             getString(R.string.something_went_wrong),
                             t.message.toString(),
@@ -284,6 +300,15 @@ class SearchActivity : AppCompatActivity() {
                     }
                 })
         }
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
     }
 
     private fun showSearchHistory(isVisible: Boolean) {
@@ -320,6 +345,8 @@ class SearchActivity : AppCompatActivity() {
         private val SEARCH_DEF: CharSequence = ""
         const val SEARCH_TRACKS_HISTORY = "search_track_history"
         const val AUDIO_PLAYER = "track_for_player"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
 
