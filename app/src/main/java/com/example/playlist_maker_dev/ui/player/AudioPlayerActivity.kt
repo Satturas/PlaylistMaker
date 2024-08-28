@@ -11,8 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlist_maker_dev.Creator
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
+import com.example.playlist_maker_dev.domain.api.AudioPlayerInteractor
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.ui.search.SearchActivity
 import com.example.playlist_maker_dev.ui.search.dpToPx
@@ -23,9 +25,9 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioPlayerBinding
     private var mediaPlayer = MediaPlayer()
-    private var playerState = STATE_DEFAULT
     private lateinit var url: String
-    private var mainThreadHandler: Handler? = null
+    private lateinit var audioPlayerInteractor: AudioPlayerInteractor
+    private lateinit var mainThreadHandler: Handler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,68 +40,75 @@ class AudioPlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        val emptyTrack: Track?
-
-        if (intent.hasExtra(SearchActivity.AUDIO_PLAYER)) {
-
-            emptyTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                intent.getSerializableExtra(SearchActivity.AUDIO_PLAYER, Track::class.java)
-            } else {
-                intent.getSerializableExtra(SearchActivity.AUDIO_PLAYER) as Track
-            }
-
-            if (emptyTrack != null) {
-                binding.songTitle.text = emptyTrack.trackName
-                binding.bandTitle.text = emptyTrack.artistName
-                binding.songLength.text = emptyTrack.trackTimeMillis
-
-                if (emptyTrack.collectionName?.isNotEmpty() == true) {
-                    binding.album.text = emptyTrack.collectionName
-                    binding.album.visibility = View.VISIBLE
-                    binding.albumTitle.visibility = View.VISIBLE
-                }
-
-                if (emptyTrack.releaseDate?.isNotEmpty() == true) {
-                    binding.year.text = emptyTrack.releaseDate.substring(0, 4)
-                }
-                binding.genre.text = emptyTrack.primaryGenreName
-                binding.country.text = emptyTrack.country
-                Glide
-                    .with(binding.imageCover)
-                    .load(emptyTrack.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
-                    .placeholder(R.drawable.vector_cover_placeholder)
-                    .centerCrop()
-                    .transform(RoundedCorners(dpToPx(2.0f, binding.imageCover.context)))
-                    .into(binding.imageCover)
-
-                url = emptyTrack.previewUrl
-            }
+        val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra(SearchActivity.AUDIO_PLAYER, Track::class.java)
+        } else {
+            intent.getSerializableExtra(SearchActivity.AUDIO_PLAYER) as Track
         }
 
-        preparePlayer()
+        if (track != null) {
+            binding.songTitle.text = track.trackName
+            binding.bandTitle.text = track.artistName
+            binding.songLength.text = track.trackTimeMillis
+
+            if (track.collectionName?.isNotEmpty() == true) {
+                binding.album.text = track.collectionName
+                binding.album.visibility = View.VISIBLE
+                binding.albumTitle.visibility = View.VISIBLE
+            }
+
+            if (track.releaseDate?.isNotEmpty() == true) {
+                binding.year.text = track.releaseDate.substring(0, 4)
+            }
+            binding.genre.text = track.primaryGenreName
+            binding.country.text = track.country
+            Glide
+                .with(binding.imageCover)
+                .load(track.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
+                .placeholder(R.drawable.vector_cover_placeholder)
+                .centerCrop()
+                .transform(RoundedCorners(dpToPx(2.0f, binding.imageCover.context)))
+                .into(binding.imageCover)
+
+            url = track.previewUrl
+        }
+
+        mainThreadHandler = Handler(Looper.getMainLooper())
+
+        audioPlayerInteractor = Creator.provideAudioInteractor(
+            mediaPlayer,
+            mainThreadHandler,
+            track,
+            binding.playButton,
+            binding.songTime
+        )
+
+
+
+        /*preparePlayer()
         binding.playButton.setOnClickListener {
             playbackControl()
             mainThreadHandler?.post(
                 setCurrentPosition()
             )
-        }
+        }*/
 
-        mainThreadHandler = Handler(Looper.getMainLooper())
+
     }
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        audioPlayerInteractor.pausePlayer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
-        mainThreadHandler?.removeCallbacks(setCurrentPosition())
+        mainThreadHandler.removeCallbacks(audioPlayerInteractor.setCurrentPosition())
     }
 
 
-    fun preparePlayer() {
+    /*fun preparePlayer() {
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
@@ -169,5 +178,5 @@ class AudioPlayerActivity : AppCompatActivity() {
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
         private const val DELAY = 500L
-    }
+    }*/
 }
