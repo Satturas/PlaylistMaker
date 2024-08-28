@@ -164,7 +164,7 @@ class SearchActivity : AppCompatActivity() {
         adapter.tracks = tracksList
         binding.rvTracks.adapter = adapter
 
-        searchHistoryAdapter.tracks = historyOfTracksList
+        searchHistoryAdapter.tracks = getHistoryOfTracksUseCase.execute()
         binding.rvHistorySearchTracks.adapter = searchHistoryAdapter
 
     }
