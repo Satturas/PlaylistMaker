@@ -19,17 +19,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.playlist_maker_dev.Creator
 import com.example.playlist_maker_dev.R
+import com.example.playlist_maker_dev.data.TracksRepositoryImpl
 import com.example.playlist_maker_dev.data.repository.SearchHistoryRepositoryImpl
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
 import com.example.playlist_maker_dev.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.domain.usecase.GetHistoryOfTracksUseCase
 import com.example.playlist_maker_dev.domain.usecase.SaveHistoryOfTracksUseCase
+import com.example.playlist_maker_dev.domain.usecase.SaveTrackToHistoryUseCase
 import com.example.playlist_maker_dev.ui.player.AudioPlayerActivity
 
 class SearchActivity : AppCompatActivity() {
 
-    private val searchHistoryRepository by lazy { SearchHistoryRepositoryImpl(context = applicationContext) }
+    private val searchHistoryRepository by lazy {
+        SearchHistoryRepositoryImpl(context = applicationContext)
+    }
     private val getHistoryOfTracksUseCase by lazy {
         GetHistoryOfTracksUseCase(
             searchHistoryRepository
@@ -41,12 +45,30 @@ class SearchActivity : AppCompatActivity() {
         )
     }
 
+    private val saveTrackToHistoryUseCase by lazy {
+        SaveTrackToHistoryUseCase(
+            searchHistoryRepository
+        )
+    }
+
     private lateinit var binding: ActivitySearchBinding
     private var inputValue: CharSequence = SEARCH_DEF
     private val tracksList = mutableListOf<Track>()
     private var historyOfTracksList = mutableListOf<Track>()
-    private val adapter = TrackAdapter(mutableListOf(), this)
-    private val searchHistoryAdapter = TrackAdapter(mutableListOf(), this)
+    private val adapter: TrackAdapter by lazy {
+        TrackAdapter(mutableListOf()) { track ->
+            handleTrackClick(
+                track
+            )
+        }
+    }
+    private val searchHistoryAdapter: TrackAdapter by lazy {
+        TrackAdapter(mutableListOf()) { track ->
+            handleTrackClick(
+                track
+            )
+        }
+    }
     private lateinit var inputEditTextSearchTracks: EditText
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { findTrack() }
@@ -144,7 +166,7 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryAdapter.tracks = historyOfTracksList
         binding.rvHistorySearchTracks.adapter = searchHistoryAdapter
 
-        adapter.setOnClickListener(object :
+        /*adapter.setOnClickListener(object :
             TrackAdapter.OnClickListener {
             override fun onClick(position: Int, track: Track) {
                 if (clickDebounce()) {
@@ -164,7 +186,7 @@ class SearchActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-        })
+        })*/
     }
 
     private fun searchDebounce() {
@@ -173,7 +195,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateHistoryOfTracksList(position: Int) {
+    /*fun updateHistoryOfTracksList(position: Int) {
         if (!inputEditTextSearchTracks.text.isNullOrEmpty()) {
             if (historyOfTracksList.isNotEmpty()) {
                 historyOfTracksList.removeIf { it.trackId == tracksList[position].trackId }
@@ -193,7 +215,7 @@ class SearchActivity : AppCompatActivity() {
                 saveHistoryOfTracksUseCase.execute(historyOfTracksList)
             }
         }
-    }
+    }*/
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -327,6 +349,18 @@ class SearchActivity : AppCompatActivity() {
         binding.placeholderImage.visibility = View.GONE
         binding.buttonReload.visibility = View.GONE
         binding.placeholderMessage.visibility = View.GONE
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun handleTrackClick(track: Track) {
+        if (clickDebounce()) {
+            Intent(this, AudioPlayerActivity::class.java).apply {
+                putExtra(AUDIO_PLAYER, track)
+                startActivity(intent)
+            }
+        }
+        saveTrackToHistoryUseCase.execute(track)
+        searchHistoryAdapter.notifyDataSetChanged()
     }
 
     enum class ErrorCauses {

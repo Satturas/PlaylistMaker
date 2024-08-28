@@ -8,4 +8,6 @@ interface SearchHistoryRepository {
 
     fun getSearchHistory(): MutableList<Track>
 
+    fun saveTracktoHistory(param: Track)
+
 }

@@ -29,6 +29,18 @@ class SearchHistoryRepositoryImpl(context: Context) : SearchHistoryRepository {
         return tracksList
     }
 
+    override fun saveTracktoHistory(param: Track) {
+        val oldTrackList = getSearchHistory()
+        if (oldTrackList.isNotEmpty()) {
+            oldTrackList.removeIf { it.trackId == param.trackId }
+            if (oldTrackList.size >= 10) {
+                oldTrackList.removeLast()
+            }
+        }
+        oldTrackList.add(0, param)
+        saveSearchHistory(oldTrackList)
+    }
+
     private fun createJsonFromTrack(tracks: List<Track>): String {
         return Gson().toJson(tracks)
     }
