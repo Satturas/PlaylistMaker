@@ -175,9 +175,9 @@ class SearchActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-        })
+        })*/
 
-        searchHistoryAdapter.setOnClickListener(object :
+        /*searchHistoryAdapter.setOnClickListener(object :
             TrackAdapter.OnClickListener {
             override fun onClick(position: Int, track: Track) {
                 if (clickDebounce()) {
@@ -354,12 +354,12 @@ class SearchActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun handleTrackClick(track: Track) {
         if (clickDebounce()) {
-            Intent(this, AudioPlayerActivity::class.java).apply {
+            val intent = Intent(this, AudioPlayerActivity::class.java).apply {
                 putExtra(AUDIO_PLAYER, track)
-                startActivity(intent)
             }
+            saveTrackToHistoryUseCase.execute(track)
+            startActivity(intent)
         }
-        saveTrackToHistoryUseCase.execute(track)
         searchHistoryAdapter.notifyDataSetChanged()
     }
 
