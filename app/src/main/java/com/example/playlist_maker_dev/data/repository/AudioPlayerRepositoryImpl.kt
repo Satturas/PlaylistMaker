@@ -27,6 +27,9 @@ class AudioPlayerRepositoryImpl(
         preparePlayer()
         playImageView.setOnClickListener {
             playbackControl()
+            handler.post(
+                setCurrentPosition()
+            )
         }
     }
 

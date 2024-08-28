@@ -82,18 +82,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             binding.playButton,
             binding.songTime
         )
-
-
-
-        /*preparePlayer()
-        binding.playButton.setOnClickListener {
-            playbackControl()
-            mainThreadHandler?.post(
-                setCurrentPosition()
-            )
-        }*/
-
-
     }
 
     override fun onPause() {
@@ -107,76 +95,4 @@ class AudioPlayerActivity : AppCompatActivity() {
         mainThreadHandler.removeCallbacks(audioPlayerInteractor.setCurrentPosition())
     }
 
-
-    /*fun preparePlayer() {
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            binding.playButton.isEnabled = true
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
-            binding.playButton.setImageResource(R.drawable.vector_play)
-            playerState = STATE_PREPARED
-        }
-    }
-
-    private fun startPlayer() {
-        mediaPlayer.start()
-        binding.playButton.setImageResource(R.drawable.vector_pause_button)
-        playerState = STATE_PLAYING
-    }
-
-    private fun pausePlayer() {
-        mediaPlayer.pause()
-        binding.playButton.setImageResource(R.drawable.vector_play)
-        playerState = STATE_PAUSED
-    }
-
-    private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-            }
-        }
-    }
-
-    private fun setCurrentPosition(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                when (playerState) {
-                    STATE_PLAYING -> {
-                        binding.songTime.text = SimpleDateFormat(
-                            "mm:ss",
-                            Locale.getDefault()
-                        ).format(mediaPlayer.currentPosition)
-                        mainThreadHandler?.postDelayed(this, DELAY)
-                    }
-
-                    STATE_PAUSED -> {
-                        mainThreadHandler?.removeCallbacks(this)
-
-                    }
-
-                    STATE_PREPARED -> {
-                        binding.songTime.text = getString(R.string.timer_00)
-                    }
-
-                }
-            }
-        }
-    }
-
-
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-        private const val DELAY = 500L
-    }*/
 }
