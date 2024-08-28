@@ -314,9 +314,10 @@ class SearchActivity : AppCompatActivity() {
                 putExtra(AUDIO_PLAYER, track)
             }
             saveTrackToHistoryUseCase.execute(track)
+            searchHistoryAdapter.tracks = getHistoryOfTracksUseCase.execute()
+            searchHistoryAdapter.notifyDataSetChanged()
             startActivity(intent)
         }
-        searchHistoryAdapter.notifyDataSetChanged()
     }
 
     enum class ErrorCauses {
