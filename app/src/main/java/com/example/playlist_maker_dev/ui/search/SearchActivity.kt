@@ -55,6 +55,7 @@ class SearchActivity : AppCompatActivity() {
     private var inputValue: CharSequence = SEARCH_DEF
     private val tracksList = mutableListOf<Track>()
     private var historyOfTracksList = mutableListOf<Track>()
+
     private val adapter: TrackAdapter by lazy {
         TrackAdapter(mutableListOf()) { track ->
             handleTrackClick(
@@ -166,56 +167,12 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryAdapter.tracks = historyOfTracksList
         binding.rvHistorySearchTracks.adapter = searchHistoryAdapter
 
-        /*adapter.setOnClickListener(object :
-            TrackAdapter.OnClickListener {
-            override fun onClick(position: Int, track: Track) {
-                if (clickDebounce()) {
-                    val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
-                    intent.putExtra(AUDIO_PLAYER, track)
-                    startActivity(intent)
-                }
-            }
-        })*/
-
-        /*searchHistoryAdapter.setOnClickListener(object :
-            TrackAdapter.OnClickListener {
-            override fun onClick(position: Int, track: Track) {
-                if (clickDebounce()) {
-                    val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
-                    intent.putExtra(AUDIO_PLAYER, track)
-                    startActivity(intent)
-                }
-            }
-        })*/
     }
 
     private fun searchDebounce() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
-
-    @SuppressLint("NotifyDataSetChanged")
-    /*fun updateHistoryOfTracksList(position: Int) {
-        if (!inputEditTextSearchTracks.text.isNullOrEmpty()) {
-            if (historyOfTracksList.isNotEmpty()) {
-                historyOfTracksList.removeIf { it.trackId == tracksList[position].trackId }
-                if (historyOfTracksList.size >= 10) {
-                    historyOfTracksList.removeLast()
-                }
-            }
-            historyOfTracksList.add(0, tracksList[position])
-            searchHistoryAdapter.notifyDataSetChanged()
-            saveHistoryOfTracksUseCase.execute(historyOfTracksList)
-        } else {
-            if (historyOfTracksList.isNotEmpty()) {
-                val tempTrack = historyOfTracksList[position]
-                historyOfTracksList.removeAt(position)
-                historyOfTracksList.add(0, tempTrack)
-                searchHistoryAdapter.notifyDataSetChanged()
-                saveHistoryOfTracksUseCase.execute(historyOfTracksList)
-            }
-        }
-    }*/
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -315,7 +272,6 @@ class SearchActivity : AppCompatActivity() {
                 })
         }
     }
-
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
