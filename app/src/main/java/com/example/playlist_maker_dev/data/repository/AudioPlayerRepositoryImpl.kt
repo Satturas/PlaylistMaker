@@ -22,6 +22,8 @@ class AudioPlayerRepositoryImpl(
     private var playerState = STATE_DEFAULT
     private var url: String
 
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
     init {
         url = track?.previewUrl.toString()
         preparePlayer()
@@ -76,10 +78,7 @@ class AudioPlayerRepositoryImpl(
             override fun run() {
                 when (playerState) {
                     STATE_PLAYING -> {
-                        trackTimerTextView.text = SimpleDateFormat(
-                            "mm:ss",
-                            Locale.getDefault()
-                        ).format(mediaPlayer.currentPosition)
+                        trackTimerTextView.text = dateFormat.format(mediaPlayer.currentPosition)
                         mainThreadHandler.postDelayed(this, DELAY)
                     }
 
