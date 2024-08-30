@@ -18,8 +18,6 @@ import com.example.playlist_maker_dev.domain.api.AudioPlayerInteractor
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.ui.search.SearchActivity
 import com.example.playlist_maker_dev.ui.search.dpToPx
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -75,7 +73,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         mainThreadHandler = Handler(Looper.getMainLooper())
 
-        audioPlayerInteractor = Creator.provideAudioInteractor(
+        audioPlayerInteractor = Creator.provideAudioPlayerInteractor(
             mediaPlayer,
             mainThreadHandler,
             track,

@@ -23,32 +23,9 @@ import com.example.playlist_maker_dev.data.repository.SearchHistoryRepositoryImp
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
 import com.example.playlist_maker_dev.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.domain.models.Track
-import com.example.playlist_maker_dev.domain.usecase.GetHistoryOfTracksUseCase
-import com.example.playlist_maker_dev.domain.usecase.SaveHistoryOfTracksUseCase
-import com.example.playlist_maker_dev.domain.usecase.SaveTrackToHistoryUseCase
 import com.example.playlist_maker_dev.ui.player.AudioPlayerActivity
 
 class SearchActivity : AppCompatActivity() {
-
-    private val searchHistoryRepository by lazy {
-        SearchHistoryRepositoryImpl(context = applicationContext)
-    }
-    private val getHistoryOfTracksUseCase by lazy {
-        GetHistoryOfTracksUseCase(
-            searchHistoryRepository
-        )
-    }
-    private val saveHistoryOfTracksUseCase by lazy {
-        SaveHistoryOfTracksUseCase(
-            searchHistoryRepository
-        )
-    }
-
-    private val saveTrackToHistoryUseCase by lazy {
-        SaveTrackToHistoryUseCase(
-            searchHistoryRepository
-        )
-    }
 
     private lateinit var binding: ActivitySearchBinding
     private var inputValue: CharSequence = SEARCH_DEF
@@ -96,7 +73,8 @@ class SearchActivity : AppCompatActivity() {
         binding.inputEditTextSearchTracks.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.inputEditTextSearchTracks.text.isNullOrEmpty()) {
                 if (historyOfTracksList.isEmpty()) {
-                    historyOfTracksList = getHistoryOfTracksUseCase.execute()
+                    historyOfTracksList = Creator.provideSearchHistoryInteractor(this)
+                        .getHistoryOfTracks()//getHistoryOfTracksUseCase.execute()
                     searchHistoryAdapter.tracks = historyOfTracksList
                     searchHistoryAdapter.notifyDataSetChanged()
                     showHistoryByEmptyOrNotList()
@@ -136,7 +114,7 @@ class SearchActivity : AppCompatActivity() {
         binding.buttonClearSearchHistory.setOnClickListener {
             historyOfTracksList.clear()
             searchHistoryAdapter.notifyDataSetChanged()
-            saveHistoryOfTracksUseCase.execute(historyOfTracksList)
+            Creator.provideSearchHistoryInteractor(this).saveHistoryOfTracks(historyOfTracksList)
             showSearchHistory(false)
         }
 
@@ -163,7 +141,8 @@ class SearchActivity : AppCompatActivity() {
         adapter.tracks = tracksList
         binding.rvTracks.adapter = adapter
 
-        searchHistoryAdapter.tracks = getHistoryOfTracksUseCase.execute()
+        searchHistoryAdapter.tracks =
+            Creator.provideSearchHistoryInteractor(this).getHistoryOfTracks()
         binding.rvHistorySearchTracks.adapter = searchHistoryAdapter
 
     }
@@ -312,8 +291,9 @@ class SearchActivity : AppCompatActivity() {
             val intent = Intent(this, AudioPlayerActivity::class.java).apply {
                 putExtra(AUDIO_PLAYER, track)
             }
-            saveTrackToHistoryUseCase.execute(track)
-            searchHistoryAdapter.tracks = getHistoryOfTracksUseCase.execute()
+            Creator.provideSearchHistoryInteractor(this).saveTrackToHistory(track)
+            searchHistoryAdapter.tracks =
+                Creator.provideSearchHistoryInteractor(this).getHistoryOfTracks()
             searchHistoryAdapter.notifyDataSetChanged()
             startActivity(intent)
         }
