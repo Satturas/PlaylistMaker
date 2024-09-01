@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev
+package com.example.playlist_maker_dev.domain.models
 
 import retrofit2.Call
 import retrofit2.http.GET
@@ -17,11 +17,4 @@ data class Track(
     val previewUrl: String
 ) : java.io.Serializable
 
-class TrackResponse(
-    val results: List<Track>
-)
 
-interface ITunesApi {
-    @GET("/search?entity=song")
-    fun findTrack(@Query("term") text: String): Call<TrackResponse>
-}

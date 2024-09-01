@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev
+package com.example.playlist_maker_dev.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,31 +17,35 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.example.playlist_maker_dev.Creator
+import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.playlist_maker_dev.domain.api.TracksInteractor
+import com.example.playlist_maker_dev.domain.models.Track
+import com.example.playlist_maker_dev.ui.player.AudioPlayerActivity
 
 class SearchActivity : AppCompatActivity() {
 
-    private val iTunesBaseUrl = "https://itunes.apple.com"
     private lateinit var binding: ActivitySearchBinding
-
-    private val retrofit =
-        Retrofit.Builder().baseUrl(iTunesBaseUrl).addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-    private val iTunesService = retrofit.create(ITunesApi::class.java)
     private var inputValue: CharSequence = SEARCH_DEF
     private val tracksList = mutableListOf<Track>()
     private var historyOfTracksList = mutableListOf<Track>()
-    private val adapter = TrackAdapter(mutableListOf(), this)
-    private val searchHistoryAdapter = TrackAdapter(mutableListOf(), this)
-    private lateinit var searchHistory: SearchHistory
-    private lateinit var inputEditTextSearchTracks: EditText
 
+    private val adapter: TrackAdapter by lazy {
+        TrackAdapter(mutableListOf()) { track ->
+            handleTrackClick(
+                track
+            )
+        }
+    }
+    private val searchHistoryAdapter: TrackAdapter by lazy {
+        TrackAdapter(mutableListOf()) { track ->
+            handleTrackClick(
+                track
+            )
+        }
+    }
+    private lateinit var inputEditTextSearchTracks: EditText
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { findTrack() }
     private var isClickAllowed = true
@@ -60,12 +64,6 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        searchHistory = SearchHistory(
-            getSharedPreferences(
-                SEARCH_TRACKS_HISTORY, MODE_PRIVATE
-            )
-        )
-
         if (savedInstanceState != null) inputValue =
             savedInstanceState.getCharSequence(SEARCH_USER_INPUT, SEARCH_DEF)
 
@@ -74,7 +72,8 @@ class SearchActivity : AppCompatActivity() {
         binding.inputEditTextSearchTracks.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.inputEditTextSearchTracks.text.isNullOrEmpty()) {
                 if (historyOfTracksList.isEmpty()) {
-                    historyOfTracksList = searchHistory.readFromSharedPreferences()
+                    historyOfTracksList = Creator.provideSearchHistoryInteractor(this)
+                        .getHistoryOfTracks()//getHistoryOfTracksUseCase.execute()
                     searchHistoryAdapter.tracks = historyOfTracksList
                     searchHistoryAdapter.notifyDataSetChanged()
                     showHistoryByEmptyOrNotList()
@@ -114,7 +113,7 @@ class SearchActivity : AppCompatActivity() {
         binding.buttonClearSearchHistory.setOnClickListener {
             historyOfTracksList.clear()
             searchHistoryAdapter.notifyDataSetChanged()
-            searchHistory.writeToSharedPreferences(historyOfTracksList)
+            Creator.provideSearchHistoryInteractor(this).saveHistoryOfTracks(historyOfTracksList)
             showSearchHistory(false)
         }
 
@@ -141,58 +140,15 @@ class SearchActivity : AppCompatActivity() {
         adapter.tracks = tracksList
         binding.rvTracks.adapter = adapter
 
-        searchHistoryAdapter.tracks = historyOfTracksList
+        searchHistoryAdapter.tracks =
+            Creator.provideSearchHistoryInteractor(this).getHistoryOfTracks()
         binding.rvHistorySearchTracks.adapter = searchHistoryAdapter
 
-        adapter.setOnClickListener(object :
-            TrackAdapter.OnClickListener {
-            override fun onClick(position: Int, track: Track) {
-                if (clickDebounce()) {
-                    val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
-                    intent.putExtra(AUDIO_PLAYER, track)
-                    startActivity(intent)
-                }
-            }
-        })
-
-        searchHistoryAdapter.setOnClickListener(object :
-            TrackAdapter.OnClickListener {
-            override fun onClick(position: Int, track: Track) {
-                if (clickDebounce()) {
-                    val intent = Intent(this@SearchActivity, AudioPlayerActivity::class.java)
-                    intent.putExtra(AUDIO_PLAYER, track)
-                    startActivity(intent)
-                }
-            }
-        })
     }
 
     private fun searchDebounce() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateHistoryOfTracksList(position: Int) {
-        if (!inputEditTextSearchTracks.text.isNullOrEmpty()) {
-            if (historyOfTracksList.isNotEmpty()) {
-                historyOfTracksList.removeIf { it.trackId == tracksList[position].trackId }
-                if (historyOfTracksList.size >= 10) {
-                    historyOfTracksList.removeLast()
-                }
-            }
-            historyOfTracksList.add(0, tracksList[position])
-            searchHistoryAdapter.notifyDataSetChanged()
-            searchHistory.writeToSharedPreferences(historyOfTracksList)
-        } else {
-            if (historyOfTracksList.isNotEmpty()) {
-                val tempTrack = historyOfTracksList[position]
-                historyOfTracksList.removeAt(position)
-                historyOfTracksList.add(0, tempTrack)
-                searchHistoryAdapter.notifyDataSetChanged()
-                searchHistory.writeToSharedPreferences(historyOfTracksList)
-            }
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -256,17 +212,16 @@ class SearchActivity : AppCompatActivity() {
             binding.searchHistoryTitle.visibility = View.GONE
             binding.rvHistorySearchTracks.visibility = View.GONE
             binding.buttonClearSearchHistory.visibility = View.GONE
-            iTunesService.findTrack(binding.inputEditTextSearchTracks.text.toString())
-                .enqueue(object : Callback<TrackResponse> {
+            Creator.provideTracksInteractor().searchTracks(
+                binding.inputEditTextSearchTracks.text.toString(),
+                object : TracksInteractor.TracksConsumer {
                     @SuppressLint("NotifyDataSetChanged")
-                    override fun onResponse(
-                        call: Call<TrackResponse>, response: Response<TrackResponse>
-                    ) {
-                        binding.progressBar.visibility = View.GONE
-                        if (response.code() == 200) {
+                    override fun consume(foundTracks: List<Track>) {
+                        runOnUiThread {
+                            binding.progressBar.visibility = View.GONE
                             tracksList.clear()
-                            if (!response.body()?.results.isNullOrEmpty()) {
-                                tracksList.addAll(response.body()?.results ?: emptyList())
+                            if (!foundTracks.isNullOrEmpty()) {
+                                tracksList.addAll(foundTracks)
                                 adapter.notifyDataSetChanged()
                             }
                             if (tracksList.isEmpty()) {
@@ -279,17 +234,10 @@ class SearchActivity : AppCompatActivity() {
                             } else {
                                 showMessage("", "", ErrorCauses.EVERYTHING_GOOD)
                             }
-                        } else {
-                            showMessage(
-                                getString(R.string.something_went_wrong),
-                                response.code().toString(),
-                                ErrorCauses.NO_CONNECTION
-                            )
-                            showSearchHistory(false)
                         }
                     }
 
-                    override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                    override fun onFailure(t: Throwable) {
                         binding.progressBar.visibility = View.GONE
                         showMessage(
                             getString(R.string.something_went_wrong),
@@ -336,6 +284,20 @@ class SearchActivity : AppCompatActivity() {
         binding.placeholderMessage.visibility = View.GONE
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private fun handleTrackClick(track: Track) {
+        if (clickDebounce()) {
+            val intent = Intent(this, AudioPlayerActivity::class.java).apply {
+                putExtra(AUDIO_PLAYER, track)
+            }
+            Creator.provideSearchHistoryInteractor(this).saveTrackToHistory(track)
+            searchHistoryAdapter.tracks =
+                Creator.provideSearchHistoryInteractor(this).getHistoryOfTracks()
+            searchHistoryAdapter.notifyDataSetChanged()
+            startActivity(intent)
+        }
+    }
+
     enum class ErrorCauses {
         NO_CONNECTION, NO_RESULTS, EVERYTHING_GOOD
     }
@@ -343,7 +305,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_USER_INPUT = "search_user_input"
         private val SEARCH_DEF: CharSequence = ""
-        const val SEARCH_TRACKS_HISTORY = "search_track_history"
         const val AUDIO_PLAYER = "track_for_player"
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
