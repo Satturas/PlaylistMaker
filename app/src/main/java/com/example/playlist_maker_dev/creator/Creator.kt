@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev
+package com.example.playlist_maker_dev.creator
 
 import android.content.Context
 import android.media.MediaPlayer
