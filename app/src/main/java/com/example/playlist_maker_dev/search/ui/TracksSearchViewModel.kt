@@ -19,15 +19,16 @@ import com.example.playlist_maker_dev.search.data.TracksState
 
 class TracksSearchViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val moviesInteractor = Creator.provideTracksInteractor(getApplication<Application>())
-    private val handler = Handler(Looper.getMainLooper())
 
-    private var latestSearchText: String? = null
+    private val tracksInteractor = Creator.provideTracksInteractor(getApplication())
+    private val handler = Handler(Looper.getMainLooper())
 
     private val stateLiveData = MutableLiveData<TracksState>()
     fun observeState(): LiveData<TracksState> = stateLiveData
 
-    fun onDestroy() {
+    private var latestSearchText: String? = null
+
+    override fun onCleared() {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
@@ -53,41 +54,38 @@ class TracksSearchViewModel(application: Application) : AndroidViewModel(applica
         if (newSearchText.isNotEmpty()) {
             renderState(TracksState.Loading)
 
-            moviesInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
-                override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
-
+            tracksInteractor.searchTracks(newSearchText, object : TracksInteractor.TracksConsumer {
+                 override fun consume(foundMovies: List<Track>?) {
                     val tracks = mutableListOf<Track>()
-                    if (foundTracks != null) {
-                        tracks.addAll(foundTracks)
+                    if (foundMovies != null) {
+                        tracks.addAll(foundMovies)
+                    }
 
-                        when {
-                            errorMessage != null -> {
-                                renderState(
-                                    TracksState.Error(
-                                        getApplication<Application>().getString(R.string.something_went_wrong),
-                                    )
+                    when {
+                        errorMessage != null -> {
+                            renderState(
+                                TracksState.Error(getApplication<Application>().getString(R.string.something_went_wrong),
                                 )
-                                //viewState.showToast(errorMessage)
-                            }
-
-                            tracks.isEmpty() -> {
-                                renderState(
-                                    TracksState.Empty(
-                                        getApplication<Application>().getString(R.string.nothing_found),
-                                    )
-                                )
-                            }
-
-                            else -> {
-                                renderState(
-                                    TracksState.Content(
-                                        tracks
-                                    )
-                                )
-                            }
+                            )
+                            //showToast.postValue(errorMessage)
                         }
 
+                        tracks.isEmpty() -> {
+                            renderState(
+                                TracksState.Empty(getApplication<Application>().getString(R.string.nothing_found),
+                                )
+                            )
+                        }
+
+                        else -> {
+                            renderState(
+                                TracksState.Content(
+                                    movies = tracks,
+                                )
+                            )
+                        }
                     }
+
                 }
             })
         }
@@ -97,12 +95,20 @@ class TracksSearchViewModel(application: Application) : AndroidViewModel(applica
         stateLiveData.postValue(state)
     }
 
-    override fun onCleared() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-    }
-
 
     companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private val SEARCH_REQUEST_TOKEN = Any()
+
+        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                TracksSearchViewModel(this[APPLICATION_KEY] as Application)
+            }
+        }
+    }
+}
+
+/*companion object {
         private const val SEARCH_USER_INPUT = "search_user_input"
         private val SEARCH_DEF: CharSequence = ""
         const val AUDIO_PLAYER = "track_for_player"
@@ -116,4 +122,4 @@ class TracksSearchViewModel(application: Application) : AndroidViewModel(applica
             }
         }
     }
-}
+}*/
