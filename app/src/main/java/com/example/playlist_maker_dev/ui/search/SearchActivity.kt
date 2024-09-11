@@ -73,7 +73,7 @@ class SearchActivity : AppCompatActivity() {
             if (hasFocus && binding.inputEditTextSearchTracks.text.isNullOrEmpty()) {
                 if (historyOfTracksList.isEmpty()) {
                     historyOfTracksList = Creator.provideSearchHistoryInteractor(this)
-                        .getHistoryOfTracks()//getHistoryOfTracksUseCase.execute()
+                        .getHistoryOfTracks()
                     searchHistoryAdapter.tracks = historyOfTracksList
                     searchHistoryAdapter.notifyDataSetChanged()
                     showHistoryByEmptyOrNotList()
