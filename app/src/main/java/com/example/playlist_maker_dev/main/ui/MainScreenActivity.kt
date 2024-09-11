@@ -1,12 +1,9 @@
 package com.example.playlist_maker_dev.main.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlist_maker_dev.databinding.ActivityMainBinding
-import com.example.playlist_maker_dev.ui.media.MediaActivity
-import com.example.playlist_maker_dev.ui.settings.SettingsActivity
 
 
 class MainScreenActivity : AppCompatActivity() {

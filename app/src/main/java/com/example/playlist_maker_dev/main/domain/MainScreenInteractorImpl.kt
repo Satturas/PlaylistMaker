@@ -1,6 +1,6 @@
 package com.example.playlist_maker_dev.main.domain
 
-class MainScreenInterectorImpl(private val repository: MainScreenRepository) : MainScreenInterector {
+class MainScreenInteractorImpl(private val repository: MainScreenRepository) : MainScreenInteractor {
 
     override fun onSearchClick() = repository.onSearchClick()
 
