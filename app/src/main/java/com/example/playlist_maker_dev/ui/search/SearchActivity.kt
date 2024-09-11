@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.playlist_maker_dev.creator.Creator
@@ -22,14 +23,17 @@ import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
 import com.example.playlist_maker_dev.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.domain.models.Track
-import com.example.playlist_maker_dev.ui.player.AudioPlayerActivity
+import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
+import com.example.playlist_maker_dev.search.ui.TracksSearchViewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : ComponentActivity() {
 
     private lateinit var binding: ActivitySearchBinding
     private var inputValue: CharSequence = SEARCH_DEF
     private val tracksList = mutableListOf<Track>()
     private var historyOfTracksList = mutableListOf<Track>()
+
+    private lateinit var viewModel: TracksSearchViewModel
 
     private val adapter: TrackAdapter by lazy {
         TrackAdapter(mutableListOf()) { track ->
@@ -54,6 +58,10 @@ class SearchActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel.observeState().observe(this) {
+            render(it)
+        }
 
         binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)

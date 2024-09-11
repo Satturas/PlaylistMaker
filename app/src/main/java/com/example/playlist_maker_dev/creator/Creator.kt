@@ -22,12 +22,12 @@ import com.example.playlist_maker_dev.domain.repository.SearchHistoryRepository
 
 
 object Creator {
-    private fun getTracksRepository(): TracksRepository {
+    private fun getTracksRepository(context: Context): TracksRepository {
         return TracksRepositoryImpl(RetrofitNetworkClient())
     }
 
-    fun provideTracksInteractor(): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository())
+    fun provideTracksInteractor(context: Context): TracksInteractor {
+        return TracksInteractorImpl(getTracksRepository(context))
     }
 
     private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
