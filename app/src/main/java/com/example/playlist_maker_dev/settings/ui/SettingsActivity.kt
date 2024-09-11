@@ -30,12 +30,20 @@ class SettingsActivity : AppCompatActivity() {
         binding.buttonUserAgreement.setOnClickListener { viewModel.userAgreement() }
         binding.buttonShareApp.setOnClickListener { viewModel.shareTextToOtherApps() }
         binding.buttonBackFromSettings.setOnClickListener { finish() }
-        binding.themeSwitcher
 
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        viewModel.darkThemeEnabled.observe(this) { enabled ->
+            if (binding.themeSwitcher.isChecked != enabled) {
+                binding.themeSwitcher.isChecked = enabled
+            }
+        }
+        binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            viewModel.switchTheme(checked)
+        }
+
+        /*val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
         themeSwitcher.isChecked = (applicationContext as App).darkTheme
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
-        }
+        }*/
     }
 }

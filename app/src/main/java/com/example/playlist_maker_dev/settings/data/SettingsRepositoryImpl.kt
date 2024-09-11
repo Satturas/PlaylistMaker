@@ -1,14 +1,20 @@
 package com.example.playlist_maker_dev.settings.data
 
+import android.app.Application.MODE_PRIVATE
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlist_maker_dev.R
+import com.example.playlist_maker_dev.creator.Creator
+import com.example.playlist_maker_dev.presentation.App.Companion.KEY_THEME_MODE
+import com.example.playlist_maker_dev.presentation.App.Companion.PLAYLISTMAKER_PREFERENCES
 import com.example.playlist_maker_dev.settings.domain.SettingsRepository
 
 class SettingsRepositoryImpl(private val context: Context) : SettingsRepository {
-    override fun switchTheme() {
-        TODO("Not yet implemented")
+    override fun switchTheme(isDarkTheme: Boolean) {
+
     }
 
     override fun writeToSupport() {
@@ -46,4 +52,9 @@ class SettingsRepositoryImpl(private val context: Context) : SettingsRepository 
         context.startActivity(shareIntent)
     }
 
+    override fun getSharedPreferencesThemeValue(): Boolean =
+        Creator.provideSharedPreferences(KEY_THEME_MODE).getBoolean(KEY_THEME_MODE, false)
+
+
 }
+

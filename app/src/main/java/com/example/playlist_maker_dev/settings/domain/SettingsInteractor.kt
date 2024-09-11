@@ -1,8 +1,9 @@
 package com.example.playlist_maker_dev.settings.domain
 
 interface SettingsInteractor {
-    fun switchTheme()
+    fun switchTheme(isDarkTheme: Boolean)
     fun writeToSupport()
     fun userAgreement()
     fun shareTextToOtherApps()
+    fun getSharedPreferencesThemeValue(): Boolean
 }

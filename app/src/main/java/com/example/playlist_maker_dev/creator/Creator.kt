@@ -1,6 +1,7 @@
 package com.example.playlist_maker_dev.creator
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.Handler
 import android.widget.ImageView
@@ -19,9 +20,17 @@ import com.example.playlist_maker_dev.domain.impl.TracksInteractorImpl
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.domain.repository.AudioPlayerRepository
 import com.example.playlist_maker_dev.domain.repository.SearchHistoryRepository
+import com.example.playlist_maker_dev.presentation.App
 
 
 object Creator {
+
+    private lateinit var application: App
+
+    fun initApplication(application: App) {
+        Creator.application = application
+    }
+
     private fun getTracksRepository(context: Context): TracksRepository {
         return TracksRepositoryImpl(RetrofitNetworkClient())
     }
@@ -38,6 +47,9 @@ object Creator {
         return SearchHistoryInteractorImpl(getSearchHistoryRepository(context))
     }
 
+    fun provideSharedPreferences(key: String): SharedPreferences {
+        return application.getSharedPreferences(key, Context.MODE_PRIVATE)
+    }
 
     private fun provideAudioPlayerRepository(
         mediaPlayer: MediaPlayer,
