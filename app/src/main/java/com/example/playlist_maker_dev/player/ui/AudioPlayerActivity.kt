@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev.ui.player
+package com.example.playlist_maker_dev.player.ui
 
 import android.media.MediaPlayer
 import android.os.Build
@@ -8,13 +8,13 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.creator.Creator
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
-import com.example.playlist_maker_dev.domain.api.AudioPlayerInteractor
+import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.ui.search.SearchActivity
 import com.example.playlist_maker_dev.ui.search.dpToPx
@@ -22,6 +22,8 @@ import com.example.playlist_maker_dev.ui.search.dpToPx
 class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioPlayerBinding
+    private lateinit var viewModel: AudioPlayerViewModel
+
     private var mediaPlayer = MediaPlayer()
     private lateinit var url: String
     private lateinit var audioPlayerInteractor: AudioPlayerInteractor
@@ -33,10 +35,10 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding = ActivityAudioPlayerBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        val backButton = findViewById<Toolbar>(R.id.toolbar)
-        backButton.setOnClickListener {
-            finish()
-        }
+        binding.toolbar.setOnClickListener { finish() }
+
+        viewModel = ViewModelProvider(this, AudioPlayerViewModel.getViewModelFactory("123"))[AudioPlayerViewModel::class.java]
+
 
         val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra(SearchActivity.AUDIO_PLAYER, Track::class.java)

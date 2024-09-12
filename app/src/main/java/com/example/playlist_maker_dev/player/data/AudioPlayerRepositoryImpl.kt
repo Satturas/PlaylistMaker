@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev.data.repository
+package com.example.playlist_maker_dev.player.data
 
 import android.media.MediaPlayer
 import android.os.Handler
@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.domain.models.Track
-import com.example.playlist_maker_dev.domain.repository.AudioPlayerRepository
+import com.example.playlist_maker_dev.player.domain.AudioPlayerRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
 

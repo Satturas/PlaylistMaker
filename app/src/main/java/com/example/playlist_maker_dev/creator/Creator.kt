@@ -7,19 +7,19 @@ import android.os.Handler
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.playlist_maker_dev.data.network.RetrofitNetworkClient
-import com.example.playlist_maker_dev.data.repository.AudioPlayerRepositoryImpl
 import com.example.playlist_maker_dev.data.repository.SearchHistoryRepositoryImpl
 import com.example.playlist_maker_dev.data.repository.TracksRepositoryImpl
-import com.example.playlist_maker_dev.domain.api.AudioPlayerInteractor
+import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
 import com.example.playlist_maker_dev.domain.api.SearchHistoryInteractor
 import com.example.playlist_maker_dev.domain.api.TracksInteractor
-import com.example.playlist_maker_dev.domain.impl.AudioPlayerInteractorImpl
+import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractorImpl
 import com.example.playlist_maker_dev.domain.impl.SearchHistoryInteractorImpl
 import com.example.playlist_maker_dev.domain.impl.TracksInteractorImpl
 import com.example.playlist_maker_dev.domain.models.Track
-import com.example.playlist_maker_dev.domain.repository.AudioPlayerRepository
+import com.example.playlist_maker_dev.player.domain.AudioPlayerRepository
 import com.example.playlist_maker_dev.domain.repository.SearchHistoryRepository
 import com.example.playlist_maker_dev.domain.repository.TracksRepository
+import com.example.playlist_maker_dev.player.data.AudioPlayerRepositoryImpl
 import com.example.playlist_maker_dev.presentation.App
 import com.example.playlist_maker_dev.settings.data.SettingsRepositoryImpl
 import com.example.playlist_maker_dev.settings.domain.SettingsInteractor
@@ -96,8 +96,15 @@ object Creator {
                 track,
                 playImageView,
                 trackTimerTextView
-
             )
         )
+    }
+
+    fun getRepository(): TracksRepository {
+        return TracksRepositoryImpl(RetrofitNetworkClient())
+    }
+
+    fun provideTracksInteractor(): TracksInteractor {
+        return TracksInteractorImpl(getRepository())
     }
 }

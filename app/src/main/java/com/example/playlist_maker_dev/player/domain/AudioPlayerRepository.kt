@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev.domain.repository
+package com.example.playlist_maker_dev.player.domain
 
 interface AudioPlayerRepository {
     fun preparePlayer()

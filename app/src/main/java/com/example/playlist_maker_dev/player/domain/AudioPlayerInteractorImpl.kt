@@ -1,9 +1,7 @@
-package com.example.playlist_maker_dev.domain.impl
+package com.example.playlist_maker_dev.player.domain
 
-import com.example.playlist_maker_dev.domain.api.AudioPlayerInteractor
-import com.example.playlist_maker_dev.domain.repository.AudioPlayerRepository
-
-class AudioPlayerInteractorImpl(private val audioPlayerRepository: AudioPlayerRepository) : AudioPlayerInteractor {
+class AudioPlayerInteractorImpl(private val audioPlayerRepository: AudioPlayerRepository) :
+    AudioPlayerInteractor {
     override fun preparePlayer() {
         audioPlayerRepository.preparePlayer()
     }

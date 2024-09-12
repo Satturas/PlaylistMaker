@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev.domain.api
+package com.example.playlist_maker_dev.player.domain
 
 interface AudioPlayerInteractor {
     fun preparePlayer()
