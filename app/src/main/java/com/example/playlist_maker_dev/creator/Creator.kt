@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev
+package com.example.playlist_maker_dev.creator
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -15,11 +15,11 @@ import com.example.playlist_maker_dev.domain.api.SearchHistoryInteractor
 import com.example.playlist_maker_dev.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.domain.impl.AudioPlayerInteractorImpl
 import com.example.playlist_maker_dev.domain.impl.SearchHistoryInteractorImpl
-import com.example.playlist_maker_dev.domain.repository.TracksRepository
 import com.example.playlist_maker_dev.domain.impl.TracksInteractorImpl
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.domain.repository.AudioPlayerRepository
 import com.example.playlist_maker_dev.domain.repository.SearchHistoryRepository
+import com.example.playlist_maker_dev.domain.repository.TracksRepository
 import com.example.playlist_maker_dev.presentation.App
 import com.example.playlist_maker_dev.settings.data.SettingsRepositoryImpl
 import com.example.playlist_maker_dev.settings.domain.SettingsInteractor

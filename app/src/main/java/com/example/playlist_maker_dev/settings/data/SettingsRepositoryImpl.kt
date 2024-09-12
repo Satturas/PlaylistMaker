@@ -5,7 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.Creator
+import com.example.playlist_maker_dev.creator.Creator
 import com.example.playlist_maker_dev.presentation.App.Companion.KEY_THEME_MODE
 import com.example.playlist_maker_dev.presentation.App.Companion.PLAYLISTMAKER_PREFERENCES
 import com.example.playlist_maker_dev.settings.domain.SettingsRepository

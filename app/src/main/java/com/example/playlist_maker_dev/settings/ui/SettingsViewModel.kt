@@ -27,5 +27,4 @@ class SettingsViewModel(
         interactor.switchTheme(isDarkTheme)
         isdarkThemeEnabled.value = isDarkTheme
     }
-
 }
