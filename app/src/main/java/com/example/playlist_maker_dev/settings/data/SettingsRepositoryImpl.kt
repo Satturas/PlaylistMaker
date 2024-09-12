@@ -1,20 +1,26 @@
 package com.example.playlist_maker_dev.settings.data
 
-import android.app.Application.MODE_PRIVATE
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.creator.Creator
+import com.example.playlist_maker_dev.Creator
 import com.example.playlist_maker_dev.presentation.App.Companion.KEY_THEME_MODE
 import com.example.playlist_maker_dev.presentation.App.Companion.PLAYLISTMAKER_PREFERENCES
 import com.example.playlist_maker_dev.settings.domain.SettingsRepository
 
 class SettingsRepositoryImpl(private val context: Context) : SettingsRepository {
-    override fun switchTheme(isDarkTheme: Boolean) {
 
+    override fun switchTheme(isDarkTheme: Boolean) {
+        AppCompatDelegate.setDefaultNightMode(
+            if (isDarkTheme) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+        )
+        editSharedPreferencesThemeValue(isDarkTheme)
     }
 
     override fun writeToSupport() {
@@ -53,8 +59,13 @@ class SettingsRepositoryImpl(private val context: Context) : SettingsRepository 
     }
 
     override fun getSharedPreferencesThemeValue(): Boolean =
-        Creator.provideSharedPreferences(KEY_THEME_MODE).getBoolean(KEY_THEME_MODE, false)
+        Creator.provideSharedPreferences(PLAYLISTMAKER_PREFERENCES)
+            .getBoolean(KEY_THEME_MODE, false)
 
+    override fun editSharedPreferencesThemeValue(isDarkTheme: Boolean) =
+        Creator.provideSharedPreferences(PLAYLISTMAKER_PREFERENCES).edit()
+            .putBoolean(KEY_THEME_MODE, isDarkTheme)
+            .apply()
 
 }
 

@@ -15,25 +15,21 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.example.playlist_maker_dev.creator.Creator
+import com.example.playlist_maker_dev.Creator
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
 import com.example.playlist_maker_dev.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.domain.models.Track
-import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
-import com.example.playlist_maker_dev.search.ui.TracksSearchViewModel
+import com.example.playlist_maker_dev.ui.player.AudioPlayerActivity
 
-class SearchActivity : ComponentActivity() {
+class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
     private var inputValue: CharSequence = SEARCH_DEF
     private val tracksList = mutableListOf<Track>()
     private var historyOfTracksList = mutableListOf<Track>()
-
-    private lateinit var viewModel: TracksSearchViewModel
 
     private val adapter: TrackAdapter by lazy {
         TrackAdapter(mutableListOf()) { track ->
@@ -59,10 +55,6 @@ class SearchActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.observeState().observe(this) {
-            render(it)
-        }
-
         binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         inputEditTextSearchTracks = findViewById(R.id.inputEditTextSearchTracks)
@@ -81,7 +73,7 @@ class SearchActivity : ComponentActivity() {
             if (hasFocus && binding.inputEditTextSearchTracks.text.isNullOrEmpty()) {
                 if (historyOfTracksList.isEmpty()) {
                     historyOfTracksList = Creator.provideSearchHistoryInteractor(this)
-                        .getHistoryOfTracks()
+                        .getHistoryOfTracks()//getHistoryOfTracksUseCase.execute()
                     searchHistoryAdapter.tracks = historyOfTracksList
                     searchHistoryAdapter.notifyDataSetChanged()
                     showHistoryByEmptyOrNotList()
@@ -220,7 +212,7 @@ class SearchActivity : ComponentActivity() {
             binding.searchHistoryTitle.visibility = View.GONE
             binding.rvHistorySearchTracks.visibility = View.GONE
             binding.buttonClearSearchHistory.visibility = View.GONE
-            Creator.provideTracksInteractor().searchTracks(
+            Creator.provideTracksInteractor(this).searchTracks(
                 binding.inputEditTextSearchTracks.text.toString(),
                 object : TracksInteractor.TracksConsumer {
                     @SuppressLint("NotifyDataSetChanged")
@@ -318,7 +310,3 @@ class SearchActivity : ComponentActivity() {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
-
-
-
-

@@ -14,7 +14,13 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var viewModel: SettingsViewModel
+
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this, SettingsViewModelFactory(this)
+        ).get(SettingsViewModel::class.java)
+    }
+    //private lateinit var viewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,9 +28,9 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(
+        /*viewModel = ViewModelProvider(
             this, SettingsViewModelFactory(this)
-        ).get(SettingsViewModel::class.java)
+        ).get(SettingsViewModel::class.java)*/
 
         binding.buttonWriteToSupport.setOnClickListener { viewModel.writeToSupport() }
         binding.buttonUserAgreement.setOnClickListener { viewModel.userAgreement() }

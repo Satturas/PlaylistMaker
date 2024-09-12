@@ -12,4 +12,7 @@ class SettingsInteractorImpl(private val repository: SettingsRepository) : Setti
 
     override fun getSharedPreferencesThemeValue() = repository.getSharedPreferencesThemeValue()
 
+    override fun editSharedPreferencesThemeValue(isDarkTheme: Boolean) =
+        repository.editSharedPreferencesThemeValue(isDarkTheme)
+
 }

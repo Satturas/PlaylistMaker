@@ -12,6 +12,10 @@ class SettingsViewModel(
     private val isdarkThemeEnabled = MutableLiveData<Boolean>()
     val darkThemeEnabled: LiveData<Boolean> get() = isdarkThemeEnabled
 
+    init {
+        isdarkThemeEnabled.value = interactor.getSharedPreferencesThemeValue()
+    }
+
     fun writeToSupport() = interactor.writeToSupport()
 
     fun userAgreement() = interactor.userAgreement()
@@ -19,6 +23,7 @@ class SettingsViewModel(
     fun shareTextToOtherApps() = interactor.shareTextToOtherApps()
 
     fun switchTheme(isDarkTheme: Boolean) {
+        interactor.editSharedPreferencesThemeValue(isDarkTheme)
         interactor.switchTheme(isDarkTheme)
         isdarkThemeEnabled.value = isDarkTheme
     }

@@ -6,4 +6,5 @@ interface SettingsRepository {
     fun userAgreement()
     fun shareTextToOtherApps()
     fun getSharedPreferencesThemeValue(): Boolean
+    fun editSharedPreferencesThemeValue(isDarkTheme: Boolean)
 }

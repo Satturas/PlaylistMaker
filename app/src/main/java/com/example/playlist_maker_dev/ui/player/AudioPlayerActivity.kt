@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev.player.ui
+package com.example.playlist_maker_dev.ui.player
 
 import android.media.MediaPlayer
 import android.os.Build
@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlist_maker_dev.creator.Creator
+import com.example.playlist_maker_dev.Creator
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
 import com.example.playlist_maker_dev.domain.api.AudioPlayerInteractor
