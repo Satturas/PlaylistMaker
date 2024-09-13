@@ -8,7 +8,6 @@ interface TracksInteractor {
     fun loadTrackData(trackId: String, onComplete: Any)
 
     interface TracksConsumer {
-        fun consume(foundTracks: List<Track>)
-        fun onFailure(t: Throwable)
+        fun consume(foundTracks: List<Track>?, errorMessage: String?)
     }
 }

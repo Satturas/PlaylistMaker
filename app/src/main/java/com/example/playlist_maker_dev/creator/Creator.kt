@@ -38,7 +38,7 @@ object Creator {
     }
 
     private fun getTracksRepository(context: Context): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient())
+        return TracksRepositoryImpl(RetrofitNetworkClient(context))
     }
 
     fun provideTracksInteractor(context: Context): TracksInteractor {
@@ -100,11 +100,4 @@ object Creator {
         )
     }
 
-    fun getRepository(): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient())
-    }
-
-    fun provideTracksInteractor(): TracksInteractor {
-        return TracksInteractorImpl(getRepository())
-    }
 }

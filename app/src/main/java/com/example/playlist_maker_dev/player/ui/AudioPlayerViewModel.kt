@@ -53,7 +53,7 @@ class AudioPlayerViewModel(
 
 class MyApplication : Application() {
     fun getRepository(): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient())
+        return TracksRepositoryImpl(RetrofitNetworkClient(this))
     }
 
     fun provideTracksInteractor(): TracksInteractor {
