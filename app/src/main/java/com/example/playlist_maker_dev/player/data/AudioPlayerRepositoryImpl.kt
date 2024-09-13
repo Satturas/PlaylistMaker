@@ -12,38 +12,39 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerRepositoryImpl(
-    private val mediaPlayer: MediaPlayer,
-    private val handler: Handler,
-    val track: Track?,
-    private val playImageView: ImageView,
-    private val trackTimerTextView: TextView
+    //private val mediaPlayer: MediaPlayer,
+    //private val handler: Handler,
+    //val track: Track,
+    //private val playImageView: ImageView,
+    //private val trackTimerTextView: TextView
 ) : AudioPlayerRepository {
 
+    private val mediaPlayer = MediaPlayer()
     private var playerState = STATE_DEFAULT
-    private var url: String
+    //private var url: String
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     init {
-        url = track?.previewUrl.toString()
-        preparePlayer()
-        playImageView.setOnClickListener {
+        //url = track?.previewUrl.toString()
+        //preparePlayer()
+        /*playImageView.setOnClickListener {
             playbackControl()
             handler.post(
                 setCurrentPosition()
             )
-        }
+        }*/
     }
 
-    override fun preparePlayer() {
-        mediaPlayer.setDataSource(url)
+    override fun preparePlayer(track: Track?) {
+        mediaPlayer.setDataSource(track?.previewUrl.toString())
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playImageView.isEnabled = true
+            //playImageView.isEnabled = true
             playerState = STATE_PREPARED
         }
         mediaPlayer.setOnCompletionListener {
-            playImageView.setImageResource(R.drawable.vector_play)
+            //playImageView.setImageResource(R.drawable.vector_play)
             playerState = STATE_PREPARED
         }
     }
@@ -62,13 +63,13 @@ class AudioPlayerRepositoryImpl(
 
     override fun startPlayer() {
         mediaPlayer.start()
-        playImageView.setImageResource(R.drawable.vector_pause_button)
+        //playImageView.setImageResource(R.drawable.vector_pause_button)
         playerState = STATE_PLAYING
     }
 
     override fun pausePlayer() {
         mediaPlayer.pause()
-        playImageView.setImageResource(R.drawable.vector_play)
+        //playImageView.setImageResource(R.drawable.vector_play)
         playerState = STATE_PAUSED
     }
 
@@ -78,7 +79,7 @@ class AudioPlayerRepositoryImpl(
             override fun run() {
                 when (playerState) {
                     STATE_PLAYING -> {
-                        trackTimerTextView.text = dateFormat.format(mediaPlayer.currentPosition)
+                        //trackTimerTextView.text = dateFormat.format(mediaPlayer.currentPosition)
                         mainThreadHandler.postDelayed(this, DELAY)
                     }
 
@@ -88,7 +89,7 @@ class AudioPlayerRepositoryImpl(
                     }
 
                     STATE_PREPARED -> {
-                        trackTimerTextView.text = R.string.timer_00.toString()
+                        //trackTimerTextView.text = R.string.timer_00.toString()
                     }
 
                 }
