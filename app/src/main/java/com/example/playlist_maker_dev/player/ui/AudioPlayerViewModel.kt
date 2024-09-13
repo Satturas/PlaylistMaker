@@ -4,6 +4,7 @@ import android.app.Application
 import android.media.MediaPlayer
 import android.os.Handler
 import androidx.core.util.Consumer
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -16,10 +17,11 @@ import com.example.playlist_maker_dev.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.domain.impl.TracksInteractorImpl
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.domain.repository.TracksRepository
+import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
 
 class AudioPlayerViewModel(
     private val trackId: String,
-    private val tracksInteractor: TracksInteractor,
+    private val interactor: TracksInteractor,
 ) : ViewModel() {
 
     private var mediaPlayer = MediaPlayer()
@@ -29,32 +31,10 @@ class AudioPlayerViewModel(
     private val state = MutableLiveData<AudioPlayerState>()
 
     init {
-        loadData()
+        player()
     }
 
-    private fun loadData() {
-        state.value = AudioPlayerState.Loading
-
-        tracksInteractor.loadTrackData(
-            trackId = trackId,
-            consumer = object : Consumer<Track> {
-                override fun consume(data: ConsumerData<Track>) {
-                    when (data) {
-                        is ConsumerData.Error -> {
-                            val error = AudioPlayerState.Error(data.message)
-                            state.postValue(error)
-                        }
-
-                        is ConsumerData.Data -> {
-                            val productDetailsInfo = ProductDetailsInfoMapper.map(data.value)
-                            val content = AudioPlayerState.Content(productDetailsInfo)
-                            state.postValue(content)
-                        }
-                    }
-                }
-            }
-        )
-    }
+    fun player() = interactor.loadTrackData(trackId, )
 
     fun getState(): LiveData<AudioPlayerState> = state
 
