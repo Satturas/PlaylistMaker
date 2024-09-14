@@ -20,10 +20,10 @@
             android:name=".player.ui.AudioPlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.media.MediaActivity"
+            android:name=".media.ui.MediaActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.search.SearchActivity"
+            android:name=".search.ui.SearchActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity

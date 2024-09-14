@@ -18,9 +18,8 @@ import androidx.core.view.isVisible
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.creator.Creator
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
-import com.example.playlist_maker_dev.domain.api.TracksInteractor
-import com.example.playlist_maker_dev.domain.models.Track
-import com.example.playlist_maker_dev.ui.search.TrackAdapter
+import com.example.playlist_maker_dev.search.domain.models.Track
+import com.example.playlist_maker_dev.search.ui.TrackAdapter
 
 class TracksSearchController(
     private val activity: Activity,

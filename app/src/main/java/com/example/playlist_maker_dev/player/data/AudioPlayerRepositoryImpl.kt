@@ -1,7 +1,7 @@
 package com.example.playlist_maker_dev.player.data
 
 import android.media.MediaPlayer
-import com.example.playlist_maker_dev.domain.models.Track
+import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.player.domain.AudioPlayerRepository
 import com.example.playlist_maker_dev.player.ui.AudioPlayerState
 import java.text.SimpleDateFormat
