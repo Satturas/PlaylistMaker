@@ -3,7 +3,6 @@ package com.example.playlist_maker_dev.presentation
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
@@ -21,7 +20,6 @@ import com.example.playlist_maker_dev.creator.Creator
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
 import com.example.playlist_maker_dev.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.domain.models.Track
-import com.example.playlist_maker_dev.ui.player.AudioPlayerActivity
 import com.example.playlist_maker_dev.ui.search.TrackAdapter
 
 class TracksSearchController(
@@ -29,14 +27,14 @@ class TracksSearchController(
     private val adapter: TrackAdapter,
     private val searchHistoryAdapter: TrackAdapter
 ) {
-    private val tracksInteractor = Creator.provideTracksInteractor(activity)
+    //private val tracksInteractor = Creator.provideTracksInteractor(activity)
 
     private lateinit var binding: ActivitySearchBinding
     private val tracksList = mutableListOf<Track>()
     private var historyOfTracksList = mutableListOf<Track>()
     private var inputValue: CharSequence = SEARCH_DEF
     private val handler = Handler(Looper.getMainLooper())
-    private val searchRunnable = Runnable { findTrack() }
+    //private val searchRunnable = Runnable { findTrack() }
 
     private lateinit var inputEditTextSearchTracks: EditText
 
@@ -128,12 +126,12 @@ class TracksSearchController(
     }
 
     fun onDestroy() {
-        handler.removeCallbacks(searchRunnable)
+        //handler.removeCallbacks(searchRunnable)
     }
 
     private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        //handler.removeCallbacks(searchRunnable)
+        //handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
 
@@ -158,7 +156,7 @@ class TracksSearchController(
             val reloadButton = activity.findViewById<Button>(R.id.buttonReload)
             reloadButton.setOnClickListener {
                 showSearchProblemPlaceholders()
-                findTrack()
+                //findTrack()
             }
 
             val inputMethodManager =
@@ -182,7 +180,7 @@ class TracksSearchController(
         }
     }
 
-    private fun findTrack() {
+    /*private fun findTrack() {
         if (binding.inputEditTextSearchTracks.text.isNotEmpty()) {
             binding.progressBar.visibility = View.VISIBLE
             binding.searchHistoryTitle.visibility = View.GONE
@@ -224,7 +222,7 @@ class TracksSearchController(
                     }
                 })
         }
-    }
+    }*/
 
 
     private fun showSearchHistory(isVisible: Boolean) {

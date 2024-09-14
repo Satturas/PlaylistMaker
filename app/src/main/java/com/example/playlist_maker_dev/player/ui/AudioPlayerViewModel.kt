@@ -1,28 +1,16 @@
 package com.example.playlist_maker_dev.player.ui
 
-import android.app.Application
-import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
-import androidx.core.util.Consumer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlist_maker_dev.creator.Creator
-import com.example.playlist_maker_dev.data.network.RetrofitNetworkClient
-import com.example.playlist_maker_dev.data.repository.TracksRepositoryImpl
-import com.example.playlist_maker_dev.domain.api.TracksInteractor
-import com.example.playlist_maker_dev.domain.impl.TracksInteractorImpl
 import com.example.playlist_maker_dev.domain.models.Track
-import com.example.playlist_maker_dev.domain.repository.TracksRepository
-import com.example.playlist_maker_dev.player.data.AudioPlayerRepositoryImpl
 import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
-import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractorImpl
-import com.example.playlist_maker_dev.player.domain.AudioPlayerRepository
 
 class AudioPlayerViewModel(
     private val interactor: AudioPlayerInteractor,
@@ -31,27 +19,55 @@ class AudioPlayerViewModel(
 
     private val handler = Handler(Looper.getMainLooper())
 
-    //private var mediaPlayer = MediaPlayer()
-    //private lateinit var mainThreadHandler: Handler
+    private val _playerState = MutableLiveData<AudioPlayerState>()
+    val playerState: LiveData<AudioPlayerState> get() = _playerState
 
-    //private val getProductDetailsUseCase = Creator.provideGetProductDetailsUseCase()
-    private val state = MutableLiveData<AudioPlayerState>()
-    val playerState: LiveData<AudioPlayerState> get() = state
+    private val _currentSongTime = MutableLiveData(DEFAULT_CURRENT_POS)
+    val currentSongTime: LiveData<Int> get() = _currentSongTime
 
-    init {
-        state.value = AudioPlayerState.STATE_DEFAULT
+    private val timerRunnable by lazy {
+        object : Runnable {
+            override fun run() {
+                if (_playerState.value == AudioPlayerState.STATE_PLAYING) {
+                    _currentSongTime.postValue(interactor.getCurrentSongTime())
+                    handler.postDelayed(this, DELAY)
+                }
+            }
+        }
     }
 
-    val url = track?.previewUrl.toString()
+    init {
+        _playerState.value = AudioPlayerState.STATE_DEFAULT
+    }
 
-    fun preparePlayer() = interactor.preparePlayer(track)
+    fun preparePlayer(track: Track?) = interactor.preparePlayer(track) { state ->
+        if (state == AudioPlayerState.STATE_PREPARED) {
+            handler.removeCallbacks(timerRunnable)
+            _playerState.value = AudioPlayerState.STATE_PREPARED
+        }
+    }
 
+    fun startPlayer() {
+        interactor.startPlayer()
+        _playerState.value = AudioPlayerState.STATE_PLAYING
+        handler.post(timerRunnable)
+    }
 
-    //fun player() = interactor.loadTrackData(trackId, )
+    fun pausePlayer() {
+        interactor.pausePlayer()
+        _playerState.value = AudioPlayerState.STATE_PAUSED
+        handler.removeCallbacks(timerRunnable)
+    }
 
-    fun getState(): LiveData<AudioPlayerState> = state
+    fun stopPlayer() {
+        interactor.stopPlayer()
+        _playerState.value = AudioPlayerState.STATE_STOPPED
+    }
 
     companion object {
+        private const val DELAY = 500L
+        private const val DEFAULT_CURRENT_POS = 0
+
         fun getViewModelFactory(track: Track): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val interactor = Creator.provideAudioPlayerInteractor()

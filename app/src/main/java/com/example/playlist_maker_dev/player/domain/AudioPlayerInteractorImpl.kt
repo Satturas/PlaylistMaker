@@ -1,26 +1,19 @@
 package com.example.playlist_maker_dev.player.domain
 
 import com.example.playlist_maker_dev.domain.models.Track
+import com.example.playlist_maker_dev.player.ui.AudioPlayerState
 
 class AudioPlayerInteractorImpl(private val audioPlayerRepository: AudioPlayerRepository) :
     AudioPlayerInteractor {
-    override fun preparePlayer(track: Track?) {
-        audioPlayerRepository.preparePlayer(track)
-    }
+    override fun preparePlayer(track: Track?, callback: (AudioPlayerState) -> Unit) =
+        audioPlayerRepository.preparePlayer(track, callback)
 
-    override fun playbackControl() {
-        audioPlayerRepository.playbackControl()
-    }
+    override fun startPlayer() = audioPlayerRepository.startPlayer()
 
-    override fun startPlayer() {
-        audioPlayerRepository.startPlayer()
-    }
+    override fun pausePlayer() = audioPlayerRepository.pausePlayer()
 
-    override fun pausePlayer() {
-        audioPlayerRepository.pausePlayer()
-    }
+    override fun stopPlayer() = audioPlayerRepository.stopPlayer()
 
-    override fun setCurrentPosition(): Runnable {
-        return audioPlayerRepository.setCurrentPosition()
-    }
+    override fun getCurrentSongTime(): Int = audioPlayerRepository.getCurrentSongTime()
+
 }

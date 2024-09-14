@@ -5,12 +5,11 @@ import com.example.playlist_maker_dev.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.domain.dao.TrackDAO
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.domain.repository.TracksRepository
-import com.example.playlist_maker_dev.player.domain.consumer.Consumer
-import com.example.playlist_maker_dev.player.domain.consumer.ConsumerData
+
 import com.example.playlist_maker_dev.util.Resource
 import java.util.concurrent.Executors
 
-class TracksInteractorImpl(private val repository: TracksRepository, private val trackDAO: TrackDAO) : TracksInteractor {
+class TracksInteractorImpl(private val repository: TracksRepository) : TracksInteractor {
 
     private val executor = Executors.newCachedThreadPool()
 
@@ -24,9 +23,9 @@ class TracksInteractorImpl(private val repository: TracksRepository, private val
     }
 
 
-    override fun loadTrackData(trackId: String, consumer: Consumer<Track>) {
+    /*override fun loadTrackData(trackId: String, consumer: Consumer<Track>) {
         executor.execute {
             val track = trackId?.let { trackDAO.getTrackById(trackId) }
         }
-    }
+    }*/
 }

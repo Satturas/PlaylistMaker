@@ -1,11 +1,12 @@
 package com.example.playlist_maker_dev.player.domain
 
 import com.example.playlist_maker_dev.domain.models.Track
+import com.example.playlist_maker_dev.player.ui.AudioPlayerState
 
 interface AudioPlayerRepository {
-    fun preparePlayer(track: Track?)
-    fun playbackControl()
+    fun preparePlayer(track: Track?, callback: (AudioPlayerState) -> Unit)
     fun startPlayer()
     fun pausePlayer()
-    fun setCurrentPosition(): Runnable
+    fun stopPlayer()
+    fun getCurrentSongTime(): Int
 }

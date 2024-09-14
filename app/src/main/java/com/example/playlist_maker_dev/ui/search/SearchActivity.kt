@@ -16,15 +16,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.example.playlist_maker_dev.creator.Creator
 import com.example.playlist_maker_dev.R
+import com.example.playlist_maker_dev.creator.Creator
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
 import com.example.playlist_maker_dev.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
-import com.example.playlist_maker_dev.search.ui.TracksSearchViewModel
 
 class SearchActivity : ComponentActivity() {
 
@@ -33,7 +31,7 @@ class SearchActivity : ComponentActivity() {
     private val tracksList = mutableListOf<Track>()
     private var historyOfTracksList = mutableListOf<Track>()
 
-    private lateinit var viewModel: TracksSearchViewModel
+    //private lateinit var viewModel: TracksSearchViewModel
 
     private val adapter: TrackAdapter by lazy {
         TrackAdapter(mutableListOf()) { track ->
@@ -59,9 +57,9 @@ class SearchActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.observeState().observe(this) {
+        /*viewModel.observeState().observe(this) {
             render(it)
-        }
+        }*/
 
         binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
@@ -191,7 +189,7 @@ class SearchActivity : ComponentActivity() {
             val reloadButton = findViewById<Button>(R.id.buttonReload)
             reloadButton.setOnClickListener {
                 showSearchProblemPlaceholders()
-                findTrack()
+                //findTrack()
             }
 
             val inputMethodManager =
@@ -214,7 +212,7 @@ class SearchActivity : ComponentActivity() {
         }
     }
 
-   private fun findTrack() {
+    private fun findTrack() {
         if (binding.inputEditTextSearchTracks.text.isNotEmpty()) {
             binding.progressBar.visibility = View.VISIBLE
             binding.searchHistoryTitle.visibility = View.GONE
@@ -224,7 +222,7 @@ class SearchActivity : ComponentActivity() {
                 binding.inputEditTextSearchTracks.text.toString(),
                 object : TracksInteractor.TracksConsumer {
                     @SuppressLint("NotifyDataSetChanged")
-                    override fun consume(foundTracks: List<Track>, errorMessage: String?) {
+                    override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
                         runOnUiThread {
                             binding.progressBar.visibility = View.GONE
                             tracksList.clear()

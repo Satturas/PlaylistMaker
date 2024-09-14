@@ -1,37 +1,29 @@
 package com.example.playlist_maker_dev.player.ui
 
-import android.content.Context
-import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlist_maker_dev.creator.Creator
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
-import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
 import com.example.playlist_maker_dev.domain.models.Track
 import com.example.playlist_maker_dev.ui.search.SearchActivity
 import com.example.playlist_maker_dev.ui.search.dpToPx
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioPlayerBinding
     private lateinit var viewModel: AudioPlayerViewModel
 
-    private var mediaPlayer = MediaPlayer()
-    private lateinit var url: String
-    private lateinit var audioPlayerInteractor: AudioPlayerInteractor
-    private lateinit var mainThreadHandler: Handler
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +39,8 @@ class AudioPlayerActivity : AppCompatActivity() {
             intent.getSerializableExtra(SearchActivity.AUDIO_PLAYER) as Track
         }
 
+        showLoading()
+
         if (track != null) {
             showPlayer(track)
 
@@ -54,19 +48,48 @@ class AudioPlayerActivity : AppCompatActivity() {
                 this,
                 AudioPlayerViewModel.getViewModelFactory(track)
             )[AudioPlayerViewModel::class.java]
+
+            viewModel.preparePlayer(track)
         }
 
+        viewModel.playerState.observe(this, Observer { playerState ->
 
+            when (playerState) {
+
+                AudioPlayerState.STATE_PREPARED -> {
+                    binding.songTime.setText(R.string.timer_00)
+                    binding.playButton.setImageResource(R.drawable.vector_play)
+                }
+
+                AudioPlayerState.STATE_PLAYING -> {
+                    binding.playButton.setImageResource(R.drawable.vector_pause_button)
+
+                }
+
+                AudioPlayerState.STATE_PAUSED -> {
+                    binding.playButton.setImageResource(R.drawable.vector_play)
+                }
+
+                else -> {}
+            }
+
+        })
+
+        viewModel.currentSongTime.observe(this, Observer { time ->
+            binding.songTime.text = dateFormat.format(time)
+        })
+
+        binding.playButton.setOnClickListener {
+            if (viewModel.playerState.value == AudioPlayerState.STATE_PLAYING) {
+                viewModel.pausePlayer()
+            } else {
+                viewModel.startPlayer()
+            }
+        }
     }
-
 
     private fun showLoading() {
         binding.progressBar.isVisible = true
-    }
-
-    private fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        onBackPressedDispatcher.onBackPressed()
     }
 
     private fun showPlayer(track: Track) {
@@ -79,6 +102,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.year.text = track.releaseDate?.substring(0, 4) ?: ""
         binding.genre.text = track.primaryGenreName
         binding.country.text = track.country
+
         Glide
             .with(binding.imageCover)
             .load(track.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
@@ -87,85 +111,21 @@ class AudioPlayerActivity : AppCompatActivity() {
             .transform(RoundedCorners(dpToPx(2.0f, binding.imageCover.context)))
             .into(binding.imageCover)
 
-        url = track.previewUrl
         binding.progressBar.isVisible = false
     }
 
     override fun onPause() {
         super.onPause()
-        audioPlayerInteractor.pausePlayer()
+        viewModel.pausePlayer()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.stopPlayer()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
-        mainThreadHandler.removeCallbacks(audioPlayerInteractor.setCurrentPosition())
-    }
-
-    companion object {
-        private const val TRACK_ID = "track_id"
-
-        fun show(context: Context, trackId: String) {
-            val intent = Intent(context, AudioPlayerActivity::class.java)
-            intent.putExtra(TRACK_ID, trackId)
-
-            context.startActivity(intent)
-        }
     }
 }
 
-
-/*
-
-if (track != null) {
-    binding.songTitle.text = track.trackName
-    binding.bandTitle.text = track.artistName
-    binding.songLength.text = track.trackTimeMillis
-
-    if (track.collectionName?.isNotEmpty() == true) {
-        binding.album.text = track.collectionName
-        binding.album.visibility = View.VISIBLE
-        binding.albumTitle.visibility = View.VISIBLE
-    }
-
-    if (track.releaseDate?.isNotEmpty() == true) {
-        binding.year.text = track.releaseDate.substring(0, 4)
-    }
-    binding.genre.text = track.primaryGenreName
-    binding.country.text = track.country
-    Glide
-        .with(binding.imageCover)
-        .load(track.artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg"))
-        .placeholder(R.drawable.vector_cover_placeholder)
-        .centerCrop()
-        .transform(RoundedCorners(dpToPx(2.0f, binding.imageCover.context)))
-        .into(binding.imageCover)
-
-    url = track.previewUrl
-}
-
-mainThreadHandler = Handler(Looper.getMainLooper())
-
-audioPlayerInteractor = Creator.provideAudioPlayerInteractor(
-    mediaPlayer,
-    mainThreadHandler,
-    track,
-    binding.playButton,
-    binding.songTime
-)
-}
-
-override fun onPause() {
-super.onPause()
-audioPlayerInteractor.pausePlayer()
-}
-
-override fun onDestroy() {
-super.onDestroy()
-mediaPlayer.release()
-mainThreadHandler.removeCallbacks(audioPlayerInteractor.setCurrentPosition())
-}
-
-
-
-}*/

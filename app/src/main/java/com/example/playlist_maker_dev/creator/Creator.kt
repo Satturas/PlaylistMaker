@@ -41,9 +41,9 @@ object Creator {
         return TracksRepositoryImpl(RetrofitNetworkClient(context))
     }
 
-    /*fun provideTracksInteractor(context: Context): TracksInteractor {
-        return TracksInteractorImpl(getTracksRepository(context))
-    }*/
+    fun provideTracksInteractor(context: Context): TracksInteractor {
+        return TracksInteractorImpl(TracksRepositoryImpl(RetrofitNetworkClient(context)))
+    }
 
     private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
         return SearchHistoryRepositoryImpl(context)
@@ -78,7 +78,6 @@ object Creator {
     fun provideAudioPlayerInteractor(): AudioPlayerInteractor {
         return AudioPlayerInteractorImpl(
             provideAudioPlayerRepository(
-
             )
         )
     }
