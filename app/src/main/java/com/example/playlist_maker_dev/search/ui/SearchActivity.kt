@@ -91,7 +91,7 @@ class SearchActivity : ComponentActivity() {
             } else {
                 hideSearchHistory(false)
             }
-            hideSearchProblemPlaceholders()
+            hideSearchProblemPlaceholders(true)
             binding.rvTracks.visibility = View.GONE
             binding.progressBar.visibility = View.GONE
         }
@@ -176,7 +176,7 @@ class SearchActivity : ComponentActivity() {
             }
         }
 
-        textWatcher?.let { queryInput.addTextChangedListener(it) }
+        textWatcher.let { queryInput.addTextChangedListener(it) }
 
         //binding.inputEditTextSearchTracks.addTextChangedListener(simpleTextWatcher)
 
@@ -313,13 +313,17 @@ class SearchActivity : ComponentActivity() {
     }*/
 
     private fun showNothingFound() {
+        binding.progressBar.visibility = View.GONE
         hideSearchHistory(true)
         binding.placeholderImage.setImageResource(R.drawable.vector_nothing_found)
+        hideSearchProblemPlaceholders(false)
+        binding.buttonReload.visibility = View.GONE
+
     }
 
     private fun showLoading() {
         hideSearchHistory(true)
-        hideSearchProblemPlaceholders()
+        hideSearchProblemPlaceholders(true)
         binding.progressBar.visibility = View.VISIBLE
     }
 
@@ -329,7 +333,7 @@ class SearchActivity : ComponentActivity() {
             hideSearchHistory(true)
         } else {
             hideSearchHistory(false)
-            hideSearchProblemPlaceholders()
+            hideSearchProblemPlaceholders(true)
             //viewModel.showHistoryOfTracks()
             tracksList.clear()
             tracksList.addAll(searchHistoryTracks)
@@ -339,7 +343,7 @@ class SearchActivity : ComponentActivity() {
 
     private fun showTracks(foundTracks: List<Track>) {
         hideSearchHistory(true)
-        hideSearchProblemPlaceholders()
+        hideSearchProblemPlaceholders(true)
         binding.rvTracks.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
         tracksList.clear()
@@ -352,8 +356,10 @@ class SearchActivity : ComponentActivity() {
         binding.progressBar.visibility = View.GONE
         binding.placeholderImage.setImageResource(R.drawable.vector_search_no_internet)
         binding.buttonReload.visibility = View.VISIBLE
+        hideSearchProblemPlaceholders(false)
         binding.buttonReload.setOnClickListener {
-            viewModel.searchDebounce(binding.inputEditTextSearchTracks.text.toString())
+            hideSearchProblemPlaceholders(true)
+            viewModel.searchDebounce(inputValue.toString())
         }
     }
 
@@ -381,10 +387,16 @@ class SearchActivity : ComponentActivity() {
     private fun showHistoryByEmptyOrNotList() = hideSearchHistory(historyOfTracksList.isEmpty())
 
 
-    private fun hideSearchProblemPlaceholders() {
-        binding.placeholderImage.visibility = View.GONE
-        binding.buttonReload.visibility = View.GONE
-        binding.placeholderMessage.visibility = View.GONE
+    private fun hideSearchProblemPlaceholders(isVisible: Boolean) {
+        if (isVisible) {
+            binding.placeholderImage.visibility = View.GONE
+            binding.buttonReload.visibility = View.GONE
+            binding.placeholderMessage.visibility = View.GONE
+        } else {
+            binding.placeholderImage.visibility = View.VISIBLE
+            binding.buttonReload.visibility = View.VISIBLE
+            binding.placeholderMessage.visibility = View.VISIBLE
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -403,7 +415,7 @@ class SearchActivity : ComponentActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        textWatcher?.let { queryInput.removeTextChangedListener(it) }
+        textWatcher.let { queryInput.removeTextChangedListener(it) }
     }
 
     /*enum class ErrorCauses {
