@@ -1,15 +1,16 @@
 package com.example.playlist_maker_dev.search.data.repository
 
-import com.example.playlist_maker_dev.search.data.network.NetworkClient
 import com.example.playlist_maker_dev.search.data.dto.TracksSearchRequest
 import com.example.playlist_maker_dev.search.data.dto.TracksSearchResponse
-import com.example.playlist_maker_dev.search.domain.repository.TracksRepository
+import com.example.playlist_maker_dev.search.data.network.NetworkClient
 import com.example.playlist_maker_dev.search.domain.models.Track
+import com.example.playlist_maker_dev.search.domain.repository.TracksRepository
 import com.example.playlist_maker_dev.util.Resource
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
+
     override fun searchTracks(term: String): Resource<List<Track>> {
         val response = networkClient.doRequest(TracksSearchRequest(term))
 

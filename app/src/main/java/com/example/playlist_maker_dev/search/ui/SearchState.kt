@@ -4,7 +4,6 @@ import com.example.playlist_maker_dev.search.domain.models.Track
 
 sealed interface SearchState {
     data object NothingFound : SearchState
-    data object NetworkError : SearchState
     data object Loading : SearchState
     data class Error(val message: String) : SearchState
     data class FoundTracksContent(val foundTracks: List<Track>) : SearchState
