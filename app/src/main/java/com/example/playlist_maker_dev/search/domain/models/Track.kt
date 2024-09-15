@@ -1,9 +1,5 @@
 package com.example.playlist_maker_dev.search.domain.models
 
-import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Query
-
 data class Track(
     val trackId: Int,
     val trackName: String,

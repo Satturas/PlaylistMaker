@@ -10,7 +10,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.ComponentActivity
@@ -54,9 +53,6 @@ class SearchActivity : ComponentActivity() {
     }
     private lateinit var queryInput: EditText
     private val handler = Handler(Looper.getMainLooper())
-
-    //private val searchRunnable =
-    //    Runnable { viewModel.searchTracks(binding.inputEditTextSearchTracks.text.toString()) }
     private var isClickAllowed = true
 
 
@@ -66,9 +62,7 @@ class SearchActivity : ComponentActivity() {
         binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
-        historyOfTracksList = viewModel.getHistoryOfTracks()
-
-        if (historyOfTracksList.isNullOrEmpty()) {
+        if (viewModel.getHistoryOfTracks().isNullOrEmpty()) {
             hideSearchHistory(true)
         }
 
@@ -96,22 +90,6 @@ class SearchActivity : ComponentActivity() {
             binding.progressBar.visibility = View.GONE
         }
 
-        /*binding.searchDeleteButton.setOnClickListener {
-            queryInput.setText(getString(R.string.emptyString))
-            queryInput.onEditorAction(EditorInfo.IME_ACTION_DONE)
-            val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(
-                binding.searchDeleteButton.windowToken,
-                0
-            )
-            //showSearchProblemPlaceholders()
-            tracksList.clear()
-            adapter.notifyDataSetChanged()
-            viewModel.showHistoryOfTracks()
-            //showHistoryByEmptyOrNotList()
-        }*/
-
         binding.inputEditTextSearchTracks.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
@@ -128,23 +106,12 @@ class SearchActivity : ComponentActivity() {
         binding.inputEditTextSearchTracks.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.inputEditTextSearchTracks.text.isNullOrEmpty()) {
                 if (historyOfTracksList.isEmpty()) {
-
                     searchHistoryAdapter.tracks = historyOfTracksList
                     searchHistoryAdapter.notifyDataSetChanged()
-                    //viewModel.showHistoryOfTracks()
                     showHistoryByEmptyOrNotList()
                 }
             }
         }
-        //} else
-        //showSearchHistory(false)
-
-
-        //inputEditTextSearchTracks = findViewById(R.id.inputEditTextSearchTracks)
-
-
-        //if (historyOfTracksList.isEmpty()) showSearchHistory(false)
-
 
         binding.buttonClearSearchHistory.setOnClickListener {
             historyOfTracksList.clear()
@@ -162,12 +129,6 @@ class SearchActivity : ComponentActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.searchDeleteButton.isVisible = clearButtonVisibility(s)
-                /* if (s?.isEmpty() == true) {
-                     tracksList.clear()
-                     adapter.notifyDataSetChanged()
-                     //showSearchHistory(historyOfTracksList.isNotEmpty())
-                     //viewModel.showHistoryOfTracks()
-                 }*/
                 viewModel.searchDebounce(changedText = s?.toString() ?: "")
             }
 
@@ -178,15 +139,11 @@ class SearchActivity : ComponentActivity() {
 
         textWatcher.let { queryInput.addTextChangedListener(it) }
 
-        //binding.inputEditTextSearchTracks.addTextChangedListener(simpleTextWatcher)
-
         adapter.tracks = tracksList
         binding.rvTracks.adapter = adapter
 
         searchHistoryAdapter.tracks = viewModel.getHistoryOfTracks()
-        //Creator.provideSearchHistoryInteractor(this).getHistoryOfTracks()
         binding.rvHistorySearchTracks.adapter = searchHistoryAdapter
-
     }
 
     private fun render(state: SearchState) {
@@ -198,11 +155,6 @@ class SearchActivity : ComponentActivity() {
             is SearchState.Error -> showNetworkError()
         }
     }
-
-    /*private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-    }*/
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -217,108 +169,12 @@ class SearchActivity : ComponentActivity() {
 
     private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
 
-    @SuppressLint("NotifyDataSetChanged")
-    /*private fun showMessage(text: String, additionalMessage: String, cause: ErrorCauses) {
-        if (text.isNotEmpty()) {
-            when (cause) {
-                ErrorCauses.NO_RESULTS -> binding.placeholderImage.setImageResource(R.drawable.vector_nothing_found)
-
-                ErrorCauses.NO_CONNECTION -> {
-                    binding.placeholderImage.setImageResource(R.drawable.vector_search_no_internet)
-                    binding.buttonReload.visibility = View.VISIBLE
-                }
-
-                else -> {}
-            }
-            binding.placeholderMessage.visibility = View.VISIBLE
-            binding.placeholderImage.visibility = View.VISIBLE
-
-            /*val reloadButton = findViewById<Button>(R.id.buttonReload)
-            reloadButton.setOnClickListener {
-                hideSearchProblemPlaceholders()
-                findTrack()
-            }*/
-
-            val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(
-                binding.inputEditTextSearchTracks.windowToken, 0
-            )
-
-            tracksList.clear()
-            adapter.notifyDataSetChanged()
-            binding.placeholderMessage.text = text
-
-            if (additionalMessage.isNotEmpty()) {
-                Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG).show()
-            }
-
-        } else {
-            binding.placeholderMessage.visibility = View.GONE
-            binding.placeholderImage.visibility = View.GONE
-        }
-    }*/
-
-    /*private fun findTrack() {
-        if (binding.inputEditTextSearchTracks.text.isNotEmpty()) {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.searchHistoryTitle.visibility = View.GONE
-            binding.rvHistorySearchTracks.visibility = View.GONE
-            binding.buttonClearSearchHistory.visibility = View.GONE
-            Creator.provideTracksInteractor(this).searchTracks(
-                binding.inputEditTextSearchTracks.text.toString(),
-                object : TracksInteractor.TracksConsumer {
-                    @SuppressLint("NotifyDataSetChanged")
-                    override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
-                        runOnUiThread {
-                            binding.progressBar.visibility = View.GONE
-                            tracksList.clear()
-                            if (!foundTracks.isNullOrEmpty()) {
-                                tracksList.addAll(foundTracks)
-                                adapter.notifyDataSetChanged()
-                            }
-                            if (errorMessage != null) {
-                                binding.progressBar.visibility = View.GONE
-                                showMessage(
-                                    getString(R.string.something_went_wrong),
-                                    "",
-                                    ErrorCauses.NO_CONNECTION
-                                )
-                                showSearchHistory(false)
-                            } else if (tracksList.isEmpty()) {
-                                showMessage(
-                                    getString(R.string.nothing_found),
-                                    "",
-                                    ErrorCauses.NO_RESULTS
-                                )
-                                showSearchHistory(false)
-                            } else {
-                                showMessage("", "", ErrorCauses.EVERYTHING_GOOD)
-                            }
-
-                        }
-                    }
-
-                    /*override fun onFailure(t: Throwable) {
-                        binding.progressBar.visibility = View.GONE
-                        showMessage(
-                            getString(R.string.something_went_wrong),
-                            t.message.toString(),
-                            ErrorCauses.NO_CONNECTION
-                        )
-                        showSearchHistory(false)
-                    }*/
-                })
-        }
-    }*/
-
     private fun showNothingFound() {
         binding.progressBar.visibility = View.GONE
         hideSearchHistory(true)
         binding.placeholderImage.setImageResource(R.drawable.vector_nothing_found)
         hideSearchProblemPlaceholders(false)
         binding.buttonReload.visibility = View.GONE
-
     }
 
     private fun showLoading() {
@@ -327,6 +183,7 @@ class SearchActivity : ComponentActivity() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showSearchHistory(searchHistoryTracks: List<Track>) {
         binding.progressBar.visibility = View.GONE
         if (searchHistoryTracks.isNullOrEmpty()) {
@@ -334,13 +191,13 @@ class SearchActivity : ComponentActivity() {
         } else {
             hideSearchHistory(false)
             hideSearchProblemPlaceholders(true)
-            //viewModel.showHistoryOfTracks()
             tracksList.clear()
             tracksList.addAll(searchHistoryTracks)
             adapter.notifyDataSetChanged()
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showTracks(foundTracks: List<Track>) {
         hideSearchHistory(true)
         hideSearchProblemPlaceholders(true)
@@ -386,7 +243,6 @@ class SearchActivity : ComponentActivity() {
 
     private fun showHistoryByEmptyOrNotList() = hideSearchHistory(historyOfTracksList.isEmpty())
 
-
     private fun hideSearchProblemPlaceholders(isVisible: Boolean) {
         if (isVisible) {
             binding.placeholderImage.visibility = View.GONE
@@ -407,7 +263,6 @@ class SearchActivity : ComponentActivity() {
             }
             viewModel.saveTracktoHistory(track)
             searchHistoryAdapter.tracks = viewModel.getHistoryOfTracks()
-            //Creator.provideSearchHistoryInteractor(this).getHistoryOfTracks()
             searchHistoryAdapter.notifyDataSetChanged()
             startActivity(intent)
         }
@@ -418,16 +273,10 @@ class SearchActivity : ComponentActivity() {
         textWatcher.let { queryInput.removeTextChangedListener(it) }
     }
 
-    /*enum class ErrorCauses {
-        NO_CONNECTION, NO_RESULTS, EVERYTHING_GOOD
-    }*/
-
     companion object {
-        private const val TRACK_ID = "track_id"
         private const val SEARCH_USER_INPUT = "search_user_input"
         private val SEARCH_DEF: CharSequence = ""
         const val AUDIO_PLAYER = "track_for_player"
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
