@@ -46,7 +46,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
             viewModel = ViewModelProvider(
                 this,
-                AudioPlayerViewModel.getViewModelFactory(track)
+                AudioPlayerViewModel.getViewModelFactory()
             )[AudioPlayerViewModel::class.java]
 
             viewModel.preparePlayer(track)
