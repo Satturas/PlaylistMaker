@@ -62,6 +62,8 @@ class SearchActivity : ComponentActivity() {
         binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
 
+        viewModel.showHistoryOfTracks()
+
         /*if (viewModel.getHistoryOfTracks().isNullOrEmpty()) {
             hideSearchHistory(true)
         }*/
@@ -79,7 +81,7 @@ class SearchActivity : ComponentActivity() {
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
-
+            viewModel.showHistoryOfTracks()
             /*if (viewModel.getHistoryOfTracks().isNullOrEmpty()) {
                 hideSearchHistory(true)
             } else {
@@ -266,9 +268,13 @@ class SearchActivity : ComponentActivity() {
                 putExtra(AUDIO_PLAYER, track)
             }
             viewModel.saveTracktoHistory(track)
+
             //searchHistoryAdapter.tracks = viewModel.getHistoryOfTracks()
-            //searchHistoryAdapter.notifyDataSetChanged()
+
+
             startActivity(intent)
+            searchHistoryAdapter.notifyDataSetChanged()
+            viewModel.showHistoryOfTracks()
         }
     }
 

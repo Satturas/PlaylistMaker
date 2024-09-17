@@ -31,6 +31,10 @@ class SearchViewModel(
     private var latestSearchText: String? = null
     private val handler = Handler(Looper.getMainLooper())
 
+    /*init {
+        showHistoryOfTracks()
+    }*/
+
     fun searchDebounce(changedText: String) {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
 
