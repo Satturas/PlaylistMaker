@@ -22,7 +22,12 @@ class SearchViewModel(
     private val tracksInteractor: TracksInteractor
 ) : ViewModel() {
 
-    private val searchState = MutableLiveData<SearchState>()
+    private val _searchState = MutableLiveData<SearchState>()
+    val searchState: LiveData<SearchState> = _searchState
+
+    //private val _historyOfTracks = MutableLiveData<SearchState>()
+    //val historyOfTracks: LiveData<SearchState> = _historyOfTracks
+
     private var latestSearchText: String? = null
     private val handler = Handler(Looper.getMainLooper())
 
@@ -40,8 +45,8 @@ class SearchViewModel(
     }
 
     fun showHistoryOfTracks() {
-        searchState.value = SearchState.Loading
-        searchState.value =
+        _searchState.value = SearchState.Loading
+        _searchState.value =
             SearchState.SearchHistoryTracksContent(searchHistoryInteractor.getHistoryOfTracks())
     }
 
@@ -69,15 +74,13 @@ class SearchViewModel(
 
     fun saveTracktoHistory(track: Track) = searchHistoryInteractor.saveTrackToHistory(track)
 
-    fun getHistoryOfTracks() = searchHistoryInteractor.getHistoryOfTracks()
+    //private fun getHistoryOfTracks() = searchHistoryInteractor.getHistoryOfTracks()
 
     fun saveHistoryOfTracks(list: List<Track>) =
         searchHistoryInteractor.saveHistoryOfTracks(list)
 
-    fun getState(): LiveData<SearchState> = searchState
-
     private fun renderState(state: SearchState) {
-        searchState.postValue(state)
+        _searchState.postValue(state)
     }
 
     override fun onCleared() {
