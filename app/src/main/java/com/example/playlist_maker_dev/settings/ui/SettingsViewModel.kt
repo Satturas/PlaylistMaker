@@ -3,6 +3,12 @@ package com.example.playlist_maker_dev.settings.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.playlist_maker_dev.creator.Creator
+import com.example.playlist_maker_dev.presentation.App.Companion.KEY_THEME_MODE
+import com.example.playlist_maker_dev.search.ui.SearchViewModel
 import com.example.playlist_maker_dev.settings.domain.SettingsInteractor
 
 class SettingsViewModel(
@@ -26,5 +32,16 @@ class SettingsViewModel(
         interactor.editSharedPreferencesThemeValue(isDarkTheme)
         interactor.switchTheme(isDarkTheme)
         isdarkThemeEnabled.value = isDarkTheme
+    }
+
+    companion object {
+        fun getViewModelFactory(): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    SettingsViewModel(
+                        Creator.provideSettingsInteractor(KEY_THEME_MODE),
+                    )
+                }
+            }
     }
 }

@@ -2,6 +2,7 @@ package com.example.playlist_maker_dev.settings.data
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlist_maker_dev.R
@@ -10,7 +11,10 @@ import com.example.playlist_maker_dev.presentation.App.Companion.KEY_THEME_MODE
 import com.example.playlist_maker_dev.presentation.App.Companion.PLAYLISTMAKER_PREFERENCES
 import com.example.playlist_maker_dev.settings.domain.SettingsRepository
 
-class SettingsRepositoryImpl(private val context: Context) : SettingsRepository {
+class SettingsRepositoryImpl(
+    private val sharedPreferences: SharedPreferences,
+    private val context: Context
+) : SettingsRepository {
 
     override fun switchTheme(isDarkTheme: Boolean) {
         AppCompatDelegate.setDefaultNightMode(
@@ -59,11 +63,10 @@ class SettingsRepositoryImpl(private val context: Context) : SettingsRepository 
     }
 
     override fun getSharedPreferencesThemeValue(): Boolean =
-        Creator.provideSharedPreferences(PLAYLISTMAKER_PREFERENCES)
-            .getBoolean(KEY_THEME_MODE, false)
+        sharedPreferences.getBoolean(KEY_THEME_MODE, false)
 
     override fun editSharedPreferencesThemeValue(isDarkTheme: Boolean) =
-        Creator.provideSharedPreferences(PLAYLISTMAKER_PREFERENCES).edit()
+        sharedPreferences.edit()
             .putBoolean(KEY_THEME_MODE, isDarkTheme)
             .apply()
 

@@ -63,17 +63,16 @@ object Creator {
         return application.getSharedPreferences(key, Context.MODE_PRIVATE)
     }
 
-    fun provideSettingsRepository(application: App): SettingsRepository {
-        return SettingsRepositoryImpl(application)
+    fun provideSettingsRepository(key: String): SettingsRepository {
+        return SettingsRepositoryImpl(provideSharedPreferences(key), application)
     }
 
-    fun provideSettingsInteractor(): SettingsInteractor {
-        return SettingsInteractorImpl(provideSettingsRepository(application))
+    fun provideSettingsInteractor(key: String): SettingsInteractor {
+        return SettingsInteractorImpl(provideSettingsRepository(key))
     }
 
     private fun provideAudioPlayerRepository(): AudioPlayerRepository {
         return AudioPlayerRepositoryImpl(
-
         )
     }
 

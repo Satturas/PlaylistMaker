@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlist_maker_dev.databinding.ActivitySettingsBinding
+import com.example.playlist_maker_dev.search.ui.SearchViewModel
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -11,8 +12,9 @@ class SettingsActivity : AppCompatActivity() {
 
     private val viewModel by lazy {
         ViewModelProvider(
-            this, SettingsViewModelFactory(this)
-        ).get(SettingsViewModel::class.java)
+            this,
+            SettingsViewModel.getViewModelFactory()
+        )[SettingsViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
