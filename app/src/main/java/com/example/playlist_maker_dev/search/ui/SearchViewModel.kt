@@ -25,15 +25,8 @@ class SearchViewModel(
     private val _searchState = MutableLiveData<SearchState>()
     val searchState: LiveData<SearchState> = _searchState
 
-    //private val _historyOfTracks = MutableLiveData<SearchState>()
-    //val historyOfTracks: LiveData<SearchState> = _historyOfTracks
-
     private var latestSearchText: String? = null
     private val handler = Handler(Looper.getMainLooper())
-
-    /*init {
-        showHistoryOfTracks()
-    }*/
 
     fun searchDebounce(changedText: String) {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
@@ -78,8 +71,6 @@ class SearchViewModel(
 
     fun saveTracktoHistory(track: Track) = searchHistoryInteractor.saveTrackToHistory(track)
 
-    //private fun getHistoryOfTracks() = searchHistoryInteractor.getHistoryOfTracks()
-
     fun saveHistoryOfTracks(list: List<Track>) =
         searchHistoryInteractor.saveHistoryOfTracks(list)
 
@@ -95,7 +86,7 @@ class SearchViewModel(
         private val SEARCH_REQUEST_TOKEN = Any()
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
 
-        fun getViewModelFactory(application: Application): ViewModelProvider.Factory =
+        fun getViewModelFactory(): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
                     SearchViewModel(

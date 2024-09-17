@@ -33,7 +33,7 @@ class SearchActivity : ComponentActivity() {
     private val viewModel by lazy {
         ViewModelProvider(
             this,
-            SearchViewModel.getViewModelFactory(application as App)
+            SearchViewModel.getViewModelFactory()
         )[SearchViewModel::class.java]
     }
 
@@ -64,10 +64,6 @@ class SearchActivity : ComponentActivity() {
 
         viewModel.showHistoryOfTracks()
 
-        /*if (viewModel.getHistoryOfTracks().isNullOrEmpty()) {
-            hideSearchHistory(true)
-        }*/
-
         queryInput = binding.inputEditTextSearchTracks
 
         viewModel.searchState.observe(this) {
@@ -82,11 +78,6 @@ class SearchActivity : ComponentActivity() {
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
             viewModel.showHistoryOfTracks()
-            /*if (viewModel.getHistoryOfTracks().isNullOrEmpty()) {
-                hideSearchHistory(true)
-            } else {
-                hideSearchHistory(false)
-            }*/
             hideSearchProblemPlaceholders(true)
             binding.rvTracks.visibility = View.GONE
             binding.progressBar.visibility = View.GONE
@@ -144,8 +135,6 @@ class SearchActivity : ComponentActivity() {
         adapter.tracks = tracksList
         binding.rvTracks.adapter = adapter
 
-        //searchHistoryAdapter.tracks = viewModel.getHistoryOfTracks()
-       // binding.rvHistorySearchTracks.adapter = searchHistoryAdapter
     }
 
     private fun render(state: SearchState) {
@@ -193,8 +182,6 @@ class SearchActivity : ComponentActivity() {
         } else {
             hideSearchHistory(false)
             hideSearchProblemPlaceholders(true)
-            //tracksList.clear()
-            //tracksList.addAll(searchHistoryTracks)
             searchHistoryAdapter.tracks = searchHistoryTracks
             binding.rvHistorySearchTracks.adapter = searchHistoryAdapter
             searchHistoryAdapter.notifyDataSetChanged()
@@ -268,10 +255,6 @@ class SearchActivity : ComponentActivity() {
                 putExtra(AUDIO_PLAYER, track)
             }
             viewModel.saveTracktoHistory(track)
-
-            //searchHistoryAdapter.tracks = viewModel.getHistoryOfTracks()
-
-
             startActivity(intent)
             searchHistoryAdapter.notifyDataSetChanged()
             viewModel.showHistoryOfTracks()
