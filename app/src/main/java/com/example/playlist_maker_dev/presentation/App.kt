@@ -8,13 +8,12 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Creator.initApplication(this)
-        Creator.provideSettingsInteractor(KEY_THEME_MODE, this)
-            .switchTheme(Creator.provideSettingsRepository(KEY_THEME_MODE, this).getSharedPreferencesThemeValue())
-        Creator.provideSharedPreferences(KEY_THEME_MODE)
+        Creator.provideSettingsInteractor(this)
+            .switchTheme(Creator.provideSettingsRepository(this).getSharedPreferencesThemeValue())
+        Creator.provideSharedPreferences()
     }
 
     companion object {
-        const val PLAYLISTMAKER_PREFERENCES = "playlistmaker_preferences"
         const val KEY_THEME_MODE = "key_theme_mode"
     }
 }

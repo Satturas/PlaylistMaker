@@ -1,6 +1,5 @@
 package com.example.playlist_maker_dev.creator
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.playlist_maker_dev.main.data.MainScreenRepositoryImpl
@@ -12,6 +11,7 @@ import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
 import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractorImpl
 import com.example.playlist_maker_dev.player.domain.AudioPlayerRepository
 import com.example.playlist_maker_dev.presentation.App
+import com.example.playlist_maker_dev.presentation.App.Companion.KEY_THEME_MODE
 import com.example.playlist_maker_dev.search.data.network.RetrofitNetworkClient
 import com.example.playlist_maker_dev.search.data.repository.SearchHistoryRepositoryImpl
 import com.example.playlist_maker_dev.search.data.repository.TracksRepositoryImpl
@@ -59,16 +59,16 @@ object Creator {
         return MainScreenInteractorImpl(getMainScreenRepository(context))
     }
 
-    fun provideSharedPreferences(key: String): SharedPreferences {
-        return application.getSharedPreferences(key, Context.MODE_PRIVATE)
+    fun provideSharedPreferences(): SharedPreferences {
+        return application.getSharedPreferences(KEY_THEME_MODE, Context.MODE_PRIVATE)
     }
 
-    fun provideSettingsRepository(key: String, context: Context): SettingsRepository {
-        return SettingsRepositoryImpl(provideSharedPreferences(key), context)
+    fun provideSettingsRepository(context: Context): SettingsRepository {
+        return SettingsRepositoryImpl(provideSharedPreferences(), context)
     }
 
-    fun provideSettingsInteractor(key: String, context: Context): SettingsInteractor {
-        return SettingsInteractorImpl(provideSettingsRepository(key, context))
+    fun provideSettingsInteractor(context: Context): SettingsInteractor {
+        return SettingsInteractorImpl(provideSettingsRepository(context))
     }
 
     private fun provideAudioPlayerRepository(): AudioPlayerRepository {

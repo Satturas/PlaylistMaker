@@ -12,16 +12,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
 import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
-import com.example.playlist_maker_dev.presentation.App
 import com.example.playlist_maker_dev.search.domain.models.Track
 
-class SearchActivity : ComponentActivity() {
+class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
 

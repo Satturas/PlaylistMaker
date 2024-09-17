@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlist_maker_dev.databinding.ActivitySettingsBinding
-import com.example.playlist_maker_dev.search.ui.SearchViewModel
 
 class SettingsActivity : AppCompatActivity() {
 
