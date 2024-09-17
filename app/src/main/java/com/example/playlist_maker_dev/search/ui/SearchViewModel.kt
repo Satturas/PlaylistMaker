@@ -92,8 +92,8 @@ class SearchViewModel(
             viewModelFactory {
                 initializer {
                     SearchViewModel(
-                        Creator.provideSearchHistoryInteractor(application),
-                        Creator.provideTracksInteractor(application)
+                        Creator.provideSearchHistoryInteractor(),
+                        Creator.provideTracksInteractor()
                     )
                 }
             }

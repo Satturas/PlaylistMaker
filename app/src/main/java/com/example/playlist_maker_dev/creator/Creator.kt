@@ -1,7 +1,12 @@
 package com.example.playlist_maker_dev.creator
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.playlist_maker_dev.main.data.MainScreenRepositoryImpl
+import com.example.playlist_maker_dev.main.domain.MainScreenInteractor
+import com.example.playlist_maker_dev.main.domain.MainScreenInteractorImpl
+import com.example.playlist_maker_dev.main.domain.MainScreenRepository
 import com.example.playlist_maker_dev.player.data.AudioPlayerRepositoryImpl
 import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
 import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractorImpl
@@ -26,42 +31,44 @@ object Creator {
 
     private lateinit var application: App
 
-    private lateinit var sharedPreferences: SharedPreferences
-
     fun initApplication(application: App) {
         Creator.application = application
     }
 
-    private fun getTracksRepository(context: Context): TracksRepository {
-        return TracksRepositoryImpl(RetrofitNetworkClient(context))
+    private fun getTracksRepository(): TracksRepository {
+        return TracksRepositoryImpl(RetrofitNetworkClient(application))
     }
 
-    fun provideTracksInteractor(context: Context): TracksInteractor {
-        return TracksInteractorImpl(TracksRepositoryImpl(RetrofitNetworkClient(context)))
+    fun provideTracksInteractor(): TracksInteractor {
+        return TracksInteractorImpl(TracksRepositoryImpl(RetrofitNetworkClient(application)))
     }
 
-    private fun getSearchHistoryRepository(context: Context): SearchHistoryRepository {
-        return SearchHistoryRepositoryImpl(context)
+    private fun getSearchHistoryRepository(): SearchHistoryRepository {
+        return SearchHistoryRepositoryImpl(application)
     }
 
-    fun provideSearchHistoryInteractor(context: Context): SearchHistoryInteractor {
-        return SearchHistoryInteractorImpl(getSearchHistoryRepository(context))
+    fun provideSearchHistoryInteractor(): SearchHistoryInteractor {
+        return SearchHistoryInteractorImpl(getSearchHistoryRepository())
+    }
+
+    private fun getMainScreenRepository(context: Context): MainScreenRepository {
+        return MainScreenRepositoryImpl(context)
+    }
+
+    fun provideMainScreenInteractor(context: Context): MainScreenInteractor {
+        return MainScreenInteractorImpl(getMainScreenRepository(context))
     }
 
     fun provideSharedPreferences(key: String): SharedPreferences {
         return application.getSharedPreferences(key, Context.MODE_PRIVATE)
     }
 
-    fun initialize(sharedPreferences: SharedPreferences) {
-        Creator.sharedPreferences = sharedPreferences
+    fun provideSettingsRepository(application: App): SettingsRepository {
+        return SettingsRepositoryImpl(application)
     }
 
-    fun provideSettingsRepository(context: Context): SettingsRepository {
-        return SettingsRepositoryImpl(context)
-    }
-
-    fun provideSettingsInteractor(context: Context): SettingsInteractor {
-        return SettingsInteractorImpl(provideSettingsRepository(context))
+    fun provideSettingsInteractor(): SettingsInteractor {
+        return SettingsInteractorImpl(provideSettingsRepository(application))
     }
 
     private fun provideAudioPlayerRepository(): AudioPlayerRepository {

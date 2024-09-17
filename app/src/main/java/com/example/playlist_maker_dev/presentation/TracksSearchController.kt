@@ -49,7 +49,7 @@ class TracksSearchController(
         binding.inputEditTextSearchTracks.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.inputEditTextSearchTracks.text.isNullOrEmpty()) {
                 if (historyOfTracksList.isEmpty()) {
-                    historyOfTracksList = Creator.provideSearchHistoryInteractor(activity)
+                    historyOfTracksList = Creator.provideSearchHistoryInteractor()
                         .getHistoryOfTracks()
                     searchHistoryAdapter.tracks = historyOfTracksList
                     searchHistoryAdapter.notifyDataSetChanged()
@@ -90,7 +90,7 @@ class TracksSearchController(
         binding.buttonClearSearchHistory.setOnClickListener {
             historyOfTracksList.clear()
             searchHistoryAdapter.notifyDataSetChanged()
-            Creator.provideSearchHistoryInteractor(activity)
+            Creator.provideSearchHistoryInteractor()
                 .saveHistoryOfTracks(historyOfTracksList)
             showSearchHistory(false)
         }
@@ -119,7 +119,7 @@ class TracksSearchController(
         binding.rvTracks.adapter = adapter
 
         searchHistoryAdapter.tracks =
-            Creator.provideSearchHistoryInteractor(activity).getHistoryOfTracks()
+            Creator.provideSearchHistoryInteractor().getHistoryOfTracks()
         binding.rvHistorySearchTracks.adapter = searchHistoryAdapter
 
     }

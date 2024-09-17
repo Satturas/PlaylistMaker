@@ -8,9 +8,9 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Creator.initApplication(this)
-        Creator.provideSettingsInteractor(this)
+        Creator.provideSettingsInteractor()
             .switchTheme(Creator.provideSettingsRepository(this).getSharedPreferencesThemeValue())
-        Creator.initialize(Creator.provideSharedPreferences(KEY_THEME_MODE))
+        Creator.provideSharedPreferences(KEY_THEME_MODE)
     }
 
     companion object {
