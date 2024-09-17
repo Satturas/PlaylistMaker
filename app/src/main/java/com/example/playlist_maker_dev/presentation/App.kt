@@ -8,8 +8,8 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Creator.initApplication(this)
-        Creator.provideSettingsInteractor(KEY_THEME_MODE)
-            .switchTheme(Creator.provideSettingsRepository(KEY_THEME_MODE).getSharedPreferencesThemeValue())
+        Creator.provideSettingsInteractor(KEY_THEME_MODE, this)
+            .switchTheme(Creator.provideSettingsRepository(KEY_THEME_MODE, this).getSharedPreferencesThemeValue())
         Creator.provideSharedPreferences(KEY_THEME_MODE)
     }
 

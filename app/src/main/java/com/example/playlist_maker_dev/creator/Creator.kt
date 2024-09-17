@@ -63,12 +63,12 @@ object Creator {
         return application.getSharedPreferences(key, Context.MODE_PRIVATE)
     }
 
-    fun provideSettingsRepository(key: String): SettingsRepository {
-        return SettingsRepositoryImpl(provideSharedPreferences(key), application)
+    fun provideSettingsRepository(key: String, context: Context): SettingsRepository {
+        return SettingsRepositoryImpl(provideSharedPreferences(key), context)
     }
 
-    fun provideSettingsInteractor(key: String): SettingsInteractor {
-        return SettingsInteractorImpl(provideSettingsRepository(key))
+    fun provideSettingsInteractor(key: String, context: Context): SettingsInteractor {
+        return SettingsInteractorImpl(provideSettingsRepository(key, context))
     }
 
     private fun provideAudioPlayerRepository(): AudioPlayerRepository {
