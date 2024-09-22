@@ -10,7 +10,6 @@ class App : Application() {
         Creator.initApplication(this)
         Creator.provideSettingsInteractor(this)
             .switchTheme(Creator.provideSettingsRepository(this).getSharedPreferencesThemeValue())
-        Creator.provideSharedPreferences()
     }
 
     companion object {
