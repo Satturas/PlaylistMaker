@@ -7,9 +7,9 @@ import com.example.playlist_maker_dev.player.ui.AudioPlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class AudioPlayerRepositoryImpl() : AudioPlayerRepository {
+class AudioPlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : AudioPlayerRepository {
 
-    private val mediaPlayer = MediaPlayer()
+    //private val mediaPlayer = MediaPlayer()
     private var playerState: AudioPlayerState = AudioPlayerState.STATE_DEFAULT
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }

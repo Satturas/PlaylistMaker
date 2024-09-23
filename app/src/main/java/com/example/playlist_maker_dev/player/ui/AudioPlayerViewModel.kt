@@ -66,15 +66,6 @@ class AudioPlayerViewModel(
     companion object {
         private const val DELAY = 500L
         private const val DEFAULT_CURRENT_POS = 0
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val interactor = Creator.provideAudioPlayerInteractor()
-                AudioPlayerViewModel(
-                    interactor
-                )
-            }
-        }
     }
 }
 
