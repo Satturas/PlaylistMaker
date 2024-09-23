@@ -27,7 +27,7 @@ import com.example.playlist_maker_dev.settings.domain.SettingsInteractorImpl
 import com.example.playlist_maker_dev.settings.domain.SettingsRepository
 
 
-object Creator {
+/*object Creator {
 
     private lateinit var application: App
 
@@ -83,4 +83,4 @@ object Creator {
         )
     }
 
-}
+}*/
