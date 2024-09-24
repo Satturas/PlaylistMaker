@@ -10,7 +10,7 @@ data class Track(
     val primaryGenreName: String,
     val releaseDate: String?,
     val country: String,
-    val previewUrl: String
+    val previewUrl: String?
 ) : java.io.Serializable
 
 

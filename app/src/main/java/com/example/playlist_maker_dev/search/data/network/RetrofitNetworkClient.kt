@@ -17,8 +17,6 @@ class RetrofitNetworkClient(private val iTunesService: ITunesApiService, val con
         Retrofit.Builder().baseUrl(iTunesBaseUrl).addConverterFactory(GsonConverterFactory.create())
             .build()
 
-    //private val iTunesService = retrofit.create(ITunesApiService::class.java)
-
     override fun doRequest(dto: Any): Response {
         if (isConnected() == false) {
             return Response().apply { resultCode = -1 }

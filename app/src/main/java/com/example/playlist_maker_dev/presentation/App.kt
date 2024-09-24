@@ -17,9 +17,6 @@ class App : Application() {
             androidContext(this@App)
             modules(dataModule, repositoryModule, interactorModule, viewModelModule)
         }
-        /*Creator.initApplication(this)
-        Creator.provideSettingsInteractor(this)
-            .switchTheme(Creator.provideSettingsRepository(this).getSharedPreferencesThemeValue())*/
     }
 
     companion object {

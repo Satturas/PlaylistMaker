@@ -38,7 +38,8 @@ class SettingsRepositoryImpl(
                 Intent.EXTRA_TEXT,
                 context.getString(R.string.support_email_text)
             )
-            val shareIntent = Intent.createChooser(this, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            val shareIntent =
+                Intent.createChooser(this, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(shareIntent)
         }
     }
@@ -56,7 +57,8 @@ class SettingsRepositoryImpl(
             putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_text))
             type = "text/plain"
         }.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        val shareIntent = Intent.createChooser(sendIntent, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val shareIntent =
+            Intent.createChooser(sendIntent, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(shareIntent)
     }
 

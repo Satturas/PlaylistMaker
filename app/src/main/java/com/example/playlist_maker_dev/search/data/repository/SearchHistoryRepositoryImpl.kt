@@ -15,9 +15,6 @@ class SearchHistoryRepositoryImpl(
 ) :
     SearchHistoryRepository {
 
-    /*private val sharedPreferences =
-        context.getSharedPreferences(SHARED_PREFS_HISTORY, Context.MODE_PRIVATE)*/
-
     override fun saveSearchHistory(param: List<Track>) {
         sharedPreferences.edit()
             .putString(KEY_HISTORY, createJsonFromTrack(param))
