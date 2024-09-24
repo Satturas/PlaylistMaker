@@ -248,7 +248,7 @@ class SearchActivity : AppCompatActivity() {
             val intent = Intent(
                 this,
                 AudioPlayerActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).apply {
+            ).apply {
                 putExtra(AUDIO_PLAYER, track)
             }
             viewModel.saveTracktoHistory(track)
