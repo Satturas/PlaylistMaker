@@ -245,7 +245,10 @@ class SearchActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun handleTrackClick(track: Track) {
         if (clickDebounce()) {
-            val intent = Intent(this, AudioPlayerActivity::class.java).apply {
+            val intent = Intent(
+                this,
+                AudioPlayerActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).apply {
                 putExtra(AUDIO_PLAYER, track)
             }
             viewModel.saveTracktoHistory(track)
