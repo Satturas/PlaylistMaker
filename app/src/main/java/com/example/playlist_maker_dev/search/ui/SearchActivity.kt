@@ -250,7 +250,7 @@ class SearchActivity : AppCompatActivity() {
             }
             viewModel.saveTracktoHistory(track)
             startActivity(intent)
-            searchHistoryAdapter.notifyDataSetChanged()
+            //searchHistoryAdapter.notifyDataSetChanged()
             viewModel.showHistoryOfTracks()
         }
     }
