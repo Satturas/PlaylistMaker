@@ -11,7 +11,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.playlist_maker_dev.R
@@ -45,7 +44,7 @@ class SearchActivity : AppCompatActivity() {
             )
         }
     }
-    private lateinit var queryInput: EditText
+
     private val handler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
 
@@ -58,8 +57,6 @@ class SearchActivity : AppCompatActivity() {
 
         viewModel.showHistoryOfTracks()
 
-        queryInput = binding.inputEditTextSearchTracks
-
         viewModel.searchState.observe(this) {
             render(it)
         }
@@ -67,7 +64,7 @@ class SearchActivity : AppCompatActivity() {
         binding.buttonBackFromSearch.setOnClickListener { finish() }
 
         binding.searchDeleteButton.setOnClickListener {
-            queryInput.setText(R.string.emptyString)
+            binding.inputEditTextSearchTracks.setText(R.string.emptyString)
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
@@ -83,7 +80,9 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 binding.searchDeleteButton.visibility =
-                    if (queryInput.hasFocus() && p0?.isEmpty() == true) View.VISIBLE else View.GONE
+                    if (binding.inputEditTextSearchTracks.hasFocus() && p0?.isEmpty() == true) View.VISIBLE else View.GONE
+                hideSearchHistory(true)
+                viewModel.searchDebounce(changedText = p0?.toString() ?: "")
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -116,6 +115,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.searchDeleteButton.isVisible = clearButtonVisibility(s)
+                hideSearchHistory(true)
                 viewModel.searchDebounce(changedText = s?.toString() ?: "")
             }
 
@@ -124,7 +124,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        textWatcher.let { queryInput.addTextChangedListener(it) }
+        textWatcher.let { binding.inputEditTextSearchTracks.addTextChangedListener(it) }
 
         adapter.tracks = tracksList
         binding.rvTracks.adapter = adapter
@@ -155,6 +155,7 @@ class SearchActivity : AppCompatActivity() {
     private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
 
     private fun showNothingFound() {
+        binding.rvTracks.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         hideSearchHistory(true)
         binding.placeholderImage.setImageResource(R.drawable.vector_nothing_found)
@@ -170,6 +171,7 @@ class SearchActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showSearchHistory(searchHistoryTracks: List<Track>) {
+        binding.rvTracks.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         if (searchHistoryTracks.isNullOrEmpty()) {
             hideSearchHistory(true)
@@ -260,7 +262,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        textWatcher.let { queryInput.removeTextChangedListener(it) }
+        textWatcher.let { binding.inputEditTextSearchTracks.removeTextChangedListener(it) }
     }
 
     companion object {
