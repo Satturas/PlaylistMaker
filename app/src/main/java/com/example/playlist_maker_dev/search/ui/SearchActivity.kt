@@ -116,7 +116,12 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.searchDeleteButton.isVisible = clearButtonVisibility(s)
                 hideSearchHistory(true)
-                viewModel.searchDebounce(changedText = s?.toString() ?: "")
+                //viewModel.searchDebounce(changedText = s?.toString() ?: "")
+                if (s?.isEmpty() == true) {
+                    tracksList.clear()
+                    adapter.notifyDataSetChanged()
+                    viewModel.showHistoryOfTracks()
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -129,6 +134,12 @@ class SearchActivity : AppCompatActivity() {
         adapter.tracks = tracksList
         binding.rvTracks.adapter = adapter
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (binding.inputEditTextSearchTracks.text.isNullOrEmpty()) viewModel.showHistoryOfTracks() else binding.rvTracks.visibility =
+            View.VISIBLE
     }
 
     private fun render(state: SearchState) {
