@@ -15,13 +15,13 @@
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/white"
         app:buttonGravity="center_vertical"
-        app:navigationIcon="@drawable/arrow_back_vector"
-        app:title="@string/search_text"
-        app:titleTextColor="@color/black"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
         app:contentInsetStartWithNavigation="0dp"
-        app:titleMarginStart="0dp"/>
+        app:navigationIcon="@drawable/arrow_back_vector"
+        app:title="@string/search_text"
+        app:titleMarginStart="0dp"
+        app:titleTextColor="@color/black" />
 
     <LinearLayout
         android:id="@+id/searchField"
