@@ -30,11 +30,6 @@ val repositoryModule = module {
         MainScreenRepositoryImpl(get())
     }
 
-    single {
-        androidContext()
-            .getSharedPreferences(KEY_THEME_MODE, Context.MODE_PRIVATE)
-    }
-
     single<SettingsRepository> {
         SettingsRepositoryImpl(get(), androidContext())
     }
