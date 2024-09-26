@@ -64,10 +64,13 @@ class SearchViewModel(
         }
     }
 
-    fun saveTracktoHistory(track: Track) = searchHistoryInteractor.saveTrackToHistory(track)
+    fun saveTracktoHistory(track: Track) {
+        searchHistoryInteractor.saveTrackToHistory(track)
+    }
 
-    fun saveHistoryOfTracks(list: List<Track>) =
+    fun saveHistoryOfTracks(list: List<Track>) {
         searchHistoryInteractor.saveHistoryOfTracks(list)
+    }
 
     private fun renderState(state: SearchState) {
         _searchState.postValue(state)

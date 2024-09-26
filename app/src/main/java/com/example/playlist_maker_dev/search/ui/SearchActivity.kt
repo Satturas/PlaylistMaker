@@ -116,7 +116,6 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.searchDeleteButton.isVisible = clearButtonVisibility(s)
                 hideSearchHistory(true)
-                //viewModel.searchDebounce(changedText = s?.toString() ?: "")
                 if (s?.isEmpty() == true) {
                     tracksList.clear()
                     adapter.notifyDataSetChanged()
@@ -134,12 +133,6 @@ class SearchActivity : AppCompatActivity() {
         adapter.tracks = tracksList
         binding.rvTracks.adapter = adapter
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (binding.inputEditTextSearchTracks.text.isNullOrEmpty()) viewModel.showHistoryOfTracks() else binding.rvTracks.visibility =
-            View.VISIBLE
     }
 
     private fun render(state: SearchState) {
@@ -170,11 +163,13 @@ class SearchActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.GONE
         hideSearchHistory(true)
         binding.placeholderImage.setImageResource(R.drawable.vector_nothing_found)
+        binding.placeholderMessage.setText(R.string.nothing_found)
         hideSearchProblemPlaceholders(false)
         binding.buttonReload.visibility = View.GONE
     }
 
     private fun showLoading() {
+        binding.rvTracks.visibility = View.GONE
         hideSearchHistory(true)
         hideSearchProblemPlaceholders(true)
         binding.progressBar.visibility = View.VISIBLE
@@ -212,6 +207,7 @@ class SearchActivity : AppCompatActivity() {
         hideSearchHistory(true)
         binding.progressBar.visibility = View.GONE
         binding.placeholderImage.setImageResource(R.drawable.vector_search_no_internet)
+        binding.placeholderMessage.setText(R.string.something_went_wrong)
         binding.buttonReload.visibility = View.VISIBLE
         hideSearchProblemPlaceholders(false)
         binding.buttonReload.setOnClickListener {
@@ -264,10 +260,10 @@ class SearchActivity : AppCompatActivity() {
             ).apply {
                 putExtra(AUDIO_PLAYER, track)
             }
-            viewModel.saveTracktoHistory(track)
             startActivity(intent)
+            viewModel.saveTracktoHistory(track)
             searchHistoryAdapter.notifyDataSetChanged()
-            viewModel.showHistoryOfTracks()
+            if (binding.inputEditTextSearchTracks.text.isEmpty()) viewModel.showHistoryOfTracks()
         }
     }
 
