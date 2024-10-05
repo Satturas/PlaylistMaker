@@ -20,7 +20,6 @@ class SearchViewModel(
     private val _searchState = MutableLiveData<SearchState>()
     val searchState: LiveData<SearchState> = _searchState
 
-    private var latestSearchText: String? = null
     private val handler = Handler(Looper.getMainLooper())
 
     fun searchDebounce(changedText: String) {
@@ -64,7 +63,7 @@ class SearchViewModel(
         }
     }
 
-    fun saveTracktoHistory(track: Track) {
+    fun saveTrackToHistory(track: Track) {
         searchHistoryInteractor.saveTrackToHistory(track)
     }
 

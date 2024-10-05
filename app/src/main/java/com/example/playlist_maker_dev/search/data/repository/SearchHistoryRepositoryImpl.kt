@@ -6,12 +6,10 @@ import com.example.playlist_maker_dev.search.domain.repository.SearchHistoryRepo
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-private const val SHARED_PREFS_HISTORY = "shared_prefs_history"
 private const val KEY_HISTORY = "history"
 
 class SearchHistoryRepositoryImpl(
-    private val sharedPreferences: SharedPreferences,
-    private val gson: Gson
+    private val sharedPreferences: SharedPreferences
 ) :
     SearchHistoryRepository {
 
@@ -30,7 +28,7 @@ class SearchHistoryRepositoryImpl(
         return tracksList
     }
 
-    override fun saveTracktoHistory(param: Track) {
+    override fun saveTrackToHistory(param: Track) {
         val oldTrackList = getSearchHistory()
         if (oldTrackList.isNotEmpty()) {
             oldTrackList.removeIf { it.trackId == param.trackId }

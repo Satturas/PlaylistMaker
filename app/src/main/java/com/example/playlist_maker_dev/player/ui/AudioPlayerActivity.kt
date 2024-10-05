@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
@@ -47,7 +46,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             viewModel.preparePlayer(track)
         }
 
-        viewModel.playerState.observe(this, Observer { playerState ->
+        viewModel.playerState.observe(this) { playerState ->
 
             when (playerState) {
 
@@ -68,11 +67,11 @@ class AudioPlayerActivity : AppCompatActivity() {
                 else -> {}
             }
 
-        })
+        }
 
-        viewModel.currentSongTime.observe(this, Observer { time ->
+        viewModel.currentSongTime.observe(this) { time ->
             binding.songTime.text = dateFormat.format(time)
-        })
+        }
 
         binding.playButton.setOnClickListener {
             if (viewModel.playerState.value == AudioPlayerState.STATE_PLAYING) {
@@ -117,10 +116,6 @@ class AudioPlayerActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         viewModel.stopPlayer()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }
 
