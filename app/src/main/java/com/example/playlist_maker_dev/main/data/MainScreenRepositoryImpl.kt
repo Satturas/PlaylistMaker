@@ -10,10 +10,27 @@ import com.example.playlist_maker_dev.settings.ui.SettingsActivity
 class MainScreenRepositoryImpl(private val context: Context) : MainScreenRepository {
 
     override fun onSearchClick() =
-        context.startActivity(Intent(context, SearchActivity::class.java))
+        context.startActivity(
+            Intent(
+                context,
+                SearchActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
 
-    override fun onMediaClick() = context.startActivity(Intent(context, MediaActivity::class.java))
+
+    override fun onMediaClick() =
+        context.startActivity(
+            Intent(
+                context,
+                MediaActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
 
     override fun onSettingsClick() =
-        context.startActivity(Intent(context, SettingsActivity::class.java))
+        context.startActivity(
+            Intent(
+                context,
+                SettingsActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        )
 }

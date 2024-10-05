@@ -11,14 +11,13 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
 import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
 import com.example.playlist_maker_dev.search.domain.models.Track
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
@@ -29,12 +28,7 @@ class SearchActivity : AppCompatActivity() {
     private var historyOfTracksList = mutableListOf<Track>()
     private lateinit var textWatcher: TextWatcher
 
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
-    }
+    private val viewModel by viewModel<SearchViewModel>()
 
     private val adapter: TrackAdapter by lazy {
         TrackAdapter(mutableListOf()) { track ->
@@ -50,7 +44,7 @@ class SearchActivity : AppCompatActivity() {
             )
         }
     }
-    private lateinit var queryInput: EditText
+
     private val handler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
 
@@ -63,8 +57,6 @@ class SearchActivity : AppCompatActivity() {
 
         viewModel.showHistoryOfTracks()
 
-        queryInput = binding.inputEditTextSearchTracks
-
         viewModel.searchState.observe(this) {
             render(it)
         }
@@ -72,7 +64,7 @@ class SearchActivity : AppCompatActivity() {
         binding.buttonBackFromSearch.setOnClickListener { finish() }
 
         binding.searchDeleteButton.setOnClickListener {
-            queryInput.setText(R.string.emptyString)
+            binding.inputEditTextSearchTracks.setText(R.string.emptyString)
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
@@ -88,7 +80,9 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 binding.searchDeleteButton.visibility =
-                    if (queryInput.hasFocus() && p0?.isEmpty() == true) View.VISIBLE else View.GONE
+                    if (binding.inputEditTextSearchTracks.hasFocus() && p0?.isEmpty() == true) View.VISIBLE else View.GONE
+                hideSearchHistory(true)
+                viewModel.searchDebounce(changedText = p0?.toString() ?: "")
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -121,7 +115,12 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.searchDeleteButton.isVisible = clearButtonVisibility(s)
-                viewModel.searchDebounce(changedText = s?.toString() ?: "")
+                hideSearchHistory(true)
+                if (s?.isEmpty() == true) {
+                    tracksList.clear()
+                    adapter.notifyDataSetChanged()
+                    viewModel.showHistoryOfTracks()
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -129,7 +128,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        textWatcher.let { queryInput.addTextChangedListener(it) }
+        textWatcher.let { binding.inputEditTextSearchTracks.addTextChangedListener(it) }
 
         adapter.tracks = tracksList
         binding.rvTracks.adapter = adapter
@@ -160,14 +159,17 @@ class SearchActivity : AppCompatActivity() {
     private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
 
     private fun showNothingFound() {
+        binding.rvTracks.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         hideSearchHistory(true)
         binding.placeholderImage.setImageResource(R.drawable.vector_nothing_found)
+        binding.placeholderMessage.setText(R.string.nothing_found)
         hideSearchProblemPlaceholders(false)
         binding.buttonReload.visibility = View.GONE
     }
 
     private fun showLoading() {
+        binding.rvTracks.visibility = View.GONE
         hideSearchHistory(true)
         hideSearchProblemPlaceholders(true)
         binding.progressBar.visibility = View.VISIBLE
@@ -175,6 +177,7 @@ class SearchActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showSearchHistory(searchHistoryTracks: List<Track>) {
+        binding.rvTracks.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         if (searchHistoryTracks.isNullOrEmpty()) {
             hideSearchHistory(true)
@@ -204,12 +207,16 @@ class SearchActivity : AppCompatActivity() {
         hideSearchHistory(true)
         binding.progressBar.visibility = View.GONE
         binding.placeholderImage.setImageResource(R.drawable.vector_search_no_internet)
+        binding.placeholderMessage.setText(R.string.something_went_wrong)
         binding.buttonReload.visibility = View.VISIBLE
         hideSearchProblemPlaceholders(false)
         binding.buttonReload.setOnClickListener {
             hideSearchProblemPlaceholders(true)
             viewModel.searchDebounce(inputValue.toString())
         }
+        val inputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
     }
 
     private fun clickDebounce(): Boolean {
@@ -250,19 +257,22 @@ class SearchActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     private fun handleTrackClick(track: Track) {
         if (clickDebounce()) {
-            val intent = Intent(this, AudioPlayerActivity::class.java).apply {
+            val intent = Intent(
+                this,
+                AudioPlayerActivity::class.java
+            ).apply {
                 putExtra(AUDIO_PLAYER, track)
             }
-            viewModel.saveTracktoHistory(track)
             startActivity(intent)
+            viewModel.saveTracktoHistory(track)
             searchHistoryAdapter.notifyDataSetChanged()
-            viewModel.showHistoryOfTracks()
+            if (binding.inputEditTextSearchTracks.text.isEmpty()) viewModel.showHistoryOfTracks()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        textWatcher.let { queryInput.removeTextChangedListener(it) }
+        textWatcher.let { binding.inputEditTextSearchTracks.removeTextChangedListener(it) }
     }
 
     companion object {

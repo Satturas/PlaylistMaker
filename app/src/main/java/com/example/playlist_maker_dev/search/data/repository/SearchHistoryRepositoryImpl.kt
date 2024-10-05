@@ -1,6 +1,6 @@
 package com.example.playlist_maker_dev.search.data.repository
 
-import android.content.Context
+import android.content.SharedPreferences
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.domain.repository.SearchHistoryRepository
 import com.google.gson.Gson
@@ -9,10 +9,11 @@ import com.google.gson.reflect.TypeToken
 private const val SHARED_PREFS_HISTORY = "shared_prefs_history"
 private const val KEY_HISTORY = "history"
 
-class SearchHistoryRepositoryImpl(context: Context) : SearchHistoryRepository {
-
-    private val sharedPreferences =
-        context.getSharedPreferences(SHARED_PREFS_HISTORY, Context.MODE_PRIVATE)
+class SearchHistoryRepositoryImpl(
+    private val sharedPreferences: SharedPreferences,
+    private val gson: Gson
+) :
+    SearchHistoryRepository {
 
     override fun saveSearchHistory(param: List<Track>) {
         sharedPreferences.edit()

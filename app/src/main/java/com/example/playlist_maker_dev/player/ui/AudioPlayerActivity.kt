@@ -7,7 +7,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
@@ -15,13 +14,15 @@ import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchActivity
 import com.example.playlist_maker_dev.search.ui.dpToPx
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioPlayerBinding
-    private lateinit var viewModel: AudioPlayerViewModel
+
+    private val viewModel by viewModel<AudioPlayerViewModel>()
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
@@ -43,12 +44,6 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         if (track != null) {
             showPlayer(track)
-
-            viewModel = ViewModelProvider(
-                this,
-                AudioPlayerViewModel.getViewModelFactory()
-            )[AudioPlayerViewModel::class.java]
-
             viewModel.preparePlayer(track)
         }
 

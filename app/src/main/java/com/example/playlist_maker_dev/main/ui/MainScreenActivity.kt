@@ -2,22 +2,15 @@ package com.example.playlist_maker_dev.main.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlist_maker_dev.databinding.ActivityMainBinding
-import com.example.playlist_maker_dev.presentation.App
-import com.example.playlist_maker_dev.search.ui.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainScreenActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this,
-            MainScreenViewModel.getViewModelFactory(this)
-        )[MainScreenViewModel::class.java]
-    }
+    private val viewModel by viewModel<MainScreenViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

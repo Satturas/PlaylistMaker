@@ -5,10 +5,6 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlist_maker_dev.creator.Creator
 import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
 import com.example.playlist_maker_dev.search.domain.models.Track
 
@@ -66,15 +62,6 @@ class AudioPlayerViewModel(
     companion object {
         private const val DELAY = 500L
         private const val DEFAULT_CURRENT_POS = 0
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val interactor = Creator.provideAudioPlayerInteractor()
-                AudioPlayerViewModel(
-                    interactor
-                )
-            }
-        }
     }
 }
 

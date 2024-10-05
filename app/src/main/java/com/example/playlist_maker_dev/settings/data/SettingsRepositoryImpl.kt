@@ -38,7 +38,8 @@ class SettingsRepositoryImpl(
                 Intent.EXTRA_TEXT,
                 context.getString(R.string.support_email_text)
             )
-            val shareIntent = Intent.createChooser(this, null)
+            val shareIntent =
+                Intent.createChooser(this, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(shareIntent)
         }
     }
@@ -47,7 +48,7 @@ class SettingsRepositoryImpl(
         Intent(
             Intent.ACTION_VIEW,
             Uri.parse(context.getString(R.string.user_agreement_link))
-        )
+        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     )
 
     override fun shareTextToOtherApps() {
@@ -55,8 +56,9 @@ class SettingsRepositoryImpl(
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_text))
             type = "text/plain"
-        }
-        val shareIntent = Intent.createChooser(sendIntent, null)
+        }.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val shareIntent =
+            Intent.createChooser(sendIntent, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(shareIntent)
     }
 
