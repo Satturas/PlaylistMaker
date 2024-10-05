@@ -14,6 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
         android:contentDescription="@string/search_delete_text_icon"
         android:src="@drawable/vector_nothing_found"/>
 
