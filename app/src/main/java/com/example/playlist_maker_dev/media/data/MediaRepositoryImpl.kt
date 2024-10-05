@@ -1,4 +1,6 @@
 package com.example.playlist_maker_dev.media.data
 
-class MediaRepositoryImpl {
+import com.example.playlist_maker_dev.media.domain.MediaRepository
+
+class MediaRepositoryImpl : MediaRepository {
 }

@@ -9,7 +9,6 @@ import com.example.playlist_maker_dev.databinding.FragmentMediaFavoriteTracksBin
 
 class MediaFavoriteTracksFragment : Fragment() {
 
-
     private lateinit var binding: FragmentMediaFavoriteTracksBinding
 
     override fun onCreateView(
