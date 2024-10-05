@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="side_padding">16dp</dimen>
+    <dimen name="side_padding_16">16dp</dimen>
     <dimen name="main_menu_text_size">22sp</dimen>
     <dimen name="main_menu_buttons_corner_radius">16dp</dimen>
     <dimen name="main_menu_buttons_bottom_padding">16dp</dimen>
@@ -8,4 +8,5 @@
     <dimen name="settings_text_size">16sp</dimen>
     <dimen name="settings_menu_buttons_height">61dp</dimen>
     <dimen name="search_margin_4">4dp</dimen>
+    <dimen name="side_padding_24">24dp</dimen>
 </resources>
