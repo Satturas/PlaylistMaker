@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/side_padding">
+    android:paddingHorizontal="@dimen/side_padding_16">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/buttonBackFromSearch"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/toolbar_height"
         android:layout_marginTop="14dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/white"
@@ -21,7 +21,8 @@
         app:navigationIcon="@drawable/arrow_back_vector"
         app:title="@string/search_text"
         app:titleMarginStart="0dp"
-        app:titleTextColor="@color/black" />
+        app:titleTextColor="?attr/colorOnTertiary"
+        app:titleTextAppearance="@style/ToolbarTextStyle"/>
 
     <LinearLayout
         android:id="@+id/searchField"
@@ -29,7 +30,7 @@
         android:layout_height="36dp"
         android:background="@drawable/search_field_vector"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/side_padding">
+        android:paddingHorizontal="@dimen/side_padding_16">
 
         <ImageView
             android:id="@+id/search_image"
@@ -42,7 +43,7 @@
         <EditText
             android:id="@+id/inputEditTextSearchTracks"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:autofillHints="true"
@@ -88,7 +89,7 @@
             android:id="@+id/rvTracks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/side_padding"
+            android:layout_marginVertical="@dimen/side_padding_16"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="7" />
     </LinearLayout>
@@ -116,7 +117,7 @@
             android:id="@+id/rvHistorySearchTracks"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginVertical="@dimen/side_padding"
+            android:layout_marginVertical="@dimen/side_padding_16"
             android:layout_weight="1"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 

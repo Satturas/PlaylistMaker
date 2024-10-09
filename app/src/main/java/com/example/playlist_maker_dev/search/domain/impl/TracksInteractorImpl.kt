@@ -22,5 +22,4 @@ class TracksInteractorImpl(private val repository: TracksRepository) : TracksInt
             }
         }
     }
-
 }

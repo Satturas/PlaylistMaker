@@ -9,11 +9,11 @@ class SettingsViewModel(
     private val interactor: SettingsInteractor
 ) : ViewModel() {
 
-    private val isdarkThemeEnabled = MutableLiveData<Boolean>()
-    val darkThemeEnabled: LiveData<Boolean> get() = isdarkThemeEnabled
+    private val isDarkThemeEnabled = MutableLiveData<Boolean>()
+    val darkThemeEnabled: LiveData<Boolean> get() = isDarkThemeEnabled
 
     init {
-        isdarkThemeEnabled.value = interactor.getSharedPreferencesThemeValue()
+        isDarkThemeEnabled.value = interactor.getSharedPreferencesThemeValue()
     }
 
     fun writeToSupport() = interactor.writeToSupport()
@@ -25,6 +25,6 @@ class SettingsViewModel(
     fun switchTheme(isDarkTheme: Boolean) {
         interactor.editSharedPreferencesThemeValue(isDarkTheme)
         interactor.switchTheme(isDarkTheme)
-        isdarkThemeEnabled.value = isDarkTheme
+        isDarkThemeEnabled.value = isDarkTheme
     }
 }

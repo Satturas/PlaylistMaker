@@ -16,5 +16,5 @@ class SearchHistoryInteractorImpl(private val searchHistoryRepository: SearchHis
 
     override fun saveTrackToHistory(
         param: Track
-    ) = searchHistoryRepository.saveTracktoHistory(param)
+    ) = searchHistoryRepository.saveTrackToHistory(param)
 }

@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="@dimen/side_padding"
+    android:paddingHorizontal="@dimen/side_padding_16"
     android:paddingBottom="28dp">
 
     <Button
         android:id="@+id/buttonBackFromSettings"
         style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/toolbar_height"
         android:layout_marginTop="14dp"
         android:layout_marginBottom="40dp"
         android:background="@android:color/transparent"

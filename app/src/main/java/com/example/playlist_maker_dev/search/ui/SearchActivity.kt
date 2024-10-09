@@ -179,7 +179,7 @@ class SearchActivity : AppCompatActivity() {
     private fun showSearchHistory(searchHistoryTracks: List<Track>) {
         binding.rvTracks.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
-        if (searchHistoryTracks.isNullOrEmpty()) {
+        if (searchHistoryTracks.isEmpty()) {
             hideSearchHistory(true)
         } else {
             hideSearchHistory(false)
@@ -264,7 +264,7 @@ class SearchActivity : AppCompatActivity() {
                 putExtra(AUDIO_PLAYER, track)
             }
             startActivity(intent)
-            viewModel.saveTracktoHistory(track)
+            viewModel.saveTrackToHistory(track)
             searchHistoryAdapter.notifyDataSetChanged()
             if (binding.inputEditTextSearchTracks.text.isEmpty()) viewModel.showHistoryOfTracks()
         }

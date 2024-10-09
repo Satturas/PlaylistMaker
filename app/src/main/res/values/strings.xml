@@ -18,7 +18,6 @@
     <string name="user_agreement_link">https://yandex.ru/legal/practicum_offer/</string>
     <!--settings screen end-->
 
-    <!--search screen start-->
     <string name="search_text_icon">search_text_icon</string>
     <string name="search_delete_text_icon">search_delete_text_icon</string>
     <string name="separator_band_length">Separator_band_length</string>
@@ -39,7 +38,11 @@
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
     <string name="timer_00">00:00</string>
-    <!--search screen end-->
-
+    <string name="Media_library">Медиатека</string>
+    <string name="media_library_is_empty">Ваша медиатека пуста</string>
+    <string name="no_playlists_yet">Вы не создали\nни одного плейлиста</string>
+    <string name="new_playlist">Новый плейлист</string>
+    <string name="favorite_tracks">Избранные треки</string>
+    <string name="playlists">Плейлисты</string>
 
 </resources>
