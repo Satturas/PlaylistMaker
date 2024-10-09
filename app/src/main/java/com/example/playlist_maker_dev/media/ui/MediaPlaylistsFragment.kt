@@ -10,7 +10,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaPlaylistsFragment : Fragment() {
 
-    private lateinit var binding: FragmentMediaPlaylistsBinding
+    private var _binding: FragmentMediaPlaylistsBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel by viewModel<PlaylistsViewModel>()
 
@@ -19,8 +20,13 @@ class MediaPlaylistsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentMediaPlaylistsBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
