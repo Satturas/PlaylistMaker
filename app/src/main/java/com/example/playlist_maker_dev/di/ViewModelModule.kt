@@ -17,10 +17,6 @@ val viewModelModule = module {
     }
 
     viewModel {
-        MainScreenViewModel(get())
-    }
-
-    viewModel {
         AudioPlayerViewModel(get())
     }
 
