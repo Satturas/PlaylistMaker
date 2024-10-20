@@ -1,6 +1,5 @@
 package com.example.playlist_maker_dev.di
 
-import com.example.playlist_maker_dev.main.ui.MainScreenViewModel
 import com.example.playlist_maker_dev.media.ui.FavoriteTracksViewModel
 import com.example.playlist_maker_dev.media.ui.MediaViewModel
 import com.example.playlist_maker_dev.media.ui.PlaylistsViewModel
