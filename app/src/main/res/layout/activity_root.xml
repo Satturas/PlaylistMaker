@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/colorOnTertiaryContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorOnTertiaryContainer"
     tools:context=".ui.root.RootActivity">
 
     <androidx.fragment.app.FragmentContainerView
@@ -18,17 +18,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/root_navigation_graph" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-        android:background="@drawable/bottom_view_divider" />
+        android:background="@drawable/bottom_view_divider"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:theme="@style/BottomNavigationViewTextStyle"
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:theme="@style/BottomNavigationViewTextStyle"
         app:itemIconTint="@color/bnv_tab_item_foreground"
         app:itemTextColor="@color/bnv_tab_item_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
