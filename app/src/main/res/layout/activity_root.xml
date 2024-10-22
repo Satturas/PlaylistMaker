@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/colorOnTertiaryContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.root.RootActivity">
@@ -17,6 +18,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/root_navigation_graph" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        android:background="@drawable/bottom_view_divider" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:theme="@style/BottomNavigationViewTextStyle"
