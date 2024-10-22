@@ -32,9 +32,7 @@ class SettingsFragment : Fragment() {
         binding.buttonShareApp.setOnClickListener { viewModel.shareTextToOtherApps() }
 
         viewModel.darkThemeEnabled.observe(viewLifecycleOwner) { enabled ->
-            if (binding.themeSwitcher.isChecked != enabled) {
-                binding.themeSwitcher.isChecked = enabled
-            }
+            binding.themeSwitcher.isChecked = enabled
         }
         binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked)
