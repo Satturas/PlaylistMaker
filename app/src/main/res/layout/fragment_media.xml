@@ -18,7 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside"
-        app:navigationIcon="@drawable/arrow_back_vector"
         app:title="@string/Media_library"
         app:titleTextAppearance="@style/ToolbarTextStyle"
         app:titleTextColor="?attr/colorOnTertiary" />

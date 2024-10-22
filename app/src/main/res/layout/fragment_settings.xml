@@ -28,7 +28,6 @@
         android:textSize="@dimen/main_menu_text_size"
         android:visibility="visible"
         app:cornerRadius="0dp"
-        app:icon="@drawable/arrow_back_vector"
         app:iconGravity="textStart"
         app:iconPadding="28dp"
         app:iconTint="?attr/colorOnPrimary" />

@@ -62,7 +62,11 @@ class SearchFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        inputValue = savedInstanceState?.getString(SEARCH_USER_INPUT).toString()
+
+        if (savedInstanceState != null) {
+            inputValue = savedInstanceState.getString(SEARCH_USER_INPUT).toString()
+        }
+
         binding.inputEditTextSearchTracks.setText(inputValue)
 
         viewModel.showHistoryOfTracks()
