@@ -1,48 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:paddingHorizontal="@dimen/side_padding_16"
-    android:paddingBottom="28dp"
+    android:background="?attr/colorOnTertiaryContainer"
     tools:context=".settings.ui.SettingsFragment">
 
-    <Button
-        android:id="@+id/buttonBackFromSettings"
-        style="@style/Widget.AppCompat.Button.Small"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/toolbar_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/toolbar_height" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="@dimen/toolbar_height"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="40dp"
-        android:background="@android:color/transparent"
-        android:backgroundTint="@color/white"
-        android:fontFamily="@font/ys_display_medium"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="start|center_vertical"
-        android:includeFontPadding="true"
-        android:text="@string/settings_text"
-        android:textAllCaps="false"
-        android:textFontWeight="500"
-        android:textSize="@dimen/main_menu_text_size"
-        android:visibility="visible"
-        app:cornerRadius="0dp"
-        app:iconGravity="textStart"
-        app:iconPadding="28dp"
-        app:iconTint="?attr/colorOnPrimary" />
+        app:layout_constraintBottom_toTopOf="@id/toolbar_border"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/settings_text"
+        app:titleTextAppearance="@style/ToolbarTextStyle"
+        app:titleTextColor="?attr/colorOnTertiary" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
-        style="@style/ButtonSettingsScreenStyle"
         android:id="@+id/themeSwitcher"
-        android:layout_width="match_parent"
+        style="@style/ButtonSettingsScreenStyle"
+        android:layout_width="0dp"
         android:layout_height="@dimen/settings_menu_buttons_height"
-        android:gravity="start|center_vertical"
-        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
+        android:layout_marginTop="24dp"
         android:autoSizeTextType="none"
         android:buttonTint="@color/black"
+        android:gravity="start|center_vertical"
         android:switchMinWidth="38dp"
         android:text="@string/dark_theme"
+        app:layout_constraintBottom_toTopOf="@id/buttonShareApp"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_border"
         app:thumbTint="@color/track"
         app:trackTint="@color/switch_track"
         app:useMaterialThemeColors="false" />
@@ -50,31 +63,40 @@
     <Button
         android:id="@+id/buttonShareApp"
         style="@style/ButtonSettingsScreenStyle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/settings_menu_buttons_height"
         android:gravity="start|center_vertical"
-        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
         android:text="@string/share_app"
-        app:icon="@drawable/share_vector" />
+        app:icon="@drawable/share_vector"
+        app:layout_constraintBottom_toTopOf="@id/buttonWriteToSupport"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/themeSwitcher" />
 
     <Button
         android:id="@+id/buttonWriteToSupport"
         style="@style/ButtonSettingsScreenStyle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/settings_menu_buttons_height"
         android:gravity="start|center_vertical"
-        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
         android:text="@string/support"
-        app:icon="@drawable/support_vector" />
+        app:icon="@drawable/support_vector"
+        app:layout_constraintBottom_toTopOf="@id/buttonUserAgreement"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/buttonShareApp" />
 
     <Button
         android:id="@+id/buttonUserAgreement"
         style="@style/ButtonSettingsScreenStyle"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/settings_menu_buttons_height"
-        android:gravity="start|center_vertical"
         android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
+        android:gravity="start|center_vertical"
         android:text="@string/user_agreement"
-        app:icon="@drawable/forward_arrow_vector" />
+        app:icon="@drawable/forward_arrow_vector"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/buttonWriteToSupport" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
