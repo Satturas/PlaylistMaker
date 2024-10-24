@@ -1,7 +1,5 @@
 package com.example.playlist_maker_dev.di
 
-import com.example.playlist_maker_dev.main.domain.MainScreenInteractor
-import com.example.playlist_maker_dev.main.domain.MainScreenInteractorImpl
 import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
 import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractorImpl
 import com.example.playlist_maker_dev.search.domain.api.SearchHistoryInteractor
@@ -20,10 +18,6 @@ val interactorModule = module {
 
     single<SearchHistoryInteractor> {
         SearchHistoryInteractorImpl(get())
-    }
-
-    single<MainScreenInteractor> {
-        MainScreenInteractorImpl(get())
     }
 
     single<SettingsInteractor> {

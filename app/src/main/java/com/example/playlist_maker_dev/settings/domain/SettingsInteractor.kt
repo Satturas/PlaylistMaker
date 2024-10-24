@@ -7,4 +7,5 @@ interface SettingsInteractor {
     fun shareTextToOtherApps()
     fun getSharedPreferencesThemeValue(): Boolean
     fun editSharedPreferencesThemeValue(isDarkTheme: Boolean)
+    fun getInitialTheme()
 }

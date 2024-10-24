@@ -3,6 +3,7 @@ package com.example.playlist_maker_dev.settings.data
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlist_maker_dev.R
@@ -70,5 +71,13 @@ class SettingsRepositoryImpl(
             .putBoolean(KEY_THEME_MODE, isDarkTheme)
             .apply()
 
+    override fun getInitialTheme() {
+        switchTheme(
+            sharedPreferences.getBoolean(
+                KEY_THEME_MODE,
+                context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+            )
+        )
+    }
 }
 

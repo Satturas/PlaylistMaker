@@ -10,18 +10,20 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.databinding.ActivitySearchBinding
+import com.example.playlist_maker_dev.databinding.FragmentSearchBinding
 import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
 import com.example.playlist_maker_dev.search.domain.models.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
-    private lateinit var binding: ActivitySearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     private var inputValue: CharSequence = SEARCH_DEF
     private val tracksList = mutableListOf<Track>()
@@ -48,26 +50,36 @@ class SearchActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(LayoutInflater.from(this))
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (savedInstanceState != null) {
+            inputValue = savedInstanceState.getString(SEARCH_USER_INPUT).toString()
+        }
+
+        binding.inputEditTextSearchTracks.setText(inputValue)
 
         viewModel.showHistoryOfTracks()
 
-        viewModel.searchState.observe(this) {
+        viewModel.searchState.observe(viewLifecycleOwner) {
             render(it)
         }
-
-        binding.buttonBackFromSearch.setOnClickListener { finish() }
 
         binding.searchDeleteButton.setOnClickListener {
             binding.inputEditTextSearchTracks.setText(R.string.emptyString)
             val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(view.windowToken, 0)
             viewModel.showHistoryOfTracks()
             hideSearchProblemPlaceholders(true)
             binding.rvTracks.visibility = View.GONE
@@ -132,7 +144,11 @@ class SearchActivity : AppCompatActivity() {
 
         adapter.tracks = tracksList
         binding.rvTracks.adapter = adapter
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun render(state: SearchState) {
@@ -148,12 +164,6 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putCharSequence(SEARCH_USER_INPUT, inputValue)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        inputValue = savedInstanceState.getString(SEARCH_USER_INPUT).toString()
-        binding.inputEditTextSearchTracks.setText(inputValue)
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
@@ -215,8 +225,8 @@ class SearchActivity : AppCompatActivity() {
             viewModel.searchDebounce(inputValue.toString())
         }
         val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        inputMethodManager?.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        inputMethodManager?.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
     private fun clickDebounce(): Boolean {
@@ -258,7 +268,7 @@ class SearchActivity : AppCompatActivity() {
     private fun handleTrackClick(track: Track) {
         if (clickDebounce()) {
             val intent = Intent(
-                this,
+                requireContext(),
                 AudioPlayerActivity::class.java
             ).apply {
                 putExtra(AUDIO_PLAYER, track)
@@ -270,11 +280,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        textWatcher.let { binding.inputEditTextSearchTracks.removeTextChangedListener(it) }
-    }
-
     companion object {
         private const val SEARCH_USER_INPUT = "search_user_input"
         private val SEARCH_DEF: CharSequence = ""
@@ -282,7 +287,3 @@ class SearchActivity : AppCompatActivity() {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
-
-
-
-
