@@ -12,7 +12,6 @@
         android:id="@+id/buttonBackFromSearch"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        android:layout_marginTop="14dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/white"
         app:buttonGravity="center_vertical"
