@@ -1,6 +1,5 @@
 package com.example.playlist_maker_dev.search.ui
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlist_maker_dev.search.domain.api.SearchHistoryInteractor
 import com.example.playlist_maker_dev.search.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.search.domain.models.Track
-import com.example.playlist_maker_dev.util.Resource
 import com.example.playlist_maker_dev.util.debounce
+import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val searchHistoryInteractor: SearchHistoryInteractor,
@@ -43,21 +42,26 @@ class SearchViewModel(
         if (query.isNotEmpty()) {
             renderState(SearchState.Loading)
 
-            tracksInteractor.searchTracks(query, object : TracksInteractor.TracksConsumer {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun consume(foundTracks: Resource<List<Track>?>, errorMessage: String?) {
-                    val tracks = mutableListOf<Track>()
-                    foundTracks.data?.let { tracks.addAll(it) }
-                    when (foundTracks) {
-                        is Resource.Error -> renderState(SearchState.Error(errorMessage.toString()))
-                        is Resource.Success -> {
-                            if (!foundTracks.data.isNullOrEmpty()) {
-                                renderState(SearchState.FoundTracksContent(foundTracks.data))
-                            } else renderState(SearchState.NothingFound)
-                        }
+            viewModelScope.launch {
+                tracksInteractor
+                    .searchTracks(query)
+                    .collect { pair ->
+                        processResult(pair.first, pair.second)
                     }
-                }
-            })
+            }
+        }
+    }
+
+    private fun processResult(foundTracks: List<Track>?, errorMessage: String?) {
+        val tracks = mutableListOf<Track>()
+        if (foundTracks != null) {
+            tracks.addAll(foundTracks)
+        }
+
+        when {
+            errorMessage != null -> renderState(SearchState.Error(errorMessage.toString()))
+            tracks.isEmpty() -> renderState(SearchState.NothingFound)
+            else -> renderState(SearchState.FoundTracksContent(tracks))
         }
     }
 

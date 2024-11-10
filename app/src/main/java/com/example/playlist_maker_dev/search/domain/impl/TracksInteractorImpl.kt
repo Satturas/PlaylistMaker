@@ -1,23 +1,23 @@
 package com.example.playlist_maker_dev.search.domain.impl
 
 import com.example.playlist_maker_dev.search.domain.api.TracksInteractor
+import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.domain.repository.TracksRepository
 import com.example.playlist_maker_dev.util.Resource
-import java.util.concurrent.Executors
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class TracksInteractorImpl(private val repository: TracksRepository) : TracksInteractor {
 
-    private val executor = Executors.newCachedThreadPool()
-
-    override fun searchTracks(term: String, consumer: TracksInteractor.TracksConsumer) {
-        executor.execute {
-            when (val resource = repository.searchTracks(term)) {
+    override fun searchTracks(term: String): Flow<Pair<List<Track>?, String?>> {
+        return repository.searchTracks(term).map { result ->
+            when (result) {
                 is Resource.Success -> {
-                    consumer.consume(Resource.Success(resource.data), null)
+                    Pair(result.data, null)
                 }
 
                 is Resource.Error -> {
-                    consumer.consume(Resource.Error(resource.message.toString()), resource.message)
+                    Pair(null, result.message)
                 }
             }
         }
