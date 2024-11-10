@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -14,10 +12,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.FragmentSearchBinding
 import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
 import com.example.playlist_maker_dev.search.domain.models.Track
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -29,6 +30,7 @@ class SearchFragment : Fragment() {
     private val tracksList = mutableListOf<Track>()
     private var historyOfTracksList = mutableListOf<Track>()
     private lateinit var textWatcher: TextWatcher
+    private var isClickAllowed = true
 
     private val viewModel by viewModel<SearchViewModel>()
 
@@ -39,6 +41,7 @@ class SearchFragment : Fragment() {
             )
         }
     }
+
     private val searchHistoryAdapter: TrackAdapter by lazy {
         TrackAdapter(mutableListOf()) { track ->
             handleTrackClick(
@@ -46,9 +49,6 @@ class SearchFragment : Fragment() {
             )
         }
     }
-
-    private val handler = Handler(Looper.getMainLooper())
-    private var isClickAllowed = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -233,7 +233,10 @@ class SearchFragment : Fragment() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }

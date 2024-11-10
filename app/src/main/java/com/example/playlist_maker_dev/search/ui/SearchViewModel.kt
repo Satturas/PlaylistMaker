@@ -1,16 +1,15 @@
 package com.example.playlist_maker_dev.search.ui
 
 import android.annotation.SuppressLint
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlist_maker_dev.search.domain.api.SearchHistoryInteractor
 import com.example.playlist_maker_dev.search.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.util.Resource
+import com.example.playlist_maker_dev.util.debounce
 
 class SearchViewModel(
     private val searchHistoryInteractor: SearchHistoryInteractor,
@@ -20,19 +19,18 @@ class SearchViewModel(
     private val _searchState = MutableLiveData<SearchState>()
     val searchState: LiveData<SearchState> = _searchState
 
-    private val handler = Handler(Looper.getMainLooper())
+    private var latestSearchText: String? = null
+
+    private val trackSearchDebounce =
+        debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
+            searchTracks(changedText)
+        }
 
     fun searchDebounce(changedText: String) {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-
-        val searchRunnable = Runnable { searchTracks(changedText) }
-
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        handler.postAtTime(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            postTime,
-        )
+        if (latestSearchText != changedText) {
+            latestSearchText = changedText
+            trackSearchDebounce(changedText)
+        }
     }
 
     fun showHistoryOfTracks() {
@@ -75,12 +73,7 @@ class SearchViewModel(
         _searchState.postValue(state)
     }
 
-    override fun onCleared() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-    }
-
     companion object {
-        private val SEARCH_REQUEST_TOKEN = Any()
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }
