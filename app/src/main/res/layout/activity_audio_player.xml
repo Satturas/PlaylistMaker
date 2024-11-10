@@ -28,6 +28,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="24dp" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/toolbar_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="?attr/actionBarSize" />
+
 
     <TextView
         android:id="@+id/countryTitle"
@@ -278,17 +285,17 @@
         android:id="@+id/imageCover"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@id/songTitle"
         app:layout_constraintDimensionRatio="h,1:1"
-        app:layout_constraintEnd_toStartOf="@+id/right_border"
-        app:layout_constraintStart_toStartOf="@+id/left_border"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:srcCompat="@drawable/vector_cover_placeholder" />
+        app:layout_constraintEnd_toStartOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_border"
+        app:srcCompat="@drawable/vector_cover_placeholder"
+        app:layout_constraintVertical_chainStyle="spread_inside"/>
 
 
     <androidx.appcompat.widget.Toolbar
@@ -297,12 +304,10 @@
         android:layout_height="@dimen/toolbar_height"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:layout_constraintBottom_toTopOf="@id/imageCover"
+        app:layout_constraintBottom_toTopOf="@id/toolbar_border"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="spread_inside"
         app:navigationIcon="@drawable/arrow_back_vector" />
 
     <ProgressBar

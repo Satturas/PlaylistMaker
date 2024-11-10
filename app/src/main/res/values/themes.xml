@@ -15,6 +15,7 @@
         <item name="colorOnTertiary">@color/icon</item>
         <item name="colorOnTertiaryContainer">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="colorTertiary">@color/menu_day</item>
     </style>
 
     <style name="MainScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">

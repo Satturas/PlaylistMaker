@@ -11,7 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
 import com.example.playlist_maker_dev.search.domain.models.Track
-import com.example.playlist_maker_dev.search.ui.SearchActivity
+import com.example.playlist_maker_dev.search.ui.SearchFragment
 import com.example.playlist_maker_dev.search.ui.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
@@ -34,9 +34,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.toolbar.setOnClickListener { finish() }
 
         val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getSerializableExtra(SearchActivity.AUDIO_PLAYER, Track::class.java)
+            intent.getSerializableExtra(SearchFragment.AUDIO_PLAYER, Track::class.java)
         } else {
-            intent.getSerializableExtra(SearchActivity.AUDIO_PLAYER) as Track
+            intent.getSerializableExtra(SearchFragment.AUDIO_PLAYER) as Track
         }
 
         showLoading()

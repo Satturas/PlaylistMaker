@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnTertiaryContainer"
+    tools:context=".settings.ui.SettingsFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/left_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/right_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/toolbar_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/toolbar_height" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/toolbar_height"
+        app:layout_constraintBottom_toTopOf="@id/toolbar_border"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/settings_text"
+        app:titleTextAppearance="@style/ToolbarTextStyle"
+        app:titleTextColor="?attr/colorOnTertiary" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/themeSwitcher"
+        style="@style/ButtonSettingsScreenStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/settings_menu_buttons_height"
+        android:layout_marginTop="24dp"
+        android:autoSizeTextType="none"
+        android:buttonTint="@color/black"
+        android:gravity="start|center_vertical"
+        android:switchMinWidth="38dp"
+        android:text="@string/dark_theme"
+        app:layout_constraintBottom_toTopOf="@id/buttonShareApp"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_border"
+        app:thumbTint="@color/track"
+        app:trackTint="@color/switch_track"
+        app:useMaterialThemeColors="false" />
+
+    <Button
+        android:id="@+id/buttonShareApp"
+        style="@style/ButtonSettingsScreenStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/settings_menu_buttons_height"
+        android:gravity="start|center_vertical"
+        android:text="@string/share_app"
+        app:icon="@drawable/share_vector"
+        app:layout_constraintBottom_toTopOf="@id/buttonWriteToSupport"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/themeSwitcher" />
+
+    <Button
+        android:id="@+id/buttonWriteToSupport"
+        style="@style/ButtonSettingsScreenStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/settings_menu_buttons_height"
+        android:gravity="start|center_vertical"
+        android:text="@string/support"
+        app:icon="@drawable/support_vector"
+        app:layout_constraintBottom_toTopOf="@id/buttonUserAgreement"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/buttonShareApp" />
+
+    <Button
+        android:id="@+id/buttonUserAgreement"
+        style="@style/ButtonSettingsScreenStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/settings_menu_buttons_height"
+        android:layout_marginBottom="@dimen/main_menu_buttons_bottom_padding"
+        android:gravity="start|center_vertical"
+        android:text="@string/user_agreement"
+        app:icon="@drawable/forward_arrow_vector"
+        app:layout_constraintEnd_toEndOf="@id/right_border"
+        app:layout_constraintStart_toStartOf="@id/left_border"
+        app:layout_constraintTop_toBottomOf="@id/buttonWriteToSupport" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
