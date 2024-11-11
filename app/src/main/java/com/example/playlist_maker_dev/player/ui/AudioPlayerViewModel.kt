@@ -60,7 +60,7 @@ class AudioPlayerViewModel(
     }
 
     companion object {
-        private const val DELAY = 500L
+        private const val DELAY = 300L
         private const val DEFAULT_CURRENT_POS = 0
     }
 }
