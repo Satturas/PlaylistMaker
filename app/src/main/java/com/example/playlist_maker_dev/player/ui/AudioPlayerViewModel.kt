@@ -1,18 +1,18 @@
 package com.example.playlist_maker_dev.player.ui
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
 import com.example.playlist_maker_dev.search.domain.models.Track
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
     private val interactor: AudioPlayerInteractor,
 ) : ViewModel() {
-
-    private val handler = Handler(Looper.getMainLooper())
 
     private val _playerState = MutableLiveData<AudioPlayerState>()
     val playerState: LiveData<AudioPlayerState> get() = _playerState
@@ -20,16 +20,7 @@ class AudioPlayerViewModel(
     private val _currentSongTime = MutableLiveData(DEFAULT_CURRENT_POS)
     val currentSongTime: LiveData<Int> get() = _currentSongTime
 
-    private val timerRunnable by lazy {
-        object : Runnable {
-            override fun run() {
-                if (_playerState.value == AudioPlayerState.STATE_PLAYING) {
-                    _currentSongTime.postValue(interactor.getCurrentSongTime())
-                    handler.postDelayed(this, DELAY)
-                }
-            }
-        }
-    }
+    private var timerJob: Job? = null
 
     init {
         _playerState.value = AudioPlayerState.STATE_DEFAULT
@@ -37,7 +28,7 @@ class AudioPlayerViewModel(
 
     fun preparePlayer(track: Track?) = interactor.preparePlayer(track) { state ->
         if (state == AudioPlayerState.STATE_PREPARED) {
-            handler.removeCallbacks(timerRunnable)
+            timerJob?.cancel()
             _playerState.value = AudioPlayerState.STATE_PREPARED
         }
     }
@@ -45,13 +36,13 @@ class AudioPlayerViewModel(
     fun startPlayer() {
         interactor.startPlayer()
         _playerState.value = AudioPlayerState.STATE_PLAYING
-        handler.post(timerRunnable)
+        startTimer()
     }
 
     fun pausePlayer() {
         interactor.pausePlayer()
         _playerState.value = AudioPlayerState.STATE_PAUSED
-        handler.removeCallbacks(timerRunnable)
+        timerJob?.cancel()
     }
 
     fun stopPlayer() {
@@ -59,10 +50,17 @@ class AudioPlayerViewModel(
         _playerState.value = AudioPlayerState.STATE_STOPPED
     }
 
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (_playerState.value == AudioPlayerState.STATE_PLAYING) {
+                delay(DELAY)
+                _currentSongTime.postValue(interactor.getCurrentSongTime())
+            }
+        }
+    }
+
     companion object {
         private const val DELAY = 500L
         private const val DEFAULT_CURRENT_POS = 0
     }
 }
-
-

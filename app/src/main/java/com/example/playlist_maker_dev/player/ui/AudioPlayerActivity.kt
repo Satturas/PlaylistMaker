@@ -118,4 +118,3 @@ class AudioPlayerActivity : AppCompatActivity() {
         viewModel.stopPlayer()
     }
 }
-
