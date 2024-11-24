@@ -22,7 +22,6 @@ val repositoryModule = module {
         SearchHistoryRepositoryImpl(get())
     }
 
-
     single<SettingsRepository> {
         SettingsRepositoryImpl(get(), androidContext())
     }

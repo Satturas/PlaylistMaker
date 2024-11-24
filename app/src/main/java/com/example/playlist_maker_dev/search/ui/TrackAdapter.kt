@@ -11,7 +11,6 @@ class TrackAdapter(var tracks: List<Track>, private val onItemClick: (Track) -> 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder =
         TrackViewHolder(parent)
 
-
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
         holder.itemView.setOnClickListener {
@@ -21,3 +20,4 @@ class TrackAdapter(var tracks: List<Track>, private val onItemClick: (Track) -> 
 
     override fun getItemCount(): Int = tracks.size
 }
+
