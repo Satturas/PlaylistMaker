@@ -11,13 +11,13 @@ import com.example.playlist_maker_dev.media.data.db.entity.TrackEntity
 interface TrackDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTracks(tracks: List<TrackEntity>)
+    fun insertTrack(track: TrackEntity)
 
     @Query("SELECT * FROM track_table")
     suspend fun getTracks(): List<TrackEntity>
 
     @Delete
-    fun deleteTrack(track: TrackEntity)
+    fun deleteTrack(trackId: String)
 
     @Query("SELECT trackId FROM track_table")
     suspend fun getTracksId(): List<Int>
