@@ -1,6 +1,8 @@
 package com.example.playlist_maker_dev.di
 
 import android.content.Context
+import androidx.room.Room
+import com.example.playlist_maker_dev.db.AppDatabase
 import com.example.playlist_maker_dev.presentation.App.Companion.KEY_THEME_MODE
 import com.example.playlist_maker_dev.search.data.network.ITunesApiService
 import com.example.playlist_maker_dev.search.data.network.NetworkClient
@@ -30,6 +32,11 @@ val dataModule = module {
 
     single<NetworkClient> {
         RetrofitNetworkClient(get(), androidContext())
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build()
     }
 
 }
