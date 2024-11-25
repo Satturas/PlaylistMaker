@@ -20,5 +20,5 @@ interface TrackDao {
     fun deleteTrack(trackId: String)
 
     @Query("SELECT trackId FROM track_table")
-    suspend fun getTracksId(): List<Int>
+    fun getTracksId(): List<Int>
 }

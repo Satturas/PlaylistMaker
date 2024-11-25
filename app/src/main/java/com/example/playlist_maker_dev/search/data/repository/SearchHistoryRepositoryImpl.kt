@@ -1,6 +1,7 @@
 package com.example.playlist_maker_dev.search.data.repository
 
 import android.content.SharedPreferences
+import com.example.playlist_maker_dev.db.AppDatabase
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.domain.repository.SearchHistoryRepository
 import com.google.gson.Gson
@@ -9,7 +10,8 @@ import com.google.gson.reflect.TypeToken
 private const val KEY_HISTORY = "history"
 
 class SearchHistoryRepositoryImpl(
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val appDatabase: AppDatabase
 ) :
     SearchHistoryRepository {
 
@@ -25,6 +27,7 @@ class SearchHistoryRepositoryImpl(
         if (tracksListString != null) {
             tracksList.addAll(createTrackFromJson(tracksListString))
         }
+        tracksList.map { it.isFavorite = appDatabase.trackDao().getTracksId().contains(it.trackId) }
         return tracksList
     }
 
