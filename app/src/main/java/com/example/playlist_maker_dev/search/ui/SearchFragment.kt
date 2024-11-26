@@ -34,6 +34,8 @@ class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
 
+
+
     private val adapter: TrackAdapter by lazy {
         TrackAdapter(mutableListOf()) { track ->
             handleTrackClick(
