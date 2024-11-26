@@ -44,11 +44,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         if (track != null) {
             showPlayer(track)
             viewModel.preparePlayer(track)
-
-            binding.addToFavoriteButton.setOnClickListener {
-                viewModel.onFavouriteClicked(track)
-            }
         }
+
+
 
         viewModel.playerState.observe(this) { playerState ->
 
@@ -79,7 +77,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         viewModel.favouriteState.observe(this) {
             if (it) {
-                binding.addToFavoriteButton.setImageResource(R.drawable.vector_add_favorite_button)
+                binding.addToFavoriteButton.setImageResource(R.drawable.vector_added_favorite_button)
             } else {
                 binding.addToFavoriteButton.setImageResource(R.drawable.vector_add_favorite_button)
             }
@@ -90,6 +88,12 @@ class AudioPlayerActivity : AppCompatActivity() {
                 viewModel.pausePlayer()
             } else {
                 viewModel.startPlayer()
+            }
+        }
+
+        binding.addToFavoriteButton.setOnClickListener {
+            if (track != null) {
+                viewModel.onFavouriteClicked(track)
             }
         }
     }

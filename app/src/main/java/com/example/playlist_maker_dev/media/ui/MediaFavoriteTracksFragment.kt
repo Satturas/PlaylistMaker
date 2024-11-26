@@ -66,6 +66,7 @@ class MediaFavoriteTracksFragment : Fragment() {
     private fun showNothingInFavourite() {
         binding.placeholderImage.visibility = View.VISIBLE
         binding.placeholderMessage.visibility = View.VISIBLE
+        binding.rvTracks.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -75,6 +76,7 @@ class MediaFavoriteTracksFragment : Fragment() {
         adapter.tracks = favouriteTracks
         binding.rvTracks.adapter = adapter
         adapter.notifyDataSetChanged()
+        binding.rvTracks.visibility = View.VISIBLE
     }
 
     @SuppressLint("NotifyDataSetChanged")

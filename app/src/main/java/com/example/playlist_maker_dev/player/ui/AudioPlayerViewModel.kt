@@ -65,6 +65,7 @@ class AudioPlayerViewModel(
                 favouritesInteractor.addTrackToFavourites(track)
                 track.isFavorite = true
             }
+            _favouriteState.postValue(!track.isFavorite)
         }
     }
 
