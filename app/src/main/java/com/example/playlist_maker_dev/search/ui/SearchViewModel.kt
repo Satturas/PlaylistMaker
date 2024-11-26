@@ -34,8 +34,11 @@ class SearchViewModel(
 
     fun showHistoryOfTracks() {
         _searchState.value = SearchState.Loading
-        _searchState.value =
-            SearchState.SearchHistoryTracksContent(searchHistoryInteractor.getHistoryOfTracks())
+        viewModelScope.launch {
+            searchHistoryInteractor.getHistoryOfTracks().collect {
+                _searchState.postValue(SearchState.SearchHistoryTracksContent(it))
+            }
+        }
     }
 
     private fun searchTracks(query: String) {

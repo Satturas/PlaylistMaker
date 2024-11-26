@@ -6,6 +6,8 @@ import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.domain.repository.SearchHistoryRepository
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 private const val KEY_HISTORY = "history"
 
@@ -15,24 +17,26 @@ class SearchHistoryRepositoryImpl(
 ) :
     SearchHistoryRepository {
 
+    val tracksList = mutableListOf<Track>()
+
     override fun saveSearchHistory(param: List<Track>) {
         sharedPreferences.edit()
             .putString(KEY_HISTORY, createJsonFromTrack(param))
             .apply()
     }
 
-    override fun getSearchHistory(): MutableList<Track> {
-        val tracksList = mutableListOf<Track>()
+    override fun getSearchHistory(): Flow<MutableList<Track>> = flow {
+
         val tracksListString = sharedPreferences.getString(KEY_HISTORY, null)
         if (tracksListString != null) {
             tracksList.addAll(createTrackFromJson(tracksListString))
         }
         tracksList.map { it.isFavorite = appDatabase.trackDao().getTracksId().contains(it.trackId) }
-        return tracksList
+        emit(tracksList)
     }
 
     override fun saveTrackToHistory(param: Track) {
-        val oldTrackList = getSearchHistory()
+        val oldTrackList = tracksList
         if (oldTrackList.isNotEmpty()) {
             oldTrackList.removeIf { it.trackId == param.trackId }
             if (oldTrackList.size >= 10) {

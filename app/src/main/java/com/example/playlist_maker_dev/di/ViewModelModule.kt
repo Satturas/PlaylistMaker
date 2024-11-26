@@ -25,11 +25,11 @@ val viewModelModule = module {
     }
 
     viewModel {
-        MediaViewModel(get())
+        MediaViewModel()
     }
 
-    viewModel { (track: Track) ->
-        FavoriteTracksViewModel(track)
+    viewModel {
+        FavoriteTracksViewModel(get())
     }
 
     viewModel {
