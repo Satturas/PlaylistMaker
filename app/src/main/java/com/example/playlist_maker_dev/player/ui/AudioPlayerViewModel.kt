@@ -20,8 +20,8 @@ class AudioPlayerViewModel(
     private val _playerState = MutableLiveData<AudioPlayerState>()
     val playerState: LiveData<AudioPlayerState> get() = _playerState
 
-    private val _favouriteState = MutableLiveData<AudioPlayerState>()
-    val favouriteState: LiveData<AudioPlayerState> get() = _favouriteState
+    private val _favouriteState = MutableLiveData<Boolean>()
+    val favouriteState: LiveData<Boolean> get() = _favouriteState
 
     private val _currentSongTime = MutableLiveData(DEFAULT_CURRENT_POS)
     val currentSongTime: LiveData<Int> get() = _currentSongTime
@@ -56,16 +56,7 @@ class AudioPlayerViewModel(
         _playerState.value = AudioPlayerState.STATE_STOPPED
     }
 
-    private fun startTimer() {
-        timerJob = viewModelScope.launch {
-            while (_playerState.value == AudioPlayerState.STATE_PLAYING) {
-                delay(DELAY)
-                _currentSongTime.postValue(interactor.getCurrentSongTime())
-            }
-        }
-    }
-
-    private fun onFavouriteClicked(track: Track) {
+    fun onFavouriteClicked(track: Track) {
         viewModelScope.launch(Dispatchers.IO) {
             if (track.isFavorite) {
                 favouritesInteractor.removeTrackFromFavourites(track.trackId)
@@ -73,6 +64,15 @@ class AudioPlayerViewModel(
             } else {
                 favouritesInteractor.addTrackToFavourites(track)
                 track.isFavorite = true
+            }
+        }
+    }
+
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (_playerState.value == AudioPlayerState.STATE_PLAYING) {
+                delay(DELAY)
+                _currentSongTime.postValue(interactor.getCurrentSongTime())
             }
         }
     }
