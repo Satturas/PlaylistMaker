@@ -46,8 +46,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             viewModel.preparePlayer(track)
         }
 
-
-
         viewModel.playerState.observe(this) { playerState ->
 
             when (playerState) {
@@ -77,9 +75,9 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         viewModel.favouriteState.observe(this) {
             if (it) {
-                binding.addToFavoriteButton.setImageResource(R.drawable.vector_added_favorite_button)
-            } else {
                 binding.addToFavoriteButton.setImageResource(R.drawable.vector_add_favorite_button)
+            } else {
+                binding.addToFavoriteButton.setImageResource(R.drawable.vector_added_favorite_button)
             }
         }
 

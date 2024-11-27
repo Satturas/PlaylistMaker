@@ -15,13 +15,11 @@ class FavoriteTracksViewModel(
     private val _mediaState = MutableLiveData<MediaState>()
     val mediaState: LiveData<MediaState> = _mediaState
 
-    init {
-        fun fillData() {
-            viewModelScope.launch {
-                favouritesInteractor
-                    .getFavouriteTracks()
-                    .collect { tracks -> processResult(tracks) }
-            }
+    fun fillData() {
+        viewModelScope.launch {
+            favouritesInteractor
+                .getFavouriteTracks()
+                .collect { tracks -> processResult(tracks) }
         }
     }
 

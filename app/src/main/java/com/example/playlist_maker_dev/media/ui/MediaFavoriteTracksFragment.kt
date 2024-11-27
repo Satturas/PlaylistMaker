@@ -46,6 +46,8 @@ class MediaFavoriteTracksFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.fillData()
+
         viewModel.mediaState.observe(viewLifecycleOwner) {
             render(it)
         }
@@ -66,7 +68,7 @@ class MediaFavoriteTracksFragment : Fragment() {
     private fun showNothingInFavourite() {
         binding.placeholderImage.visibility = View.VISIBLE
         binding.placeholderMessage.visibility = View.VISIBLE
-        binding.rvTracks.visibility = View.GONE
+        binding.rvFavTracks.visibility = View.GONE
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -74,9 +76,9 @@ class MediaFavoriteTracksFragment : Fragment() {
         binding.placeholderImage.visibility = View.GONE
         binding.placeholderMessage.visibility = View.GONE
         adapter.tracks = favouriteTracks
-        binding.rvTracks.adapter = adapter
+        binding.rvFavTracks.adapter = adapter
         adapter.notifyDataSetChanged()
-        binding.rvTracks.visibility = View.VISIBLE
+        binding.rvFavTracks.visibility = View.VISIBLE
     }
 
     @SuppressLint("NotifyDataSetChanged")

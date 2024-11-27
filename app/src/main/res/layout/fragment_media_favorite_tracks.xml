@@ -36,7 +36,7 @@
         android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTracks"
+        android:id="@+id/rvFavTracks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginVertical="@dimen/side_padding_16"
