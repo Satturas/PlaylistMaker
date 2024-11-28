@@ -44,6 +44,12 @@ class AudioPlayerActivity : AppCompatActivity() {
         if (track != null) {
             showPlayer(track)
             viewModel.preparePlayer(track)
+
+            if (track.isFavorite) {
+                binding.addToFavoriteButton.setImageResource(R.drawable.vector_added_favorite_button)
+            } else {
+                binding.addToFavoriteButton.setImageResource(R.drawable.vector_add_favorite_button)
+            }
         }
 
         viewModel.playerState.observe(this) { playerState ->
@@ -72,6 +78,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         viewModel.currentSongTime.observe(this) { time ->
             binding.songTime.text = dateFormat.format(time)
         }
+
 
         viewModel.favouriteState.observe(this) {
             if (it) {

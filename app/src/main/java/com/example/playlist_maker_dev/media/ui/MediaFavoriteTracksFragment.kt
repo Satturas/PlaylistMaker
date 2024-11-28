@@ -23,7 +23,6 @@ class MediaFavoriteTracksFragment : Fragment() {
     private val binding get() = _binding!!
     private val favouriteTracksList = mutableListOf<Track>()
     private var isClickAllowed = true
-
     private val viewModel by viewModel<FavoriteTracksViewModel>()
 
     private val adapter: TrackAdapter by lazy {
@@ -51,6 +50,9 @@ class MediaFavoriteTracksFragment : Fragment() {
         viewModel.mediaState.observe(viewLifecycleOwner) {
             render(it)
         }
+
+        adapter.tracks = favouriteTracksList
+        binding.rvFavTracks.adapter = adapter
     }
 
     override fun onDestroyView() {
@@ -75,6 +77,8 @@ class MediaFavoriteTracksFragment : Fragment() {
     private fun showFavouriteTracks(favouriteTracks: List<Track>) {
         binding.placeholderImage.visibility = View.GONE
         binding.placeholderMessage.visibility = View.GONE
+        favouriteTracksList.clear()
+        favouriteTracksList.addAll(favouriteTracks)
         adapter.tracks = favouriteTracks
         binding.rvFavTracks.adapter = adapter
         adapter.notifyDataSetChanged()

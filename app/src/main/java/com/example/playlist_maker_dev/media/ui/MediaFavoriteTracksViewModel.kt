@@ -15,6 +15,10 @@ class FavoriteTracksViewModel(
     private val _mediaState = MutableLiveData<MediaState>()
     val mediaState: LiveData<MediaState> = _mediaState
 
+    init {
+        fillData()
+    }
+
     fun fillData() {
         viewModelScope.launch {
             favouritesInteractor
@@ -24,7 +28,7 @@ class FavoriteTracksViewModel(
     }
 
     private fun processResult(tracks: List<Track>) {
-        if (tracks.isEmpty()) {
+        if (tracks.isNullOrEmpty()) {
             renderState(MediaState.NothingInFavourite)
         } else {
             renderState(MediaState.FavouriteTracks(tracks))
