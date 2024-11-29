@@ -38,6 +38,7 @@ class SearchViewModel(
             SearchState.SearchHistoryTracksContent(searchHistoryInteractor.getHistoryOfTracks())
     }
 
+
     private fun searchTracks(query: String) {
         if (query.isNotEmpty()) {
             renderState(SearchState.Loading)
