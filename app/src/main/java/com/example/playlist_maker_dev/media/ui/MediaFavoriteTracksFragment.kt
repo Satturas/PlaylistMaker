@@ -45,8 +45,6 @@ class MediaFavoriteTracksFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.fillData()
-
         viewModel.mediaState.observe(viewLifecycleOwner) {
             render(it)
         }
@@ -115,7 +113,6 @@ class MediaFavoriteTracksFragment : Fragment() {
         }
         return current
     }
-
 
     companion object {
         fun newInstance() = MediaFavoriteTracksFragment()
