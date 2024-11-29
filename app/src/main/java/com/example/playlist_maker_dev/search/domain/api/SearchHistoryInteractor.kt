@@ -4,7 +4,7 @@ import com.example.playlist_maker_dev.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 
 interface SearchHistoryInteractor {
-    fun getHistoryOfTracks(): MutableList<Track>
+    fun getHistoryOfTracks(): Flow<MutableList<Track>>
     fun saveHistoryOfTracks(param: List<Track>)
     fun saveTrackToHistory (param: Track)
 }

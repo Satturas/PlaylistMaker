@@ -19,6 +19,6 @@ interface TrackDao {
     @Query("DELETE FROM track_table WHERE trackId = :trackId")
     fun deleteTrack(trackId: Int)
 
-    @Query("SELECT trackId FROM track_table")
-    suspend fun getTracksId(): List<Int>
+    @Query("SELECT COUNT(*) > 0 FROM track_table WHERE trackId = :id")
+    suspend fun isTrackFavourite(id: Int): Boolean
 }
