@@ -7,7 +7,7 @@ interface SearchHistoryRepository {
 
     fun saveSearchHistory(param: List<Track>)
 
-    fun getSearchHistory(): Flow<MutableList<Track>>
+    fun getSearchHistory(): MutableList<Track>
 
     fun saveTrackToHistory(param: Track)
 
