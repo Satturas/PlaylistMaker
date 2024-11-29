@@ -2,7 +2,6 @@ package com.example.playlist_maker_dev.search.data.repository
 
 import android.content.SharedPreferences
 import com.example.playlist_maker_dev.db.AppDatabase
-import com.example.playlist_maker_dev.media.data.db.convertors.TrackDbConvertor
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.domain.repository.SearchHistoryRepository
 import com.google.gson.Gson
@@ -14,8 +13,7 @@ private const val KEY_HISTORY = "history"
 
 class SearchHistoryRepositoryImpl(
     private val sharedPreferences: SharedPreferences,
-    private val appDatabase: AppDatabase,
-    private val trackDbConvertor: TrackDbConvertor
+    private val appDatabase: AppDatabase
 ) :
     SearchHistoryRepository {
 

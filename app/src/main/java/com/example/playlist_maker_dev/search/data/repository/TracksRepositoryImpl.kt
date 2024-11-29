@@ -1,5 +1,6 @@
 package com.example.playlist_maker_dev.search.data.repository
 
+import com.example.playlist_maker_dev.db.AppDatabase
 import com.example.playlist_maker_dev.search.data.dto.TracksSearchRequest
 import com.example.playlist_maker_dev.search.data.dto.TracksSearchResponse
 import com.example.playlist_maker_dev.search.data.network.NetworkClient
@@ -11,7 +12,10 @@ import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
+class TracksRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val appDatabase: AppDatabase
+) : TracksRepository {
 
     override fun searchTracks(term: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(term))
@@ -38,6 +42,7 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
                             previewUrl = trackDto.previewUrl
                         )
                     }
+                    data.map { it.isFavorite = appDatabase.trackDao().isTrackFavourite(it.trackId) }
                     emit(Resource.Success(data))
                 }
             }
