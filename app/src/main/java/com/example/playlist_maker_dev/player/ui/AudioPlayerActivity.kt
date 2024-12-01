@@ -44,6 +44,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         if (track != null) {
             showPlayer(track)
             viewModel.preparePlayer(track)
+            viewModel.renderFavState(track)
 
             if (track.isFavorite) {
                 binding.addToFavoriteButton.setImageResource(R.drawable.vector_added_favorite_button)

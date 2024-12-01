@@ -42,11 +42,7 @@ class SearchViewModel(
     }
 
     private fun processResult(tracks: List<Track>) {
-        if (tracks.isEmpty()) {
-            renderState(SearchState.NothingFound)
-        } else {
-            renderState(SearchState.SearchHistoryTracksContent(tracks))
-        }
+        renderState(SearchState.SearchHistoryTracksContent(tracks))
     }
 
 

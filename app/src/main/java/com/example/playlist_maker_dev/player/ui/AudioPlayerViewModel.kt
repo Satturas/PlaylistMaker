@@ -32,6 +32,14 @@ class AudioPlayerViewModel(
         _playerState.value = AudioPlayerState.STATE_DEFAULT
     }
 
+    fun renderFavState(track: Track) {
+        viewModelScope.launch {
+            favouritesInteractor.isTrackFavourite(track).collect {
+                _favouriteState.postValue(!it)
+            }
+        }
+    }
+
     fun preparePlayer(track: Track?) = interactor.preparePlayer(track) { state ->
         if (state == AudioPlayerState.STATE_PREPARED) {
             timerJob?.cancel()

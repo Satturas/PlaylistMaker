@@ -40,10 +40,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginVertical="@dimen/side_padding_16"
+        android:layout_marginHorizontal="@dimen/side_padding_16"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/placeholderImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
