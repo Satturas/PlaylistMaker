@@ -4,18 +4,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlist_maker_dev.media.domain.db.FavouritesInteractor
 import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
 import com.example.playlist_maker_dev.search.domain.models.Track
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
     private val interactor: AudioPlayerInteractor,
+    private val favouritesInteractor: FavouritesInteractor
 ) : ViewModel() {
 
     private val _playerState = MutableLiveData<AudioPlayerState>()
     val playerState: LiveData<AudioPlayerState> get() = _playerState
+
+    private val _favouriteState = MutableLiveData<Boolean>()
+    val favouriteState: LiveData<Boolean> get() = _favouriteState
 
     private val _currentSongTime = MutableLiveData(DEFAULT_CURRENT_POS)
     val currentSongTime: LiveData<Int> get() = _currentSongTime
@@ -24,6 +30,14 @@ class AudioPlayerViewModel(
 
     init {
         _playerState.value = AudioPlayerState.STATE_DEFAULT
+    }
+
+    fun renderFavState(track: Track) {
+        viewModelScope.launch {
+            favouritesInteractor.isTrackFavourite(track).collect {
+                _favouriteState.postValue(!it)
+            }
+        }
     }
 
     fun preparePlayer(track: Track?) = interactor.preparePlayer(track) { state ->
@@ -48,6 +62,19 @@ class AudioPlayerViewModel(
     fun stopPlayer() {
         interactor.stopPlayer()
         _playerState.value = AudioPlayerState.STATE_STOPPED
+    }
+
+    fun onFavouriteClicked(track: Track) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (track.isFavorite) {
+                favouritesInteractor.removeTrackFromFavourites(track.trackId)
+                track.isFavorite = false
+            } else {
+                favouritesInteractor.addTrackToFavourites(track)
+                track.isFavorite = true
+            }
+            _favouriteState.postValue(!track.isFavorite)
+        }
     }
 
     private fun startTimer() {

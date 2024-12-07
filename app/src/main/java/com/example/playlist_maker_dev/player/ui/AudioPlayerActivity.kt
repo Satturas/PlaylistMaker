@@ -44,6 +44,13 @@ class AudioPlayerActivity : AppCompatActivity() {
         if (track != null) {
             showPlayer(track)
             viewModel.preparePlayer(track)
+            viewModel.renderFavState(track)
+
+            if (track.isFavorite) {
+                binding.addToFavoriteButton.setImageResource(R.drawable.vector_added_favorite_button)
+            } else {
+                binding.addToFavoriteButton.setImageResource(R.drawable.vector_add_favorite_button)
+            }
         }
 
         viewModel.playerState.observe(this) { playerState ->
@@ -73,11 +80,26 @@ class AudioPlayerActivity : AppCompatActivity() {
             binding.songTime.text = dateFormat.format(time)
         }
 
+
+        viewModel.favouriteState.observe(this) {
+            if (it) {
+                binding.addToFavoriteButton.setImageResource(R.drawable.vector_add_favorite_button)
+            } else {
+                binding.addToFavoriteButton.setImageResource(R.drawable.vector_added_favorite_button)
+            }
+        }
+
         binding.playButton.setOnClickListener {
             if (viewModel.playerState.value == AudioPlayerState.STATE_PLAYING) {
                 viewModel.pausePlayer()
             } else {
                 viewModel.startPlayer()
+            }
+        }
+
+        binding.addToFavoriteButton.setOnClickListener {
+            if (track != null) {
+                viewModel.onFavouriteClicked(track)
             }
         }
     }
