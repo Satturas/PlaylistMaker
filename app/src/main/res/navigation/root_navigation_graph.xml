@@ -38,5 +38,13 @@
         android:id="@+id/mediaPlaylistsFragment"
         android:name="com.example.playlist_maker_dev.media.ui.MediaPlaylistsFragment"
         android:label="fragment_media_playlists"
-        tools:layout="@layout/fragment_media_playlists" />
+        tools:layout="@layout/fragment_media_playlists" >
+        <action
+            android:id="@+id/action_mediaPlaylistsFragment_to_creatingPlaylistFragment"
+            app:destination="@id/creatingPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/creatingPlaylistFragment"
+        android:name="com.example.playlist_maker_dev.media.ui.CreatingPlaylistFragment"
+        android:label="CreatingPlaylistFragment" />
 </navigation>
