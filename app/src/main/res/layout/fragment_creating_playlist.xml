@@ -39,9 +39,9 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="?attr/actionBarSize" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/createNewPlaylistButton"
-        style="@style/placeholderButtonsStyle"
+        style="@style/createPlaylistButtonsStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
@@ -49,11 +49,11 @@
         android:textSize="16sp"
         android:textColor="@color/white"
         android:letterSpacing="0.02"
-        app:cornerRadius="8dp"
+        android:background="@drawable/creating_new_playlist_button_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/right_border"
         app:layout_constraintStart_toStartOf="@id/left_border"
-        android:backgroundTint="@color/settings_icon"/>
+        />
 
     <EditText
         android:id="@+id/et_fill_playlist_description"
