@@ -32,6 +32,10 @@ class CreatingPlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbar.setOnClickListener {
+            requireActivity().finish() // переделать на проверку наличия ввода...
+        }
+
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {

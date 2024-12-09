@@ -18,10 +18,10 @@ interface PlaylistDao {
     @Query("DELETE FROM playlist_table WHERE playlistId = :playlistId")
     fun deletePlaylist(playlistId: Int)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTrack(playlist: PlaylistEntity)
+    @Query("") //TODO!!!
+    suspend fun insertTrack(trackId: Int, playlistId: Int)
 
-    @Query("DELETE FROM playlist_table WHERE playlistId = :playlistId && trackId = :trackId")
+    @Query("DELETE FROM playlist_table WHERE playlistId = :playlistId AND trackId = :trackId")
     suspend fun deleteTrackFromPlaylist(trackId: Int, playlistId: Int)
 
 }
