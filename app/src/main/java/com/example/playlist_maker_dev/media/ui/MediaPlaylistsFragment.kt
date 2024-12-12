@@ -44,6 +44,7 @@ class MediaPlaylistsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.createNewPlaylistButton.setOnClickListener {
             findNavController().navigate(R.id.action_mediaPlaylistsFragment_to_creatingPlaylistFragment)
         }
@@ -51,6 +52,10 @@ class MediaPlaylistsFragment : Fragment() {
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         adapter.playlists = playlistsList
         binding.recyclerView.adapter = adapter
+
+        viewModel.playlistsState.observe(viewLifecycleOwner) {
+            render(it)
+        }
     }
 
     override fun onDestroyView() {
@@ -75,6 +80,33 @@ class MediaPlaylistsFragment : Fragment() {
             }
         }
         return current
+    }
+
+    private fun render(state: PlaylistsState) {
+        when (state) {
+            is PlaylistsState.NoPlaylists -> showNoPlaylists()
+            is PlaylistsState.Loading -> TODO()
+            is PlaylistsState.FoundPlaylistsContent -> showPlaylists(state.foundPlaylists)
+            is PlaylistsState.Error -> TODO()
+        }
+    }
+
+    private fun showNoPlaylists() {
+        binding.recyclerView.visibility = View.GONE
+        binding.placeholderImage.visibility = View.VISIBLE
+        binding.placeholderMessage.visibility = View.VISIBLE
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showPlaylists(playlists: List<Playlist>) {
+        binding.recyclerView.visibility = View.VISIBLE
+        binding.placeholderImage.visibility = View.GONE
+        binding.placeholderMessage.visibility = View.GONE
+        playlistsList.clear()
+        playlistsList.addAll(playlists)
+        adapter.playlists = playlists
+        binding.recyclerView.adapter = adapter
+        adapter.notifyDataSetChanged()
     }
 
     companion object {
