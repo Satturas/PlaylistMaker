@@ -1,5 +1,6 @@
 package com.example.playlist_maker_dev.media.ui.new_playlist
 
+import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -10,11 +11,16 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.graphics.Color
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.FragmentCreatingPlaylistBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.FileOutputStream
 
@@ -25,6 +31,8 @@ class CreatingPlaylistFragment : Fragment() {
 
     private var inputPlaylistNameValue: CharSequence = DEF_PLAYLIST_NAME
     private var inputPlaylistDescriptionValue: CharSequence = DEF_PLAYLIST_DESCRIPTION
+
+    private lateinit var confirmDialog: MaterialAlertDialogBuilder
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,8 +57,33 @@ class CreatingPlaylistFragment : Fragment() {
         binding.etFillPlaylistName.setText(inputPlaylistNameValue)
         binding.etFillPlaylistDescription.setText(inputPlaylistDescriptionValue)
 
+        confirmDialog = MaterialAlertDialogBuilder(requireActivity(), R.style.AlertDialog)
+            .setTitle("Завершить создание плейлиста?")
+            .setMessage("Все несохраненные данные будут потеряны")
+            .setNeutralButton("Отмена") { _, _ ->
+            }.setNegativeButton("Завершить") { _, _ ->
+                findNavController().navigateUp()
+            }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (
+                        binding.etFillPlaylistName.text.isEmpty()
+                        && binding.etFillPlaylistDescription.text.isEmpty()
+                        && binding.imageCover.drawable == null
+                    ) {
+                        findNavController().navigateUp()
+                        return
+                    }
+                    confirmDialog.show()
+                }
+            }
+        )
+
         binding.toolbar.setOnClickListener {
-            requireActivity().finish() // переделать на проверку наличия ввода...
+            activity?.onBackPressedDispatcher?.onBackPressed()
         }
 
         val pickMedia =
