@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev.media.ui
+package com.example.playlist_maker_dev.media.ui.playlists
 
 import android.content.Context
 import android.util.TypedValue
@@ -11,9 +11,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.media.domain.models.Playlist
-import com.example.playlist_maker_dev.search.ui.dpToPx
 
-class PlaylistViewHolder(parent: ViewGroup) :
+class PlaylistsViewHolder(parent: ViewGroup) :
     RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context)
             .inflate(R.layout.playlist_item, parent, false)
@@ -34,12 +33,12 @@ class PlaylistViewHolder(parent: ViewGroup) :
         numberOfTracks.text = item.tracksQuantity.toString()
         playlistName.text = item.name
     }
-}
 
-fun dpToPx(dp: Float, context: Context): Int {
-    return TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        dp,
-        context.resources.displayMetrics
-    ).toInt()
+    private fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            context.resources.displayMetrics
+        ).toInt()
+    }
 }

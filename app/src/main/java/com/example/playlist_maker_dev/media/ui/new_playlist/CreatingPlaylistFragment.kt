@@ -1,15 +1,18 @@
-package com.example.playlist_maker_dev.media.ui
+package com.example.playlist_maker_dev.media.ui.new_playlist
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import com.example.playlist_maker_dev.databinding.FragmentCreatingPlaylistBinding
 import java.io.File
@@ -19,6 +22,9 @@ class CreatingPlaylistFragment : Fragment() {
 
     private var _binding: FragmentCreatingPlaylistBinding? = null
     private val binding get() = _binding!!
+
+    private var inputPlaylistNameValue: CharSequence = DEF_PLAYLIST_NAME
+    private var inputPlaylistDescriptionValue: CharSequence = DEF_PLAYLIST_DESCRIPTION
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +37,17 @@ class CreatingPlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (savedInstanceState != null) {
+            inputPlaylistNameValue =
+                savedInstanceState.getCharSequence(PLAYLIST_NAME_USER_INPUT, DEF_PLAYLIST_NAME)
+            inputPlaylistDescriptionValue = savedInstanceState.getCharSequence(
+                PLAYLIST_DESCRIPTION_USER_INPUT, DEF_PLAYLIST_DESCRIPTION
+            )
+        }
+
+        binding.etFillPlaylistName.setText(inputPlaylistNameValue)
+        binding.etFillPlaylistDescription.setText(inputPlaylistDescriptionValue)
 
         binding.toolbar.setOnClickListener {
             requireActivity().finish() // переделать на проверку наличия ввода...
@@ -47,6 +64,30 @@ class CreatingPlaylistFragment : Fragment() {
         binding.imageCover.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+
+        binding.createNewPlaylistButton.setOnClickListener { TODO() }
+
+        binding.etFillPlaylistName.doOnTextChanged { text, _, _, _ ->
+            binding.createNewPlaylistButton.isEnabled = text.isNullOrBlank().not()
+        }
+
+        binding.etFillPlaylistDescription.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                inputPlaylistDescriptionValue = p0.toString()
+            }
+        })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putCharSequence(PLAYLIST_NAME_USER_INPUT, inputPlaylistNameValue)
+        outState.putCharSequence(PLAYLIST_DESCRIPTION_USER_INPUT, inputPlaylistDescriptionValue)
     }
 
 
@@ -57,7 +98,10 @@ class CreatingPlaylistFragment : Fragment() {
 
     private fun saveImageToPrivateStorage(uri: Uri) {
         val filePath =
-            File(requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "playlist_covers_album")
+            File(
+                requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                "playlist_covers_album"
+            )
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
@@ -67,5 +111,12 @@ class CreatingPlaylistFragment : Fragment() {
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+    }
+
+    companion object {
+        private const val PLAYLIST_NAME_USER_INPUT = "playlist_name_user_input"
+        private const val PLAYLIST_DESCRIPTION_USER_INPUT = "playlist_description_user_input"
+        private val DEF_PLAYLIST_NAME: CharSequence = ""
+        private val DEF_PLAYLIST_DESCRIPTION: CharSequence = ""
     }
 }

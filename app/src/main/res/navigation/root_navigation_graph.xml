@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mediaFragment"
-        android:name="com.example.playlist_maker_dev.media.ui.MediaFragment"
+        android:name="com.example.playlist_maker_dev.media.ui.media_root.MediaFragment"
         android:label="fragment_media"
         tools:layout="@layout/fragment_media" />
     <activity
@@ -17,7 +17,7 @@
         tools:layout="@layout/activity_audio_player" />
     <fragment
         android:id="@+id/mediaFavoriteTracksFragment"
-        android:name="com.example.playlist_maker_dev.media.ui.MediaFavoriteTracksFragment"
+        android:name="com.example.playlist_maker_dev.media.ui.media_fav_tracks.MediaFavoriteTracksFragment"
         android:label="fragment_media_favorite_tracks"
         tools:layout="@layout/fragment_media_favorite_tracks" />
     <fragment
@@ -35,16 +35,17 @@
             app:destination="@id/audioPlayerActivity" />
     </fragment>
     <fragment
-        android:id="@+id/mediaPlaylistsFragment"
-        android:name="com.example.playlist_maker_dev.media.ui.MediaPlaylistsFragment"
-        android:label="fragment_media_playlists"
+        android:id="@+id/PlaylistsFragment"
+        android:name="com.example.playlist_maker_dev.media.ui.playlists.PlaylistsFragment"
+        android:label="fragment_playlists"
         tools:layout="@layout/fragment_media_playlists" >
         <action
-            android:id="@+id/action_mediaPlaylistsFragment_to_creatingPlaylistFragment"
+            android:id="@+id/action_PlaylistsFragment_to_creatingPlaylistFragment"
             app:destination="@id/creatingPlaylistFragment" />
     </fragment>
     <fragment
         android:id="@+id/creatingPlaylistFragment"
-        android:name="com.example.playlist_maker_dev.media.ui.CreatingPlaylistFragment"
-        android:label="CreatingPlaylistFragment" />
+        android:name="com.example.playlist_maker_dev.media.ui.new_playlist.CreatingPlaylistFragment"
+        android:label="CreatingPlaylistFragment"
+        tools:layout="@layout/fragment_creating_playlist"/>
 </navigation>

@@ -3,10 +3,8 @@ package com.example.playlist_maker_dev.media.data.db
 import com.example.playlist_maker_dev.db.AppDatabase
 import com.example.playlist_maker_dev.media.data.db.convertors.PlaylistDbConvertor
 import com.example.playlist_maker_dev.media.data.db.entity.PlaylistEntity
-import com.example.playlist_maker_dev.media.data.db.entity.TrackEntity
 import com.example.playlist_maker_dev.media.domain.db.PlaylistsRepository
 import com.example.playlist_maker_dev.media.domain.models.Playlist
-import com.example.playlist_maker_dev.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -27,12 +25,12 @@ class PlaylistsRepositoryImpl(
         appDatabase.playlistDao().deletePlaylist(playlistId)
     }
 
-    override suspend fun insertTrack(trackId: Int, playlistId: Int) {
-        appDatabase.playlistDao().insertTrack(trackId, playlistId)
+    override suspend fun insertTrack(playlistId: Int) {
+        appDatabase.playlistDao().insertTrack(playlistId)
     }
 
-    override suspend fun deleteTrackFromPlaylist(trackId: Int, playlistId: Int) {
-        appDatabase.playlistDao().deleteTrackFromPlaylist(trackId, playlistId)
+    override suspend fun deleteTrackFromPlaylist(playlistId: Int) {
+        appDatabase.playlistDao().deleteTrackFromPlaylist(playlistId)
     }
 
     private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {

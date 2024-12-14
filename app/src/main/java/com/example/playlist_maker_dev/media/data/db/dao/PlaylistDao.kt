@@ -18,10 +18,10 @@ interface PlaylistDao {
     @Query("DELETE FROM playlist_table WHERE playlistId = :playlistId")
     fun deletePlaylist(playlistId: Int)
 
-    @Query("") //TODO!!!
-    suspend fun insertTrack(trackId: Int, playlistId: Int)
+    @Query("DELETE FROM playlist_table WHERE playlistId = :playlistId")//TODO!!!
+    suspend fun insertTrack(playlistId: Int)
 
-    @Query("DELETE FROM playlist_table WHERE playlistId = :playlistId AND trackId = :trackId")
-    suspend fun deleteTrackFromPlaylist(trackId: Int, playlistId: Int)
+    @Query("DELETE FROM playlist_table WHERE playlistId = :playlistId")
+    suspend fun deleteTrackFromPlaylist(playlistId: Int)
 
 }

@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev.media.ui
+package com.example.playlist_maker_dev.media.ui.playlists
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -16,7 +16,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MediaPlaylistsFragment : Fragment() {
+class PlaylistsFragment : Fragment() {
 
     private var _binding: FragmentMediaPlaylistsBinding? = null
     private val binding get() = _binding!!
@@ -45,8 +45,10 @@ class MediaPlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.showPlaylists()
+
         binding.createNewPlaylistButton.setOnClickListener {
-            findNavController().navigate(R.id.action_mediaPlaylistsFragment_to_creatingPlaylistFragment)
+            findNavController().navigate(R.id.creatingPlaylistFragment)
         }
 
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -85,7 +87,7 @@ class MediaPlaylistsFragment : Fragment() {
     private fun render(state: PlaylistsState) {
         when (state) {
             is PlaylistsState.NoPlaylists -> showNoPlaylists()
-            is PlaylistsState.Loading -> TODO()
+            is PlaylistsState.Loading -> {}
             is PlaylistsState.FoundPlaylistsContent -> showPlaylists(state.foundPlaylists)
             is PlaylistsState.Error -> TODO()
         }
@@ -110,7 +112,7 @@ class MediaPlaylistsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() = MediaPlaylistsFragment()
+        fun newInstance() = PlaylistsFragment()
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }

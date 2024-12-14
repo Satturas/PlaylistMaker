@@ -1,9 +1,7 @@
 package com.example.playlist_maker_dev.media.data.db.convertors
 
 import com.example.playlist_maker_dev.media.data.db.entity.PlaylistEntity
-import com.example.playlist_maker_dev.media.data.db.entity.TrackEntity
 import com.example.playlist_maker_dev.media.domain.models.Playlist
-import com.example.playlist_maker_dev.search.domain.models.Track
 
 class PlaylistDbConvertor {
 
@@ -14,7 +12,8 @@ class PlaylistDbConvertor {
             playlist.description,
             playlist.coverUrl,
             playlist.trackIdsList.joinToString(","),
-            playlist.tracksQuantity
+            playlist.tracksQuantity,
+            System.currentTimeMillis().toString()
         )
     }
 
