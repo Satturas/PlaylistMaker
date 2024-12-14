@@ -100,24 +100,32 @@
         app:layout_constraintBottom_toTopOf="@id/et_fill_playlist_description"
         app:layout_constraintEnd_toStartOf="@id/right_border_16"
         app:layout_constraintStart_toStartOf="@id/left_border_16"
-        app:layout_constraintTop_toBottomOf="@id/imageCover" />
+        app:layout_constraintTop_toBottomOf="@id/card_new_playlist_cover" />
 
-    <ImageView
-        android:id="@+id/imageCover"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_new_playlist_cover"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="26dp"
-        android:background="@drawable/playlist_cover_background"
-        android:clickable="true"
-        android:importantForAccessibility="no"
-        android:scaleType="center"
-        app:layout_constrainedHeight="true"
-        app:layout_constrainedWidth="true"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@id/et_fill_playlist_name"
-        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintDimensionRatio="w, 1:1"
         app:layout_constraintEnd_toStartOf="@id/right_border"
         app:layout_constraintStart_toStartOf="@id/left_border"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_border" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar_border">
+
+        <ImageView
+            android:id="@+id/imageCover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/playlist_cover_background"
+            android:clickable="true"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop" />
+
+    </androidx.cardview.widget.CardView>
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

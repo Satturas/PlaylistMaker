@@ -1,7 +1,9 @@
 package com.example.playlist_maker_dev.player.ui
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -13,7 +15,6 @@ import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchFragment
-import com.example.playlist_maker_dev.search.ui.dpToPx
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
@@ -157,6 +158,14 @@ class AudioPlayerActivity : AppCompatActivity() {
             .into(binding.imageCover)
 
         binding.progressBar.isVisible = false
+    }
+
+    fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            context.resources.displayMetrics
+        ).toInt()
     }
 
     override fun onPause() {

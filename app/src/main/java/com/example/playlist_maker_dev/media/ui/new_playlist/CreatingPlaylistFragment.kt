@@ -1,28 +1,25 @@
 package com.example.playlist_maker_dev.media.ui.new_playlist
 
-import android.app.AlertDialog
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
+import android.content.Context
 import android.os.Bundle
-import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.ui.graphics.Color
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.FragmentCreatingPlaylistBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.io.File
-import java.io.FileOutputStream
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CreatingPlaylistFragment : Fragment() {
 
@@ -33,6 +30,8 @@ class CreatingPlaylistFragment : Fragment() {
     private var inputPlaylistDescriptionValue: CharSequence = DEF_PLAYLIST_DESCRIPTION
 
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
+
+    private val viewModel by viewModel<CreatingPlaylistViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,8 +88,14 @@ class CreatingPlaylistFragment : Fragment() {
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
-                    binding.imageCover.setImageURI(uri)
-                    saveImageToPrivateStorage(uri)
+                    Glide
+                        .with(this)
+                        .load(uri)
+                        .placeholder(R.drawable.vector_cover_placeholder)
+                        .centerCrop()
+                        .transform(RoundedCorners(dpToPx(8.0f, binding.imageCover.context)))
+                        .into(binding.imageCover)
+                    viewModel.saveImageToPrivateStorage(uri)
                 }
             }
 
@@ -129,21 +134,12 @@ class CreatingPlaylistFragment : Fragment() {
         _binding = null
     }
 
-    private fun saveImageToPrivateStorage(uri: Uri) {
-        val filePath =
-            File(
-                requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                "playlist_covers_album"
-            )
-        if (!filePath.exists()) {
-            filePath.mkdirs()
-        }
-        val file = File(filePath, "first_cover.jpg")
-        val inputStream = requireActivity().contentResolver.openInputStream(uri)
-        val outputStream = FileOutputStream(file)
-        BitmapFactory
-            .decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+    private fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            context.resources.displayMetrics
+        ).toInt()
     }
 
     companion object {
