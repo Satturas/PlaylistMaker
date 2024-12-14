@@ -8,9 +8,11 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.drawToBitmap
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -103,7 +105,19 @@ class CreatingPlaylistFragment : Fragment() {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
-        binding.createNewPlaylistButton.setOnClickListener { TODO() }
+        binding.createNewPlaylistButton.setOnClickListener {
+            viewModel.createPlaylist(
+                binding.etFillPlaylistName.text.toString(),
+                binding.etFillPlaylistDescription.text.toString(),
+                binding.imageCover.drawToBitmap()
+            )
+            Toast.makeText(
+                requireContext(),
+                "Плейлист ${binding.etFillPlaylistName.text} создан",
+                Toast.LENGTH_SHORT
+            ).show()
+            findNavController().navigateUp()
+        }
 
         binding.etFillPlaylistName.doOnTextChanged { text, _, _, _ ->
             binding.createNewPlaylistButton.isEnabled = text.isNullOrBlank().not()

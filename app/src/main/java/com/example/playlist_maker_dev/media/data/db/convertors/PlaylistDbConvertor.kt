@@ -18,12 +18,16 @@ class PlaylistDbConvertor {
     }
 
     fun map(playlist: PlaylistEntity): Playlist {
+        val tracksList = if (playlist.trackIdsList.isEmpty()) emptyList()
+        else {
+            playlist.trackIdsList.split(",").map { it.trim().toInt() }
+        }
         return Playlist(
             playlist.playlistId,
             playlist.playlistName,
             playlist.playlistDescription,
             playlist.playlistCoverUrl,
-            playlist.trackIdsList.split(",").map { it.trim().toInt() },
+            tracksList,
             playlist.tracksQuantity,
         )
     }
