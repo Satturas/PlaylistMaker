@@ -7,14 +7,16 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
 import com.example.playlist_maker_dev.media.domain.models.Playlist
+import com.example.playlist_maker_dev.media.ui.new_playlist.CreatingPlaylistFragment
 import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsState
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchFragment
@@ -50,11 +52,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         adapter.playlists = playlistsList
         binding.rvAddToPlaylist.adapter = adapter
 
-        val bottomSheetContainer = findViewById<LinearLayout>(R.id.playlists_bottom_sheet)
-
-        val overlay = findViewById<View>(R.id.overlay)
-
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
@@ -65,11 +63,11 @@ class AudioPlayerActivity : AppCompatActivity() {
 
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        overlay.visibility = View.GONE
+                        binding.overlay.visibility = View.GONE
                     }
 
                     else -> {
-                        overlay.visibility = View.VISIBLE
+                        binding.overlay.visibility = View.VISIBLE
                     }
                 }
             }
@@ -157,7 +155,20 @@ class AudioPlayerActivity : AppCompatActivity() {
                 }
             }
         }
+
+        binding.createNewPlaylistButton.setOnClickListener {
+            supportFragmentManager.commit {
+                replace<CreatingPlaylistFragment>(R.id.playerFragmentContainerView)
+                addToBackStack(null)
+                setReorderingAllowed(true)
+            }
+            //binding.main.visibility = View.GONE
+            BottomSheetBehavior.from(binding.playlistsBottomSheet).apply {
+                state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        }
     }
+
 
     private fun showLoading() {
         binding.progressBar.isVisible = true
@@ -187,7 +198,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun render(state: PlaylistsState) {
         when (state) {
-            is PlaylistsState.NoPlaylists -> { }
+            is PlaylistsState.NoPlaylists -> {}
             is PlaylistsState.FoundPlaylistsContent -> showPlaylists(state.foundPlaylists)
         }
     }

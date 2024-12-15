@@ -12,9 +12,9 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
@@ -62,7 +62,7 @@ class CreatingPlaylistFragment : Fragment() {
             .setMessage("Все несохраненные данные будут потеряны")
             .setNeutralButton("Отмена") { _, _ ->
             }.setNegativeButton("Завершить") { _, _ ->
-                findNavController().navigateUp()
+                requireActivity().supportFragmentManager.popBackStack()
             }
 
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -74,7 +74,7 @@ class CreatingPlaylistFragment : Fragment() {
                         && binding.etFillPlaylistDescription.text.isEmpty()
                         && binding.imageCover.drawable == null
                     ) {
-                        findNavController().navigateUp()
+                        requireActivity().supportFragmentManager.popBackStack()
                         return
                     }
                     confirmDialog.show()
@@ -114,7 +114,7 @@ class CreatingPlaylistFragment : Fragment() {
                 "Плейлист ${binding.etFillPlaylistName.text} создан",
                 Toast.LENGTH_SHORT
             ).show()
-            findNavController().navigateUp()
+            requireActivity().supportFragmentManager.popBackStack()
         }
 
         binding.etFillPlaylistName.doOnTextChanged { text, _, _, _ ->
@@ -140,6 +140,15 @@ class CreatingPlaylistFragment : Fragment() {
         outState.putCharSequence(PLAYLIST_DESCRIPTION_USER_INPUT, inputPlaylistDescriptionValue)
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().findViewById<ConstraintLayout>(R.id.main_layout).visibility = View.GONE
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        requireActivity().findViewById<ConstraintLayout>(R.id.main_layout).visibility = View.VISIBLE
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
