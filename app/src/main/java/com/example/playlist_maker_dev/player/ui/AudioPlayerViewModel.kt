@@ -5,6 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlist_maker_dev.media.domain.db.FavouritesInteractor
+import com.example.playlist_maker_dev.media.domain.db.PlaylistsInteractor
+import com.example.playlist_maker_dev.media.domain.models.Playlist
+import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsState
 import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
 import com.example.playlist_maker_dev.search.domain.models.Track
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
     private val interactor: AudioPlayerInteractor,
-    private val favouritesInteractor: FavouritesInteractor
+    private val favouritesInteractor: FavouritesInteractor,
+    private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
 
     private val _playerState = MutableLiveData<AudioPlayerState>()
@@ -25,6 +29,9 @@ class AudioPlayerViewModel(
 
     private val _currentSongTime = MutableLiveData(DEFAULT_CURRENT_POS)
     val currentSongTime: LiveData<Int> get() = _currentSongTime
+
+    private val _playlistsState = MutableLiveData<PlaylistsState>()
+    val playlistsState: LiveData<PlaylistsState> = _playlistsState
 
     private var timerJob: Job? = null
 
@@ -75,6 +82,22 @@ class AudioPlayerViewModel(
             }
             _favouriteState.postValue(!track.isFavorite)
         }
+    }
+
+    fun onAddToPlaylistClicked() {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistsInteractor.getPlaylists().collect { playlists ->
+                processResult(playlists)
+            }
+        }
+    }
+
+    private fun processResult(playlists: List<Playlist>) {
+        renderState(PlaylistsState.FoundPlaylistsContent(playlists))
+    }
+
+    private fun renderState(state: PlaylistsState) {
+        _playlistsState.postValue(state)
     }
 
     private fun startTimer() {

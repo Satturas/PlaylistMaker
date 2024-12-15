@@ -8,6 +8,11 @@
     android:orientation="vertical"
     tools:context=".player.ui.AudioPlayerActivity">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/playerFragmentContainerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
@@ -329,19 +334,20 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <View android:id="@+id/overlay"
+    <View
+        android:id="@+id/overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#99000000"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/playlists_bottom_sheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/adding_track_to_playlist_background"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
-        android:background="@drawable/adding_track_to_playlist_background"
         app:behavior_hideable="true"
         app:behavior_peekHeight="500dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -363,10 +369,10 @@
             style="@style/placeholderButtonsStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
             android:text="@string/new_playlist"
             app:cornerRadius="18dp"
-            android:layout_gravity="center_horizontal"
             app:layout_constraintBottom_toTopOf="@id/top_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

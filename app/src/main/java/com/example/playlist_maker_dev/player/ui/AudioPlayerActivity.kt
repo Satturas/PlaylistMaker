@@ -1,5 +1,6 @@
 package com.example.playlist_maker_dev.player.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +14,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
+import com.example.playlist_maker_dev.media.domain.models.Playlist
+import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsState
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -28,11 +31,24 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
+    private val playlistsList = mutableListOf<Playlist>()
+
+    private val adapter: AddingToPlaylistAdapter by lazy {
+        AddingToPlaylistAdapter(mutableListOf()) { playlist ->
+            handlePlaylistClick(
+                playlist
+            )
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAudioPlayerBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+        adapter.playlists = playlistsList
+        binding.rvAddToPlaylist.adapter = adapter
 
         val bottomSheetContainer = findViewById<LinearLayout>(R.id.playlists_bottom_sheet)
 
@@ -110,7 +126,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             binding.songTime.text = dateFormat.format(time)
         }
 
-
         viewModel.favouriteState.observe(this) {
             if (it) {
                 binding.addToFavoriteButton.setImageResource(R.drawable.vector_add_favorite_button)
@@ -130,6 +145,16 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.addToFavoriteButton.setOnClickListener {
             if (track != null) {
                 viewModel.onFavouriteClicked(track)
+            }
+        }
+
+        binding.addPlaylistButton.setOnClickListener {
+            if (track != null) {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                viewModel.onAddToPlaylistClicked()
+                viewModel.playlistsState.observe(this) {
+                    render(it)
+                }
             }
         }
     }
@@ -160,12 +185,33 @@ class AudioPlayerActivity : AppCompatActivity() {
         binding.progressBar.isVisible = false
     }
 
-    fun dpToPx(dp: Float, context: Context): Int {
+    private fun render(state: PlaylistsState) {
+        when (state) {
+            is PlaylistsState.NoPlaylists -> { }
+            is PlaylistsState.FoundPlaylistsContent -> showPlaylists(state.foundPlaylists)
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showPlaylists(foundPlaylists: List<Playlist>) {
+        playlistsList.clear()
+        playlistsList.addAll(foundPlaylists)
+        adapter.playlists = foundPlaylists
+        binding.rvAddToPlaylist.adapter = adapter
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             dp,
             context.resources.displayMetrics
         ).toInt()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun handlePlaylistClick(playlist: Playlist) {
+        TODO()
     }
 
     override fun onPause() {
