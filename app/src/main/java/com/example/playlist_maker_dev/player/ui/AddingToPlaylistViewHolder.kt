@@ -45,7 +45,7 @@ fun dpToPx(dp: Float, context: Context): Int {
 
 fun numberOfTracks(number: Int): String {
     var tempNumber = number % 100
-    if (tempNumber >= 5 && tempNumber <= 20) {
+    if (tempNumber in 5..20) {
         return "$number треков"
     } else {
         tempNumber = number % 10

@@ -87,9 +87,7 @@ class PlaylistsFragment : Fragment() {
     private fun render(state: PlaylistsState) {
         when (state) {
             is PlaylistsState.NoPlaylists -> showNoPlaylists()
-            is PlaylistsState.Loading -> {}
             is PlaylistsState.FoundPlaylistsContent -> showPlaylists(state.foundPlaylists)
-            is PlaylistsState.Error -> TODO()
         }
     }
 

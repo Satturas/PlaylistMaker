@@ -30,7 +30,7 @@ class PlaylistsViewHolder(parent: ViewGroup) :
             .centerCrop()
             .transform(RoundedCorners(dpToPx(2.0f, itemView.context)))
             .into(cover)
-        numberOfTracks.text = item.tracksQuantity.toString()
+        numberOfTracks.text = numberOfTracks(item.tracksQuantity)
         playlistName.text = item.name
     }
 
@@ -40,5 +40,19 @@ class PlaylistsViewHolder(parent: ViewGroup) :
             dp,
             context.resources.displayMetrics
         ).toInt()
+    }
+
+    private fun numberOfTracks(number: Int): String {
+        var tempNumber = number % 100
+        if (tempNumber in 5..20) {
+            return "$number треков"
+        } else {
+            tempNumber = number % 10
+            return when (tempNumber) {
+                in 1..1 -> "$number трек"
+                in 2..4 -> "$number трека"
+                else -> "$number треков"
+            }
+        }
     }
 }

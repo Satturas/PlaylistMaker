@@ -14,7 +14,6 @@ class PlaylistsViewModel(private val playlistsInteractor: PlaylistsInteractor) :
     val playlistsState: LiveData<PlaylistsState> = _playlistsState
 
     fun showPlaylists() {
-        _playlistsState.value = PlaylistsState.Loading
         viewModelScope.launch {
             playlistsInteractor.getPlaylists().collect { playlists ->
                 processResult(playlists)

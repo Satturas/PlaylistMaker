@@ -5,14 +5,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
-import android.os.SystemClock
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlist_maker_dev.media.data.db.convertors.TrackDbConvertor
-import com.example.playlist_maker_dev.media.data.db.entity.PlaylistEntity
 import com.example.playlist_maker_dev.media.domain.db.PlaylistsInteractor
 import com.example.playlist_maker_dev.media.domain.models.Playlist
-import com.example.playlist_maker_dev.search.domain.models.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -23,6 +19,9 @@ class CreatingPlaylistViewModel(
     private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
 
+    private var currentFilePath = ""
+    private var currentFileUri = ""
+
     fun saveImageToPrivateStorage(uri: Uri) {
         val filePath =
             File(
@@ -32,19 +31,23 @@ class CreatingPlaylistViewModel(
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
-        val file = File(filePath, "first_cover.jpg")
+        currentFilePath = System.currentTimeMillis().toString()
+        val file = File(filePath, currentFilePath)
         val inputStream = application.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        currentFileUri = file.toURI().toString()
     }
 
-    fun createPlaylist(name: String, description: String?, cover: Bitmap?) {
+    fun createPlaylist(name: String, description: String?) {
+
         val playlist = Playlist(
-            0, name, description, cover.toString(),
+            0, name, description, currentFileUri,
             mutableListOf(), 0
         )
+
         viewModelScope.launch(Dispatchers.IO) {
             playlistsInteractor.createPlaylist(playlist)
         }
