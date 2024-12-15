@@ -162,7 +162,6 @@ class AudioPlayerActivity : AppCompatActivity() {
                 addToBackStack(null)
                 setReorderingAllowed(true)
             }
-            //binding.main.visibility = View.GONE
             BottomSheetBehavior.from(binding.playlistsBottomSheet).apply {
                 state = BottomSheetBehavior.STATE_HIDDEN
             }
