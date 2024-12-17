@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.commit
@@ -42,6 +43,8 @@ class AudioPlayerActivity : AppCompatActivity() {
             )
         }
     }
+
+    private lateinit var currentTrack: Track
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,6 +98,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             } else {
                 binding.addToFavoriteButton.setImageResource(R.drawable.vector_add_favorite_button)
             }
+            currentTrack = track
         }
 
         viewModel.playerState.observe(this) { playerState ->
@@ -221,7 +225,23 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun handlePlaylistClick(playlist: Playlist) {
-        TODO()
+        if (viewModel.trackIsInPlaylist(currentTrack, playlist)) {
+            Toast.makeText(
+                this,
+                "Трек уже добавлен в плейлист ${playlist.name}",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            viewModel.addTrackToPlaylist(currentTrack, playlist)
+            Toast.makeText(
+                this,
+                "Добавлено в плейлист ${playlist.name}",
+                Toast.LENGTH_SHORT
+            ).show()
+            BottomSheetBehavior.from(binding.playlistsBottomSheet).state =
+                BottomSheetBehavior.STATE_HIDDEN
+        }
+        adapter.notifyDataSetChanged()
     }
 
     override fun onPause() {

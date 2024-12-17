@@ -9,5 +9,5 @@ import com.example.playlist_maker_dev.media.data.db.entity.TrackInPlaylistsEntit
 interface TrackInPlaylistsDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertTrack(track: TrackInPlaylistsEntity)
+    fun insertTrack(trackInPlaylistsEntity: TrackInPlaylistsEntity)
 }

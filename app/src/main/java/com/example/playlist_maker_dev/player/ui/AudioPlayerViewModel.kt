@@ -92,6 +92,16 @@ class AudioPlayerViewModel(
         }
     }
 
+    fun trackIsInPlaylist(track: Track, playlist: Playlist): Boolean {
+        return track.trackId in playlist.trackIdsList
+    }
+
+    fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistsInteractor.addTrackToPlaylist(track, playlist)
+        }
+    }
+
     private fun processResult(playlists: List<Playlist>) {
         renderState(PlaylistsState.FoundPlaylistsContent(playlists))
     }
