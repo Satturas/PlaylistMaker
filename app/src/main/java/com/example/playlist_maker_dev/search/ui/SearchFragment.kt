@@ -117,7 +117,7 @@ class SearchFragment : Fragment() {
             viewModel.saveHistoryOfTracks(historyOfTracksList)
             hideSearchHistory(true)
         }
-//дублирование??
+
         if (savedInstanceState != null) inputValue =
             savedInstanceState.getCharSequence(SEARCH_USER_INPUT, SEARCH_DEF)
 
