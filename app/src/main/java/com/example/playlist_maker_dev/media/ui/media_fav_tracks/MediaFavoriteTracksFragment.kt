@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev.media.ui
+package com.example.playlist_maker_dev.media.ui.media_fav_tracks
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.playlist_maker_dev.databinding.FragmentMediaFavoriteTracksBinding
+import com.example.playlist_maker_dev.media.ui.media_root.MediaState
 import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchFragment.Companion.AUDIO_PLAYER

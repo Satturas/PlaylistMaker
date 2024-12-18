@@ -28,19 +28,20 @@ class TrackViewHolder(parent: ViewGroup) :
             .with(itemView)
             .load(item.artworkUrl100)
             .placeholder(R.drawable.vector_cover_placeholder)
-            .centerCrop()
             .transform(RoundedCorners(dpToPx(2.0f, itemView.context)))
+            .centerCrop()
             .into(ivCover)
         tvTrack.text = item.trackName
         tvArtist.text = item.artistName
         tvLength.text = item.trackTimeMillis
     }
-}
 
-fun dpToPx(dp: Float, context: Context): Int {
-    return TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        dp,
-        context.resources.displayMetrics
-    ).toInt()
+
+    fun dpToPx(dp: Float, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            context.resources.displayMetrics
+        ).toInt()
+    }
 }
