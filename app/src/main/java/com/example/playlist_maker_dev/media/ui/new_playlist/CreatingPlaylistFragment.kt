@@ -70,8 +70,8 @@ class CreatingPlaylistFragment : Fragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (
-                        binding.etFillPlaylistName.text.isEmpty()
-                        && binding.etFillPlaylistDescription.text.isEmpty()
+                        binding.etFillPlaylistName.text?.isNotBlank() == true
+                        && binding.etFillPlaylistDescription.text?.isNotBlank() == true
                         && binding.imageCover.drawable == null
                     ) {
                         requireActivity().supportFragmentManager.popBackStack()
