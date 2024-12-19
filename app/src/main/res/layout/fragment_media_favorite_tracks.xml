@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorOnTertiaryContainer"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".media.ui.MediaFavoriteTracksFragment">
+    tools:context=".media.ui.media_fav_tracks.MediaFavoriteTracksFragment">
 
     <ImageView
         android:id="@+id/placeholderImage"

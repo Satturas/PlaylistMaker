@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev.media.ui
+package com.example.playlist_maker_dev.media.ui.media_root
 
 import com.example.playlist_maker_dev.search.domain.models.Track
 

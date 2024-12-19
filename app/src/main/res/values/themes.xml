@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/white</item>
         <item name="colorOnSecondary">@color/settings_icon</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?android:attr/windowBackground</item>
+        <item name="android:statusBarColor">?android:attr/colorBackground</item>
         <!-- Customize your theme here. -->
         <item name="colorOnTertiary">@color/icon</item>
         <item name="colorOnTertiaryContainer">@color/white</item>
