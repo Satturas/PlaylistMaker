@@ -1,7 +1,6 @@
 package com.example.playlist_maker_dev.media.data.db.convertors
 
 import com.example.playlist_maker_dev.media.data.db.entity.TrackEntity
-import com.example.playlist_maker_dev.search.data.dto.TrackDto
 import com.example.playlist_maker_dev.search.domain.models.Track
 
 class TrackDbConvertor {
@@ -11,7 +10,7 @@ class TrackDbConvertor {
             track.trackId,
             track.trackName,
             track.artistName,
-            track.trackTimeMillis.toString(),
+            track.trackTimeMillis,
             track.artworkUrl100,
             track.collectionName,
             track.primaryGenreName,
