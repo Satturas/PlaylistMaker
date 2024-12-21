@@ -211,8 +211,7 @@
         android:background="@drawable/adding_track_to_playlist_background"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
-        android:visibility="gone"
-        app:behavior_hideable="true"
+        app:behavior_hideable="false"
         app:behavior_peekHeight="500dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -224,7 +223,7 @@
             android:background="@color/menu_divider" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_add_to_playlist"
+            android:id="@+id/rv_tracks_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginVertical="@dimen/side_padding_16"

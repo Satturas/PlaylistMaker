@@ -1,6 +1,8 @@
 package com.example.playlist_maker_dev.media.ui.playlist_screen
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -9,18 +11,36 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.FragmentPlaylistBinding
 import com.example.playlist_maker_dev.media.domain.models.Playlist
 import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsFragment.Companion.PLAYLIST_ID_KEY
+import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
+import com.example.playlist_maker_dev.search.domain.models.Track
+import com.example.playlist_maker_dev.search.ui.SearchFragment.Companion.AUDIO_PLAYER
+import com.example.playlist_maker_dev.search.ui.TrackAdapter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistScreenFragment : Fragment() {
 
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
+
+    private val tracksList = mutableListOf<Track>()
+    private var isClickAllowed = true
+
+    private val adapter: TrackAdapter by lazy {
+        TrackAdapter(mutableListOf()) { track ->
+            handleTrackClick(
+                track
+            )
+        }
+    }
 
     private val viewModel by viewModel<PlaylistScreenViewModel>()
 
@@ -37,9 +57,14 @@ class PlaylistScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getPlaylistById(requireArguments().getInt(PLAYLIST_ID_KEY))
+        viewModel.getTracks(requireArguments().getInt(PLAYLIST_ID_KEY))
 
         viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
             showPlaylist(playlist)
+        }
+
+        viewModel.playlistTracks.observe(viewLifecycleOwner) { tracks ->
+            showTracks(tracks)
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -55,6 +80,9 @@ class PlaylistScreenFragment : Fragment() {
         binding.toolbar.setOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
+
+        adapter.tracks = tracksList
+        binding.rvTracksList.adapter = adapter
 
     }
 
@@ -113,10 +141,46 @@ class PlaylistScreenFragment : Fragment() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    private fun handleTrackClick(track: Track) {
+        if (clickDebounce()) {
+            val intent = Intent(
+                requireContext(),
+                AudioPlayerActivity::class.java
+            ).apply {
+                putExtra(AUDIO_PLAYER, track)
+            }
+            startActivity(intent)
+        }
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
+        }
+        return current
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun showTracks(tracks: List<Track>) {
+        tracksList.clear()
+        tracksList.addAll(tracks)
+        adapter.tracks = tracks
+        binding.rvTracksList.adapter = adapter
+        adapter.notifyDataSetChanged()
+    }
+
 
     companion object {
         fun newInstance(id: Int) = PlaylistScreenFragment().apply {
             arguments = bundleOf(PLAYLIST_ID_KEY to id)
         }
+
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
