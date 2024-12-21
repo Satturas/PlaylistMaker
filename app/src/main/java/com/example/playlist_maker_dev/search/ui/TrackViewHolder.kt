@@ -19,8 +19,8 @@ class TrackViewHolder(parent: ViewGroup) :
     ) {
 
     private val tvTrack: TextView = itemView.findViewById(R.id.tvSong)
-    private val tvArtist: TextView = itemView.findViewById(R.id.tvBand)
-    private val tvLength: TextView = itemView.findViewById(R.id.tvLength)
+    private val tvArtist: TextView = itemView.findViewById(R.id.tv_total_playlist_length)
+    private val tvLength: TextView = itemView.findViewById(R.id.tv_playlist_tracks_quantity)
     private val ivCover: ImageView = itemView.findViewById(R.id.ivCover)
 
     fun bind(item: Track) {

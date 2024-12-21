@@ -68,7 +68,11 @@ class PlaylistsFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun handlePlaylistClick(playlist: Playlist) {
         if (clickDebounce()) {
-            TODO()
+            findNavController().navigate(R.id.playlistScreenFragment, Bundle().apply {
+                putInt(
+                    PLAYLIST_ID_KEY, playlist.id
+                )
+            })
         }
     }
 
@@ -112,5 +116,6 @@ class PlaylistsFragment : Fragment() {
     companion object {
         fun newInstance() = PlaylistsFragment()
         private const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val PLAYLIST_ID_KEY = "PLAYLIST_ID_KEY"
     }
 }

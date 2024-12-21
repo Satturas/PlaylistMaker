@@ -9,6 +9,8 @@ import com.example.playlist_maker_dev.media.domain.models.Playlist
 import com.example.playlist_maker_dev.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlaylistsRepositoryImpl(
     private val appDatabase: AppDatabase,
@@ -27,8 +29,9 @@ class PlaylistsRepositoryImpl(
         appDatabase.playlistDao().deletePlaylist(playlistId)
     }
 
-    override suspend fun insertTrack(playlistId: Int) {
-        appDatabase.playlistDao().insertTrack(playlistId)
+    override suspend fun getPlaylistById(playlistId: Int): Flow<Playlist> = flow {
+        val playlist = appDatabase.playlistDao().getPlaylistById(playlistId)
+        emit(playlistDbConvertor.map(playlist))
     }
 
     override suspend fun deleteTrackFromPlaylist(playlistId: Int) {
@@ -43,8 +46,17 @@ class PlaylistsRepositoryImpl(
         appDatabase.playlistDao().insertTrackInPlaylist(
             playlist.id,
             tracks.joinToString(","),
-            playlist.tracksQuantity + 1
+            playlist.tracksQuantity + 1,
+            playlist.tracksLength + SimpleDateFormat(
+                "mm",
+                Locale.getDefault()
+            ).format(track.trackTimeMillis).toInt()
         )
+    }
+
+    override suspend fun getTracksOfPlaylist(playlistId: Int): Flow<List<Int>> = flow {
+        val tracksList = appDatabase.trackInPlaylistsDAO().getTracksOfPlaylist(playlistId)
+        emit(tracksList)
     }
 
     private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {
