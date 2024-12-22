@@ -10,8 +10,6 @@ import com.example.playlist_maker_dev.media.domain.models.Playlist
 import com.example.playlist_maker_dev.search.domain.models.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlaylistsRepositoryImpl(
     private val appDatabase: AppDatabase,
@@ -44,8 +42,7 @@ class PlaylistsRepositoryImpl(
         appDatabase.trackInPlaylistsDAO()
             .insertTrack(TrackInPlaylistsEntity(0, track.trackId, playlist.id))
         val tracks = playlist.trackIdsList.toMutableList()
-        val currentTrackLength = SimpleDateFormat("mm", Locale.getDefault()).format(track.trackTimeMillis)
-        tracks.add(track.trackId)
+        val currentTrackLength = track.trackTimeMillis.substring(0, 2)
         appDatabase.playlistDao().insertTrackInPlaylist(
             playlist.id,
             tracks.joinToString(","),
