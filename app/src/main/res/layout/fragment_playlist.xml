@@ -133,7 +133,7 @@
             android:textSize="18sp"
             app:layout_constrainedHeight="true"
             app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toTopOf=""
+            app:layout_constraintBottom_toTopOf="@id/playlist_numbers_layout"
             app:layout_constraintEnd_toStartOf="@id/right_border"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/left_border"
@@ -212,7 +212,7 @@
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="500dp"
+        app:behavior_peekHeight="250dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View

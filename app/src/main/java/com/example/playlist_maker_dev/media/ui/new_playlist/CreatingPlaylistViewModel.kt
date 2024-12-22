@@ -45,7 +45,7 @@ class CreatingPlaylistViewModel(
 
         val playlist = Playlist(
             0, name, description, currentFileUri,
-            mutableListOf(), 0
+            mutableListOf(), 0, 0
         )
 
         viewModelScope.launch(Dispatchers.IO) {

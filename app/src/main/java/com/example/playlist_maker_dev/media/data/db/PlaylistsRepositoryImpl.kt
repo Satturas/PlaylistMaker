@@ -44,15 +44,13 @@ class PlaylistsRepositoryImpl(
         appDatabase.trackInPlaylistsDAO()
             .insertTrack(TrackInPlaylistsEntity(0, track.trackId, playlist.id))
         val tracks = playlist.trackIdsList.toMutableList()
+        val currentTrackLength = SimpleDateFormat("mm", Locale.getDefault()).format(track.trackTimeMillis)
         tracks.add(track.trackId)
         appDatabase.playlistDao().insertTrackInPlaylist(
             playlist.id,
             tracks.joinToString(","),
             playlist.tracksQuantity + 1,
-            playlist.tracksLength + SimpleDateFormat(
-                "mm",
-                Locale.getDefault()
-            ).format(track.trackTimeMillis).toInt()
+            playlist.tracksLength + currentTrackLength.toInt()
         )
     }
 
