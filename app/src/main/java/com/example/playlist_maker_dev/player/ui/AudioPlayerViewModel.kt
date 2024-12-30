@@ -93,7 +93,7 @@ class AudioPlayerViewModel(
     }
 
     fun trackIsInPlaylist(track: Track, playlist: Playlist): Boolean {
-        return track.trackId in playlist.trackIdsList
+        return playlist.trackIdsList.contains(track.trackId)
     }
 
     fun addTrackToPlaylist(track: Track, playlist: Playlist) {

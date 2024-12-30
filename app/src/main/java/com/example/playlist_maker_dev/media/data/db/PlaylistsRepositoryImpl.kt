@@ -42,6 +42,7 @@ class PlaylistsRepositoryImpl(
         appDatabase.trackInPlaylistsDAO()
             .insertTrack(TrackInPlaylistsEntity(0, track.trackId, playlist.id))
         val tracks = playlist.trackIdsList.toMutableList()
+        tracks.add(track.trackId)
         val currentTrackLength = track.trackTimeMillis.substring(0, 2)
         appDatabase.playlistDao().insertTrackInPlaylist(
             playlist.id,
