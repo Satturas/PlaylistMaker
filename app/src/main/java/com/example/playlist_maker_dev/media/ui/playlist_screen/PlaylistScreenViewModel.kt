@@ -45,5 +45,14 @@ class PlaylistScreenViewModel(
             }
         }
     }
+
+    fun removeTrackFromPlaylist(trackId: Int, playlistId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistsInteractor.deleteTrackFromPlaylist(trackId, playlistId)
+            getTracks(playlistId)
+        }
+        //getTracks(playlistId)
+    }
 }
+
 

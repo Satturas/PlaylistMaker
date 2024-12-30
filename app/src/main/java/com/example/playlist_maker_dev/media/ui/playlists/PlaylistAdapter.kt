@@ -4,7 +4,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlist_maker_dev.media.domain.models.Playlist
 
-class PlaylistAdapter(var playlists: List<Playlist>, private val onItemClick: (Playlist) -> Unit) :
+class PlaylistAdapter(
+    var playlists: List<Playlist>,
+    private val onItemClick: (Playlist) -> Unit
+) :
     RecyclerView.Adapter<PlaylistsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistsViewHolder =

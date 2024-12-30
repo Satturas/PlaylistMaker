@@ -17,11 +17,13 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.FragmentPlaylistBinding
 import com.example.playlist_maker_dev.media.domain.models.Playlist
+import com.example.playlist_maker_dev.media.ui.playlists.PlaylistAdapter
 import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsFragment.Companion.PLAYLIST_ID_KEY
 import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchFragment.Companion.AUDIO_PLAYER
 import com.example.playlist_maker_dev.search.ui.TrackAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,17 +32,21 @@ class PlaylistScreenFragment : Fragment() {
 
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
-
     private val tracksList = mutableListOf<Track>()
     private var isClickAllowed = true
+    private var playlistId: Int = 0
 
-    private val adapter: TrackAdapter by lazy {
-        TrackAdapter(mutableListOf()) { track ->
+    /*private val adapter: TrackAdapter by lazy {
+        TrackAdapter(mutableListOf(), { track ->
             handleTrackClick(
                 track
             )
+        }) { track ->
+            handleTrackLongClick(
+                track
+            )
         }
-    }
+    }*/
 
     private val viewModel by viewModel<PlaylistScreenViewModel>()
 
@@ -60,6 +66,7 @@ class PlaylistScreenFragment : Fragment() {
         viewModel.getTracks(requireArguments().getInt(PLAYLIST_ID_KEY))
 
         viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
+            playlistId = playlist.id
             showPlaylist(playlist)
         }
 
@@ -81,9 +88,8 @@ class PlaylistScreenFragment : Fragment() {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
 
-        adapter.tracks = tracksList
-        binding.rvTracksList.adapter = adapter
-
+        /*adapter.tracks = tracksList
+        binding.rvTracksList.adapter = adapter*/
     }
 
     override fun onDestroyView() {
@@ -154,6 +160,16 @@ class PlaylistScreenFragment : Fragment() {
         }
     }
 
+    private fun handleTrackLongClick(track: Track) {
+        MaterialAlertDialogBuilder(requireActivity(), R.style.AlertDialog)
+            .setTitle("Удалить трек")
+            .setMessage("Вы уверены, что хотите удалить трек из плейлиста?")
+            .setNeutralButton("Отмена") { _, _ ->
+            }.setNegativeButton("Удалить") { _, _ ->
+                viewModel.removeTrackFromPlaylist(track.trackId, playlistId)
+            }.show()
+    }
+
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
@@ -168,11 +184,26 @@ class PlaylistScreenFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showTracks(tracks: List<Track>) {
-        tracksList.clear()
+        val adapter = TrackAdapter(tracks, { track ->
+            handleTrackClick(
+                track
+            )
+        }) { track ->
+            handleTrackLongClick(
+                track
+            )
+
+        }
+
+        binding.rvTracksList.adapter = adapter
+        adapter.notifyDataSetChanged()
+
+
+        /*tracksList.clear()
         tracksList.addAll(tracks)
         adapter.tracks = tracks
         binding.rvTracksList.adapter = adapter
-        adapter.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()*/
     }
 
 

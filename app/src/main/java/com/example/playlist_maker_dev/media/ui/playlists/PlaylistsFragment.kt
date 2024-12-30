@@ -40,17 +40,22 @@ class PlaylistsFragment : Fragment() {
             findNavController().navigate(R.id.creatingPlaylistFragment)
         }
 
-        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        viewModel.showPlaylists()
-
         viewModel.playlistsState.observe(viewLifecycleOwner) {
             render(it)
         }
+
+        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        viewModel.showPlaylists()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.showPlaylists()
     }
 
     @SuppressLint("NotifyDataSetChanged")
