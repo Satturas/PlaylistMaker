@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlist_maker_dev.media.domain.db.PlaylistsInteractor
 import com.example.playlist_maker_dev.media.domain.models.Playlist
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PlaylistsViewModel(private val playlistsInteractor: PlaylistsInteractor) : ViewModel() {
@@ -14,7 +15,7 @@ class PlaylistsViewModel(private val playlistsInteractor: PlaylistsInteractor) :
     val playlistsState: LiveData<PlaylistsState> = _playlistsState
 
     fun showPlaylists() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             playlistsInteractor.getPlaylists().collect { playlists ->
                 processResult(playlists)
             }
