@@ -17,7 +17,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.FragmentPlaylistBinding
 import com.example.playlist_maker_dev.media.domain.models.Playlist
-import com.example.playlist_maker_dev.media.ui.playlists.PlaylistAdapter
 import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsFragment.Companion.PLAYLIST_ID_KEY
 import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
 import com.example.playlist_maker_dev.search.domain.models.Track
@@ -32,21 +31,10 @@ class PlaylistScreenFragment : Fragment() {
 
     private var _binding: FragmentPlaylistBinding? = null
     private val binding get() = _binding!!
-    private val tracksList = mutableListOf<Track>()
     private var isClickAllowed = true
     private var playlistId: Int = 0
-
-    /*private val adapter: TrackAdapter by lazy {
-        TrackAdapter(mutableListOf(), { track ->
-            handleTrackClick(
-                track
-            )
-        }) { track ->
-            handleTrackLongClick(
-                track
-            )
-        }
-    }*/
+    private var playlistTracksLength: Int = 0
+    private var playlistTracksNumber: Int = 0
 
     private val viewModel by viewModel<PlaylistScreenViewModel>()
 
@@ -74,6 +62,7 @@ class PlaylistScreenFragment : Fragment() {
             showTracks(tracks)
         }
 
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -88,8 +77,6 @@ class PlaylistScreenFragment : Fragment() {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
 
-        /*adapter.tracks = tracksList
-        binding.rvTracksList.adapter = adapter*/
     }
 
     override fun onDestroyView() {
@@ -115,8 +102,10 @@ class PlaylistScreenFragment : Fragment() {
             .into(binding.imageCover)
         binding.playlistName.text = playlist.name
         binding.playlistDescription.text = playlist.description
-        binding.tvPlaylistTracksQuantity.text = numberOfTracks(playlist.tracksQuantity)
-        binding.tvTotalPlaylistLength.text = lengthOfTracks(playlist.tracksLength)
+        playlistTracksLength = playlist.tracksLength
+        playlistTracksNumber = playlist.tracksQuantity
+        binding.tvPlaylistTracksQuantity.text = numberOfTracks(playlistTracksNumber)
+        binding.tvTotalPlaylistLength.text = lengthOfTracks(playlistTracksLength)
     }
 
     private fun numberOfTracks(number: Int): String {
@@ -167,6 +156,12 @@ class PlaylistScreenFragment : Fragment() {
             .setNeutralButton("Отмена") { _, _ ->
             }.setNegativeButton("Удалить") { _, _ ->
                 viewModel.removeTrackFromPlaylist(track.trackId, playlistId)
+                binding.tvPlaylistTracksQuantity.text = numberOfTracks(playlistTracksNumber - 1)
+                binding.tvTotalPlaylistLength.text = lengthOfTracks(
+                    playlistTracksLength - track.trackTimeMillis.substring(0, 2).toInt()
+                )
+                playlistTracksLength -= track.trackTimeMillis.substring(0, 2).toInt()
+                playlistTracksNumber -= 1
             }.show()
     }
 
