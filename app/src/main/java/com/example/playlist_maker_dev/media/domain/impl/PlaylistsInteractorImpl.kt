@@ -39,4 +39,8 @@ class PlaylistsInteractorImpl(private val playlistsRepository: PlaylistsReposito
     override suspend fun getTrackById(trackId: Int): Flow<Track> {
         return playlistsRepository.getTrackById(trackId)
     }
+
+    override suspend fun sharePlaylistToOtherApps(playlistId: Int) {
+        playlistsRepository.sharePlaylistToOtherApps(playlistId)
+    }
 }

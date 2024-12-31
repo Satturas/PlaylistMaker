@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchFragment.Companion.AUDIO_PLAYER
 import com.example.playlist_maker_dev.search.ui.TrackAdapter
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -61,6 +63,44 @@ class PlaylistScreenFragment : Fragment() {
         viewModel.playlistTracks.observe(viewLifecycleOwner) { tracks ->
             showTracks(tracks)
         }
+
+        binding.shareButton.setOnClickListener {
+            viewModel.onShareButtonClicked(playlistId)
+            viewModel.numberOfTracks.observe(viewLifecycleOwner) {
+                when (it) {
+                    0 -> Toast.makeText(
+                        requireActivity(),
+                        "В этом плейлисте нет списка треков, которым можно поделиться",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    else -> viewModel.sharePlaylistToOtherApps(playlistId)
+                }
+            }
+        }
+
+        val bottomSheetShareBehavior =
+            BottomSheetBehavior.from(binding.playlistShareBottomSheet).apply {
+                state = BottomSheetBehavior.STATE_HIDDEN
+            }
+
+        bottomSheetShareBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
 
 
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -192,13 +232,6 @@ class PlaylistScreenFragment : Fragment() {
 
         binding.rvTracksList.adapter = adapter
         adapter.notifyDataSetChanged()
-
-
-        /*tracksList.clear()
-        tracksList.addAll(tracks)
-        adapter.tracks = tracks
-        binding.rvTracksList.adapter = adapter
-        adapter.notifyDataSetChanged()*/
     }
 
 

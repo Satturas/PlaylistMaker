@@ -1,5 +1,7 @@
 package com.example.playlist_maker_dev.media.data.db
 
+import android.content.Context
+import android.content.Intent
 import com.example.playlist_maker_dev.db.AppDatabase
 import com.example.playlist_maker_dev.media.data.db.convertors.PlaylistDbConvertor
 import com.example.playlist_maker_dev.media.data.db.convertors.TrackDbConvertor
@@ -14,7 +16,8 @@ import kotlinx.coroutines.flow.flow
 class PlaylistsRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val playlistDbConvertor: PlaylistDbConvertor,
-    private val trackDbConvertor: TrackDbConvertor
+    private val trackDbConvertor: TrackDbConvertor,
+    private val context: Context
 ) : PlaylistsRepository {
     override fun createPlaylist(playlist: Playlist) {
         appDatabase.playlistDao().insertPlaylist(playlistDbConvertor.map(playlist))
@@ -78,6 +81,26 @@ class PlaylistsRepositoryImpl(
         emit(trackDbConvertor.map(track))
     }
 
+    override suspend fun sharePlaylistToOtherApps(playlistId: Int) {
+        val playlist =
+            playlistDbConvertor.map(appDatabase.playlistDao().getPlaylistById(playlistId))
+        val text =
+            playlist.name +
+                    "\n${playlist.description}" +
+                    "\n${numberOfTracks(playlist.tracksQuantity)}" +
+                    "\n${
+                        makeTracksInfoText(playlist)
+                    }"
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, text)
+            type = "text/plain"
+        }.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val shareIntent =
+            Intent.createChooser(sendIntent, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(shareIntent)
+    }
+
     private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {
         return playlists.map { playlist -> playlistDbConvertor.map(playlist) }
     }
@@ -90,5 +113,30 @@ class PlaylistsRepositoryImpl(
             }
         }
         return false
+    }
+
+    private fun numberOfTracks(number: Int): String {
+        var tempNumber = number % 100
+        if (tempNumber in 5..20) {
+            return "$number треков"
+        } else {
+            tempNumber = number % 10
+            return when (tempNumber) {
+                in 1..1 -> "$number трек"
+                in 2..4 -> "$number трека"
+                else -> "$number треков"
+            }
+        }
+    }
+
+    private suspend fun makeTracksInfoText(playlist: Playlist): String {
+        val text = StringBuilder()
+        var number = 1
+        for (trackId in playlist.trackIdsList) {
+            val track = trackDbConvertor.map(appDatabase.trackDao().getTrackById(trackId))
+            text.append("$number.${track.artistName} - ${track.trackName} (${track.trackTimeMillis})\n")
+            number++
+        }
+        return text.toString()
     }
 }

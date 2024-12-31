@@ -19,6 +19,9 @@ class PlaylistScreenViewModel(
     private val _playlist = MutableLiveData<Playlist>()
     val playlist: LiveData<Playlist> = _playlist
 
+    private val _numberOfTracks = MutableLiveData<Int>()
+    val numberOfTracks: LiveData<Int> = _numberOfTracks
+
     private val _playlistTracks = MutableLiveData<List<Track>>()
     val playlistTracks: LiveData<List<Track>> = _playlistTracks
 
@@ -51,7 +54,16 @@ class PlaylistScreenViewModel(
             playlistsInteractor.deleteTrackFromPlaylist(trackId, playlistId)
             getTracks(playlistId)
         }
-        //getTracks(playlistId)
+    }
+
+    fun sharePlaylistToOtherApps(playlistId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistsInteractor.sharePlaylistToOtherApps(playlistId)
+        }
+    }
+
+    fun onShareButtonClicked(playlistId: Int) {
+        TODO()
     }
 }
 
