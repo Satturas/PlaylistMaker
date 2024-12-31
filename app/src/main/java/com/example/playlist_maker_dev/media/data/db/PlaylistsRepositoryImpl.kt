@@ -49,9 +49,9 @@ class PlaylistsRepositoryImpl(
             playlist.tracksLength - currentTrackLength.toInt()
         )
 
-        /*if (!isTrackExistInPlaylists(trackId)) {
+        if (!isTrackExistInPlaylists(trackId)) {
             appDatabase.trackDao().deleteTrack(trackId)
-        }*/
+        }
     }
 
     override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist) {
