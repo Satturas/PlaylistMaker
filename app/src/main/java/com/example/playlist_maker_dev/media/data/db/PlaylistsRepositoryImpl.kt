@@ -134,7 +134,7 @@ class PlaylistsRepositoryImpl(
         var number = 1
         for (trackId in playlist.trackIdsList) {
             val track = trackDbConvertor.map(appDatabase.trackDao().getTrackById(trackId))
-            text.append("$number.${track.artistName} - ${track.trackName} (${track.trackTimeMillis})\n")
+            text.append("$number. ${track.artistName} - ${track.trackName} (${track.trackTimeMillis})\n")
             number++
         }
         return text.toString()

@@ -57,6 +57,8 @@ class PlaylistScreenFragment : Fragment() {
 
         viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
             playlistId = playlist.id
+            playlistTracksLength = playlist.tracksLength
+            playlistTracksNumber = playlist.tracksQuantity
             showPlaylist(playlist)
         }
 
@@ -65,16 +67,14 @@ class PlaylistScreenFragment : Fragment() {
         }
 
         binding.shareButton.setOnClickListener {
-            viewModel.onShareButtonClicked(playlistId)
-            viewModel.numberOfTracks.observe(viewLifecycleOwner) {
-                when (it) {
-                    0 -> Toast.makeText(
-                        requireActivity(),
-                        "В этом плейлисте нет списка треков, которым можно поделиться",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    else -> viewModel.sharePlaylistToOtherApps(playlistId)
-                }
+            when (playlistTracksNumber) {
+                0 -> Toast.makeText(
+                    requireActivity(),
+                    "В этом плейлисте нет списка треков, которым можно поделиться",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                else -> viewModel.sharePlaylistToOtherApps(playlistId)
             }
         }
 
@@ -142,8 +142,6 @@ class PlaylistScreenFragment : Fragment() {
             .into(binding.imageCover)
         binding.playlistName.text = playlist.name
         binding.playlistDescription.text = playlist.description
-        playlistTracksLength = playlist.tracksLength
-        playlistTracksNumber = playlist.tracksQuantity
         binding.tvPlaylistTracksQuantity.text = numberOfTracks(playlistTracksNumber)
         binding.tvTotalPlaylistLength.text = lengthOfTracks(playlistTracksLength)
     }
