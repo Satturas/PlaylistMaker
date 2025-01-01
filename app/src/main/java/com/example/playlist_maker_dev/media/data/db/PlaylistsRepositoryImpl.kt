@@ -28,8 +28,15 @@ class PlaylistsRepositoryImpl(
         emit(convertFromPlaylistEntity(playlists))
     }
 
-    override fun deletePlaylist(playlistId: Int) {
+    override suspend fun deletePlaylist(playlistId: Int) {
         appDatabase.playlistDao().deletePlaylist(playlistId)
+
+        val tracksList = appDatabase.trackInPlaylistsDAO().getTracksOfPlaylist(playlistId)
+        for (track in tracksList) {
+            if (!isTrackExistInPlaylists(track)) {
+                appDatabase.trackDao().deleteTrack(track)
+            }
+        }
     }
 
     override suspend fun getPlaylistById(playlistId: Int): Flow<Playlist> = flow {
