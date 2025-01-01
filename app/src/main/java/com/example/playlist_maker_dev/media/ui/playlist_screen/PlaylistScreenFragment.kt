@@ -13,6 +13,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
@@ -35,6 +36,7 @@ class PlaylistScreenFragment : Fragment() {
     private val binding get() = _binding!!
     private var isClickAllowed = true
     private var playlistId: Int = 0
+    private var currentPlaylist: Playlist? = null
     private var playlistTracksLength: Int = 0
     private var playlistTracksNumber: Int = 0
 
@@ -56,6 +58,7 @@ class PlaylistScreenFragment : Fragment() {
         viewModel.getTracks(requireArguments().getInt(PLAYLIST_ID_KEY))
 
         viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
+            currentPlaylist = playlist
             playlistId = playlist.id
             playlistTracksLength = playlist.tracksLength
             playlistTracksNumber = playlist.tracksQuantity
@@ -67,15 +70,7 @@ class PlaylistScreenFragment : Fragment() {
         }
 
         binding.shareButton.setOnClickListener {
-            when (playlistTracksNumber) {
-                0 -> Toast.makeText(
-                    requireActivity(),
-                    "В этом плейлисте нет списка треков, которым можно поделиться",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                else -> viewModel.sharePlaylistToOtherApps(playlistId)
-            }
+            share()
         }
 
         val bottomSheetShareBehavior =
@@ -102,6 +97,25 @@ class PlaylistScreenFragment : Fragment() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
+        binding.detailsButton.setOnClickListener {
+            currentPlaylist?.let { it1 -> showPlaylistInfoSmall(it1) }
+            bottomSheetShareBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+            binding.tvPlaylistShare.setOnClickListener {
+                share()
+            }
+
+            binding.tvPlaylistDelete.setOnClickListener {
+                MaterialAlertDialogBuilder(requireActivity(), R.style.AlertDialog)
+                    .setTitle("Удалить плейлист")
+                    .setMessage("Хотите удалить плейлист?")
+                    .setNegativeButton("Нет") { _, _ ->
+                    }.setPositiveButton("Да") { _, _ ->
+                        viewModel.removePlaylist(playlistId)
+                        findNavController().navigate(R.id.mediaFragment)
+                    }.show()
+            }
+        }
 
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -146,6 +160,18 @@ class PlaylistScreenFragment : Fragment() {
         binding.tvTotalPlaylistLength.text = lengthOfTracks(playlistTracksLength)
     }
 
+    private fun showPlaylistInfoSmall(playlist: Playlist) {
+        Glide
+            .with(binding.ivPlaylistCoverSmall)
+            .load(playlist.coverUrl)
+            .placeholder(R.drawable.vector_cover_placeholder)
+            .centerCrop()
+            .transform(RoundedCorners(dpToPx(2.0f, binding.ivPlaylistCoverSmall.context)))
+            .into(binding.ivPlaylistCoverSmall)
+        binding.tvPlaylistNameSmall.text = playlist.name
+        binding.tvNumberOfTracksSmall.text = numberOfTracks(playlistTracksNumber)
+    }
+
     private fun numberOfTracks(number: Int): String {
         var tempNumber = number % 100
         if (tempNumber in 5..20) {
@@ -171,6 +197,18 @@ class PlaylistScreenFragment : Fragment() {
                 in 2..4 -> "$number минуты"
                 else -> "$number минут"
             }
+        }
+    }
+
+    private fun share() {
+        when (playlistTracksNumber) {
+            0 -> Toast.makeText(
+                requireActivity(),
+                "В этом плейлисте нет списка треков, которым можно поделиться",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            else -> viewModel.sharePlaylistToOtherApps(playlistId)
         }
     }
 

@@ -70,7 +70,7 @@
 
             <ImageView
                 android:id="@+id/detailsButton"
-                android:layout_width="wrap_content"
+                android:layout_width="20dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="26dp"
                 android:contentDescription="@string/separator_band_length"

@@ -59,6 +59,12 @@ class PlaylistScreenViewModel(
         }
     }
 
+    fun removePlaylist(playlistId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistsInteractor.deletePlaylist(playlistId)
+        }
+    }
+
 }
 
 

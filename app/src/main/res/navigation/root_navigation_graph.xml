@@ -55,5 +55,9 @@
         android:id="@+id/playlistScreenFragment"
         android:name="com.example.playlist_maker_dev.media.ui.playlist_screen.PlaylistScreenFragment"
         android:label="PlaylistScreenFragment"
-        tools:layout="@layout/fragment_playlist"/>
+        tools:layout="@layout/fragment_playlist">
+        <action
+            android:id="@+id/action_playlistScreenFragment_to_mediaFragment"
+            app:destination="@id/mediaFragment" />
+    </fragment>
 </navigation>
