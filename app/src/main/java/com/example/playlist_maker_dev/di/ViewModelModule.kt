@@ -1,5 +1,6 @@
 package com.example.playlist_maker_dev.di
 
+import com.example.playlist_maker_dev.media.ui.edit_playlist.EditPlaylistViewModel
 import com.example.playlist_maker_dev.media.ui.media_fav_tracks.FavoriteTracksViewModel
 import com.example.playlist_maker_dev.media.ui.media_root.MediaViewModel
 import com.example.playlist_maker_dev.media.ui.new_playlist.CreatingPlaylistViewModel
@@ -43,6 +44,10 @@ val viewModelModule = module {
 
     viewModel {
         PlaylistScreenViewModel(get(), get())
+    }
+
+    viewModel{
+        EditPlaylistViewModel(get(), get())
     }
 
 }

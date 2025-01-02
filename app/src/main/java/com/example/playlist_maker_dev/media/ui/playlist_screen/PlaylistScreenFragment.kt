@@ -115,6 +115,13 @@ class PlaylistScreenFragment : Fragment() {
                         findNavController().navigate(R.id.mediaFragment)
                     }.show()
             }
+
+            binding.tvPlaylistEditInfo.setOnClickListener {
+                findNavController().navigate(
+                    R.id.editPlaylistFragment,
+                    Bundle().apply { putInt(PLAYLIST_ID_KEY, playlistId) }
+                )
+            }
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -130,7 +137,6 @@ class PlaylistScreenFragment : Fragment() {
         binding.toolbar.setOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
-
     }
 
     override fun onDestroyView() {
@@ -263,7 +269,6 @@ class PlaylistScreenFragment : Fragment() {
             handleTrackLongClick(
                 track
             )
-
         }
 
         binding.rvTracksList.adapter = adapter

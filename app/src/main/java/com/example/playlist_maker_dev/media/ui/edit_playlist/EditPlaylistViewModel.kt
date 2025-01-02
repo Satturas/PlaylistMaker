@@ -1,28 +1,32 @@
-package com.example.playlist_maker_dev.media.ui.new_playlist
+package com.example.playlist_maker_dev.media.ui.edit_playlist
 
 import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.playlist_maker_dev.media.domain.db.PlaylistsInteractor
 import com.example.playlist_maker_dev.media.domain.models.Playlist
+import com.example.playlist_maker_dev.media.ui.new_playlist.CreatingPlaylistViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 
-open class CreatingPlaylistViewModel(
-    protected val application: Application,
-    protected val playlistsInteractor: PlaylistsInteractor
-) : ViewModel() {
+class EditPlaylistViewModel(
+    application: Application, playlistsInteractor: PlaylistsInteractor
+) : CreatingPlaylistViewModel(application, playlistsInteractor) {
 
     private var currentFilePath = ""
     private var currentFileUri = ""
 
-    open fun saveImageToPrivateStorage(uri: Uri) {
+    private val _playlist = MutableLiveData<Playlist>()
+    val playlist: LiveData<Playlist> = _playlist
+
+    override fun saveImageToPrivateStorage(uri: Uri) {
         val filePath =
             File(
                 application.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
@@ -41,7 +45,7 @@ open class CreatingPlaylistViewModel(
         currentFileUri = file.toURI().toString()
     }
 
-    open fun createPlaylist(name: String, description: String?) {
+    override fun createPlaylist(name: String, description: String?) {
 
         val playlist = Playlist(
             0, name, description, currentFileUri,
@@ -52,5 +56,12 @@ open class CreatingPlaylistViewModel(
             playlistsInteractor.createPlaylist(playlist)
         }
     }
-}
 
+    fun getPlaylistById(playlistId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistsInteractor.getPlaylistById(playlistId).collect { playlist ->
+                _playlist.postValue(playlist)
+            }
+        }
+    }
+}
