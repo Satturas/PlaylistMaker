@@ -25,7 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 open class CreatingPlaylistFragment : Fragment() {
 
     private var _binding: FragmentCreatingPlaylistBinding? = null
-    private val binding get() = _binding!!
+    protected val binding get() = _binding!!
 
     private var inputPlaylistNameValue: CharSequence = DEF_PLAYLIST_NAME
     private var inputPlaylistDescriptionValue: CharSequence = DEF_PLAYLIST_DESCRIPTION

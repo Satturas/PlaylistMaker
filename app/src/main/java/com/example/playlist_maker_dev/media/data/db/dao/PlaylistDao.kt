@@ -12,6 +12,14 @@ interface PlaylistDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPlaylist(playlist: PlaylistEntity)
 
+    @Query("UPDATE playlist_table SET playlistName = :playlistName, playlistDescription = :playlistDescription, playlistCoverUrl = :playlistCoverUrl WHERE playlistId = :playlistId")
+    suspend fun updatePlaylist(
+        playlistId: Int,
+        playlistName: String,
+        playlistDescription: String,
+        playlistCoverUrl: String
+    )
+
     @Query("SELECT * FROM playlist_table ORDER BY addedAt DESC")
     suspend fun getPlaylists(): List<PlaylistEntity>
 

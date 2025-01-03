@@ -43,4 +43,8 @@ class PlaylistsInteractorImpl(private val playlistsRepository: PlaylistsReposito
     override suspend fun sharePlaylistToOtherApps(playlistId: Int) {
         playlistsRepository.sharePlaylistToOtherApps(playlistId)
     }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        playlistsRepository.updatePlaylist(playlist)
+    }
 }

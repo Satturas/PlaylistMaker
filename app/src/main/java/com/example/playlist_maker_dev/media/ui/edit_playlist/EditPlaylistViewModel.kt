@@ -45,15 +45,23 @@ class EditPlaylistViewModel(
         currentFileUri = file.toURI().toString()
     }
 
-    override fun createPlaylist(name: String, description: String?) {
+    fun updatePlaylist(
+        id: Int,
+        name: String,
+        description: String?,
+        url: String,
+        tracksQuantity: Int,
+        tracksLength: Int
+    ) {
 
+        val currentUri = if (url == "-1") currentFileUri else url
         val playlist = Playlist(
-            0, name, description, currentFileUri,
-            mutableListOf(), 0, 0
+            id, name, description, currentUri,
+            mutableListOf(), tracksQuantity, tracksLength
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            playlistsInteractor.createPlaylist(playlist)
+            playlistsInteractor.updatePlaylist(playlist)
         }
     }
 

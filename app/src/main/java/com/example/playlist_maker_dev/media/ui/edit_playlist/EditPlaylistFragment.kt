@@ -13,18 +13,17 @@ import androidx.core.widget.doOnTextChanged
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.databinding.FragmentCreatingPlaylistBinding
+import com.example.playlist_maker_dev.media.domain.models.Playlist
 import com.example.playlist_maker_dev.media.ui.new_playlist.CreatingPlaylistFragment
 import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class EditPlaylistFragment : CreatingPlaylistFragment() {
 
-    private var _binding: FragmentCreatingPlaylistBinding? = null
-    private val binding get() = _binding!!
-
     private var inputPlaylistNameValue: CharSequence = DEF_PLAYLIST_NAME
     private var inputPlaylistDescriptionValue: CharSequence = DEF_PLAYLIST_DESCRIPTION
+    private lateinit var currentPlaylist: Playlist
+    private var isUriChanged = false
 
     private val viewModel by viewModel<EditPlaylistViewModel>()
 
@@ -50,15 +49,16 @@ class EditPlaylistFragment : CreatingPlaylistFragment() {
 
         viewModel.getPlaylistById(requireArguments().getInt(PlaylistsFragment.PLAYLIST_ID_KEY))
 
-        viewModel.playlist.observe(viewLifecycleOwner) {
-            playlist -> Glide
-            .with(this)
-            .load(playlist.coverUrl)
-            .placeholder(R.drawable.vector_cover_placeholder)
-            .centerCrop()
-            .transform(RoundedCorners(dpToPx(8.0f, binding.imageCover.context)))
-            .into(binding.imageCover)
+        viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
+            Glide
+                .with(this)
+                .load(playlist.coverUrl)
+                .placeholder(R.drawable.vector_cover_placeholder)
+                .centerCrop()
+                .transform(RoundedCorners(dpToPx(8.0f, binding.imageCover.context)))
+                .into(binding.imageCover)
 
+            currentPlaylist = playlist
             binding.etFillPlaylistName.setText(playlist.name)
             binding.etFillPlaylistDescription.setText(playlist.description)
         }
@@ -79,16 +79,22 @@ class EditPlaylistFragment : CreatingPlaylistFragment() {
 
         binding.imageCover.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            isUriChanged = true
         }
 
         binding.createNewPlaylistButton.setOnClickListener {
-            viewModel.createPlaylist(
+            val currentUri = if (isUriChanged) "-1" else currentPlaylist.coverUrl.toString()
+            viewModel.updatePlaylist(
+                currentPlaylist.id,
                 binding.etFillPlaylistName.text.toString(),
-                binding.etFillPlaylistDescription.text.toString()
+                binding.etFillPlaylistDescription.text.toString(),
+                currentUri,
+                currentPlaylist.tracksQuantity,
+                currentPlaylist.tracksLength
             )
             Toast.makeText(
                 requireContext(),
-                "Плейлист ${binding.etFillPlaylistName.text} создан",
+                "Плейлист ${binding.etFillPlaylistName.text} изменен",
                 Toast.LENGTH_SHORT
             ).show()
             requireActivity().supportFragmentManager.popBackStack()
@@ -109,6 +115,12 @@ class EditPlaylistFragment : CreatingPlaylistFragment() {
                 inputPlaylistDescriptionValue = p0.toString()
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putCharSequence(PLAYLIST_NAME_USER_INPUT, inputPlaylistNameValue)
+        outState.putCharSequence(PLAYLIST_DESCRIPTION_USER_INPUT, inputPlaylistDescriptionValue)
     }
 
     private fun dpToPx(dp: Float, context: Context): Int {
