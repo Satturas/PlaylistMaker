@@ -59,6 +59,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/description_input_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="center_horizontal"
@@ -93,6 +94,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name_input_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:theme="@style/ThemeOverlay.AppTheme.TextInputEditText.Outlined"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="center_horizontal"

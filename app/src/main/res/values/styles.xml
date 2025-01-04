@@ -86,6 +86,10 @@
         <item name="android:colorAccent">#1b5e20</item>
     </style>
 
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="">
+        <item name="colorControlActivated">@color/button_enabled</item>
+    </style>
+
 
 
 
