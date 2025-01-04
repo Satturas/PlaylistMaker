@@ -15,4 +15,5 @@ interface PlaylistsInteractor {
     suspend fun getTrackById(trackId: Int): Flow<Track>
     suspend fun sharePlaylistToOtherApps(playlistId: Int)
     suspend fun updatePlaylist(playlist: Playlist)
+    suspend fun getTracksById(trackId: List<Int>): Flow<List<Track>>
 }

@@ -28,7 +28,8 @@ class PlaylistsRepositoryImpl(
         val playlistEntity = playlistDbConvertor.map(playlist)
         playlistEntity.playlistDescription?.let {
             playlistEntity.playlistCoverUrl?.let { it1 ->
-                appDatabase.playlistDao().updatePlaylist(playlistEntity.playlistId, playlistEntity.playlistName,
+                appDatabase.playlistDao().updatePlaylist(
+                    playlistEntity.playlistId, playlistEntity.playlistName,
                     it, it1
                 )
             }
@@ -71,7 +72,7 @@ class PlaylistsRepositoryImpl(
             playlist.tracksLength - currentTrackLength.toInt()
         )
 
-        if (!isTrackExistInPlaylists(trackId)) {
+        if (!isTrackExistInPlaylists(trackId) && !track.isFavorite) {
             appDatabase.trackDao().deleteTrack(trackId)
         }
     }
@@ -93,6 +94,11 @@ class PlaylistsRepositoryImpl(
     override suspend fun getTracksOfPlaylist(playlistId: Int): Flow<List<Int>> = flow {
         val tracksList = appDatabase.trackInPlaylistsDAO().getTracksOfPlaylist(playlistId)
         emit(tracksList)
+    }
+
+    override suspend fun getTracksById(trackId: List<Int>): Flow<List<Track>> = flow {
+        val tracks = appDatabase.trackDao().getTracksById(trackId)
+        emit(tracks.map { track -> trackDbConvertor.map(track) })
     }
 
     override suspend fun getTrackById(trackId: Int): Flow<Track> = flow {

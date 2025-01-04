@@ -55,7 +55,6 @@ class PlaylistScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getPlaylistById(requireArguments().getInt(PLAYLIST_ID_KEY))
-        viewModel.getTracks(requireArguments().getInt(PLAYLIST_ID_KEY))
 
         viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
             currentPlaylist = playlist

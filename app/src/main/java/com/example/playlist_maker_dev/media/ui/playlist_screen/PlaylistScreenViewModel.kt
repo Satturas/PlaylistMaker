@@ -1,6 +1,5 @@
 package com.example.playlist_maker_dev.media.ui.playlist_screen
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,12 +11,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PlaylistScreenViewModel(
-    private val application: Application,
     private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
 
     private val _playlist = MutableLiveData<Playlist>()
     val playlist: LiveData<Playlist> = _playlist
+    val track: Track? = null
 
     private val _playlistTracks = MutableLiveData<List<Track>>()
     val playlistTracks: LiveData<List<Track>> = _playlistTracks
@@ -26,22 +25,16 @@ class PlaylistScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             playlistsInteractor.getPlaylistById(playlistId).collect { playlist ->
                 _playlist.postValue(playlist)
-            }
-        }
-    }
-
-    fun getTracks(playlistId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            playlistsInteractor.getTracksOfPlaylist(playlistId).collect { trackIds ->
-                val trackList = mutableListOf<Track>()
-                for (i in trackIds) {
-                    viewModelScope.launch(Dispatchers.IO) {
-                        playlistsInteractor.getTrackById(i).collect { track ->
-                            trackList.add(track)
+                if (playlist.trackIdsList.isNotEmpty()) {
+                    playlistsInteractor.getTracksById(playlist.trackIdsList).collect { tracks ->
+                        val trackList = mutableListOf<Track>()
+                        playlist.trackIdsList.forEach { trackId ->
+                            tracks.find { track -> track.trackId == trackId }
+                                ?.let { trackList.add(it) }
                         }
+                        _playlistTracks.postValue(trackList)
                     }
                 }
-                _playlistTracks.postValue(trackList)
             }
         }
     }
@@ -49,7 +42,7 @@ class PlaylistScreenViewModel(
     fun removeTrackFromPlaylist(trackId: Int, playlistId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             playlistsInteractor.deleteTrackFromPlaylist(trackId, playlistId)
-            getTracks(playlistId)
+            getPlaylistById(playlistId)
         }
     }
 
@@ -64,7 +57,6 @@ class PlaylistScreenViewModel(
             playlistsInteractor.deletePlaylist(playlistId)
         }
     }
-
 }
 
 
