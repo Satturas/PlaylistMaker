@@ -42,6 +42,7 @@ class EditPlaylistFragment : CreatingPlaylistFragment() {
         }
         binding.etFillPlaylistName.setText(inputPlaylistNameValue)
         binding.etFillPlaylistDescription.setText(inputPlaylistDescriptionValue)
+        binding.imageCover.setBackgroundResource(R.drawable.editing_playlist_cover_background)
 
         binding.toolbar.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
