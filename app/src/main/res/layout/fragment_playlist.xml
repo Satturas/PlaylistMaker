@@ -212,7 +212,7 @@
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="150dp"
+        app:behavior_peekHeight="200dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
@@ -221,6 +221,27 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:background="@color/menu_divider" />
+
+        <ImageView
+            android:id="@+id/placeholderImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:contentDescription="@string/search_delete_text_icon"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/vector_nothing_found"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/placeholderMessage"
+            style="@style/placeHoldersTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:text="@string/no_tracks_in_playlist"
+            android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_tracks_list"
@@ -239,6 +260,7 @@
         android:background="@drawable/adding_track_to_playlist_background"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
+        android:visibility="gone"
         app:behavior_hideable="true"
         app:behavior_peekHeight="300dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">

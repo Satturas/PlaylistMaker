@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -24,6 +25,7 @@ import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchFragment.Companion.AUDIO_PLAYER
 import com.example.playlist_maker_dev.search.ui.TrackAdapter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.delay
@@ -62,6 +64,13 @@ class PlaylistScreenFragment : Fragment() {
             playlistTracksLength = playlist.tracksLength
             playlistTracksNumber = playlist.tracksQuantity
             showPlaylist(playlist)
+            if (playlistTracksNumber == 0) {
+                binding.placeholderImage.visibility = View.VISIBLE
+                binding.placeholderMessage.visibility = View.VISIBLE
+            } else {
+                binding.placeholderImage.visibility = View.GONE
+                binding.placeholderMessage.visibility = View.GONE
+            }
         }
 
         viewModel.playlistTracks.observe(viewLifecycleOwner) { tracks ->
@@ -136,11 +145,43 @@ class PlaylistScreenFragment : Fragment() {
         binding.toolbar.setOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
+
+
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val mainLayout = requireActivity().findViewById<ConstraintLayout>(R.id.main_layout)
+        if (mainLayout != null)
+            mainLayout.visibility = View.GONE
+        val bottomPanel =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        if (bottomPanel != null)
+            bottomPanel.visibility = View.GONE
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        val mainLayout = requireActivity().findViewById<ConstraintLayout>(R.id.main_layout)
+        if (mainLayout != null)
+            mainLayout.visibility = View.VISIBLE
+        val bottomPanel =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        if (bottomPanel != null)
+            bottomPanel.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val bottomPanel =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        if (bottomPanel != null)
+            bottomPanel.visibility = View.GONE
     }
 
     private fun dpToPx(dp: Float, context: Context): Int {
@@ -269,6 +310,7 @@ class PlaylistScreenFragment : Fragment() {
                 track
             )
         }
+
 
         binding.rvTracksList.adapter = adapter
         adapter.notifyDataSetChanged()
