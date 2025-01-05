@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
@@ -57,6 +59,7 @@ class PlaylistScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getPlaylistById(requireArguments().getInt(PLAYLIST_ID_KEY))
+        binding.rvTracksList.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
             currentPlaylist = playlist
@@ -64,6 +67,7 @@ class PlaylistScreenFragment : Fragment() {
             playlistTracksLength = playlist.tracksLength
             playlistTracksNumber = playlist.tracksQuantity
             showPlaylist(playlist)
+
             if (playlistTracksNumber == 0) {
                 binding.placeholderImage.visibility = View.VISIBLE
                 binding.placeholderMessage.visibility = View.VISIBLE
@@ -106,6 +110,7 @@ class PlaylistScreenFragment : Fragment() {
         })
 
         binding.detailsButton.setOnClickListener {
+            Log.e("error", currentPlaylist.toString())
             currentPlaylist?.let { it1 -> showPlaylistInfoSmall(it1) }
             bottomSheetShareBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
@@ -145,8 +150,6 @@ class PlaylistScreenFragment : Fragment() {
         binding.toolbar.setOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
-
-
     }
 
     override fun onAttach(context: Context) {
@@ -310,8 +313,6 @@ class PlaylistScreenFragment : Fragment() {
                 track
             )
         }
-
-
         binding.rvTracksList.adapter = adapter
         adapter.notifyDataSetChanged()
     }

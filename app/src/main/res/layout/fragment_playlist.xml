@@ -66,6 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/separator_band_length"
+                android:clickable="true"
                 android:src="@drawable/vector_share_playlist_screen" />
 
             <ImageView
@@ -74,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="26dp"
                 android:contentDescription="@string/separator_band_length"
+                android:clickable="true"
                 android:src="@drawable/vector_details_playlist_screen" />
         </LinearLayout>
 
@@ -248,8 +250,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginVertical="@dimen/side_padding_16"
-            android:layout_weight="1"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
@@ -260,7 +261,6 @@
         android:background="@drawable/adding_track_to_playlist_background"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
-        android:visibility="gone"
         app:behavior_hideable="true"
         app:behavior_peekHeight="300dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
