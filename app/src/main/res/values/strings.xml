@@ -53,6 +53,6 @@
     <string name="delete_playlist">Удалить плейлист</string>
     <string name="edit">Редактировать</string>
     <string name="save">Сохранить</string>
-    <string name="no_tracks_in_playlist">В плейлист еще не добавлено ни одного трека</string>
+    <string name="no_tracks_in_playlist">В плейлисте пока нет треков</string>
 
 </resources>

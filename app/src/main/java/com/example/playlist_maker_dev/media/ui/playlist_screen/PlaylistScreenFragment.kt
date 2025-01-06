@@ -120,6 +120,7 @@ class PlaylistScreenFragment : Fragment() {
             }
 
             binding.tvPlaylistDelete.setOnClickListener {
+                bottomSheetShareBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 MaterialAlertDialogBuilder(requireActivity(), R.style.AlertDialog)
                     .setTitle("Удалить плейлист")
                     .setMessage("Хотите удалить плейлист?")
@@ -127,7 +128,12 @@ class PlaylistScreenFragment : Fragment() {
                     }.setPositiveButton("Да") { _, _ ->
                         viewModel.removePlaylist(playlistId)
                         findNavController().navigate(R.id.mediaFragment)
+                        val bottomPanel =
+                            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+                        if (bottomPanel != null)
+                            bottomPanel.visibility = View.VISIBLE
                     }.show()
+
             }
 
             binding.tvPlaylistEditInfo.setOnClickListener {

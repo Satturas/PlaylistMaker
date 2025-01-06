@@ -18,11 +18,11 @@ class FavouritesRepositoryImpl(
     }
 
     override fun removeTrackFromFavourites(trackId: Int) {
-        appDatabase.trackDao().deleteTrack(trackId)
+        appDatabase.trackDao().removeTrackFromFavourites(trackId)
     }
 
     override fun getFavouriteTracks(): Flow<List<Track>> = flow {
-        val tracks = appDatabase.trackDao().getTracks()
+        val tracks = appDatabase.trackDao().getFavouriteTracks()
         emit(convertFromTrackEntity(tracks))
     }
 
