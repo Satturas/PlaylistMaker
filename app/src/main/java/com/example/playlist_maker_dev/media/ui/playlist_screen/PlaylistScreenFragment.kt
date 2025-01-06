@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -79,7 +78,6 @@ class PlaylistScreenFragment : Fragment() {
 
         viewModel.playlistTracks.observe(viewLifecycleOwner) { tracks ->
             showTracks(tracks)
-            Log.e("tracks", tracks.toString())
         }
 
         val bottomSheetShareBehavior =
@@ -113,7 +111,6 @@ class PlaylistScreenFragment : Fragment() {
 
 
         binding.detailsButton.setOnClickListener {
-            Log.e("error", currentPlaylist.toString())
             currentPlaylist?.let { it1 -> showPlaylistInfoSmall(it1) }
             bottomSheetShareBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
