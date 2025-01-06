@@ -2,10 +2,12 @@ package com.example.playlist_maker_dev.media.data.db
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.example.playlist_maker_dev.db.AppDatabase
 import com.example.playlist_maker_dev.media.data.db.convertors.PlaylistDbConvertor
 import com.example.playlist_maker_dev.media.data.db.convertors.TrackDbConvertor
 import com.example.playlist_maker_dev.media.data.db.entity.PlaylistEntity
+import com.example.playlist_maker_dev.media.data.db.entity.TrackEntity
 import com.example.playlist_maker_dev.media.data.db.entity.TrackInPlaylistsEntity
 import com.example.playlist_maker_dev.media.domain.db.PlaylistsRepository
 import com.example.playlist_maker_dev.media.domain.models.Playlist
@@ -89,6 +91,7 @@ class PlaylistsRepositoryImpl(
             playlist.tracksQuantity + 1,
             playlist.tracksLength + currentTrackLength.toInt()
         )
+        appDatabase.trackDao().insertTrack(trackDbConvertor.map(track))
     }
 
     override suspend fun getTracksOfPlaylist(playlistId: Int): Flow<List<Int>> = flow {
@@ -97,8 +100,12 @@ class PlaylistsRepositoryImpl(
     }
 
     override suspend fun getTracksById(trackId: List<Int>): Flow<List<Track>> = flow {
+        Log.e("tracksId_repository", trackId.toString())
         val tracks = appDatabase.trackDao().getTracksById(trackId)
+        Log.e("tracks_repository", tracks.toString())
         emit(tracks.map { track -> trackDbConvertor.map(track) })
+        val table = appDatabase.trackDao().getTracks()
+        Log.e("table", table.toString())
     }
 
     override suspend fun getTrackById(trackId: Int): Flow<Track> = flow {
@@ -157,11 +164,21 @@ class PlaylistsRepositoryImpl(
     private suspend fun makeTracksInfoText(playlist: Playlist): String {
         val text = StringBuilder()
         var number = 1
-        for (trackId in playlist.trackIdsList) {
+        /*for (trackId in playlist.trackIdsList) {
             val track = trackDbConvertor.map(appDatabase.trackDao().getTrackById(trackId))
+            text.append("$number. ${track.artistName} - ${track.trackName} (${track.trackTimeMillis})\n")
+            number++
+        }*/
+        playlist.trackIdsList.forEach { trackId ->
+            val trackEntity: TrackEntity = appDatabase.trackDao().getTrackById(trackId)
+            val track = trackEntity.let { trackDbConvertor.map(it) }
             text.append("$number. ${track.artistName} - ${track.trackName} (${track.trackTimeMillis})\n")
             number++
         }
         return text.toString()
     }
+
 }
+
+
+

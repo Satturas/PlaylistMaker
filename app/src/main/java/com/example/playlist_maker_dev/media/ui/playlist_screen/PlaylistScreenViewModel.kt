@@ -1,5 +1,6 @@
 package com.example.playlist_maker_dev.media.ui.playlist_screen
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,14 +26,17 @@ class PlaylistScreenViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             playlistsInteractor.getPlaylistById(playlistId).collect { playlist ->
                 _playlist.postValue(playlist)
+                Log.e("playlist", playlist.toString())
                 if (playlist.trackIdsList.isNotEmpty()) {
                     playlistsInteractor.getTracksById(playlist.trackIdsList).collect { tracks ->
                         val trackList = mutableListOf<Track>()
+                        Log.e("trackIdsList", playlist.trackIdsList.toString())
                         playlist.trackIdsList.forEach { trackId ->
                             tracks.find { track -> track.trackId == trackId }
-                                ?.let { trackList.add(it) }
+                                ?.let { trackList.add(0, it) }
                         }
                         _playlistTracks.postValue(trackList)
+                        Log.e("tracksList", trackList.toString())
                     }
                 }
             }

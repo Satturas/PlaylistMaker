@@ -79,6 +79,7 @@ class PlaylistScreenFragment : Fragment() {
 
         viewModel.playlistTracks.observe(viewLifecycleOwner) { tracks ->
             showTracks(tracks)
+            Log.e("tracks", tracks.toString())
         }
 
         binding.shareButton.setOnClickListener {
