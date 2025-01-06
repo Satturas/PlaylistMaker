@@ -82,10 +82,6 @@ class PlaylistScreenFragment : Fragment() {
             Log.e("tracks", tracks.toString())
         }
 
-        binding.shareButton.setOnClickListener {
-            share()
-        }
-
         val bottomSheetShareBehavior =
             BottomSheetBehavior.from(binding.playlistShareBottomSheet).apply {
                 state = BottomSheetBehavior.STATE_HIDDEN
@@ -110,12 +106,19 @@ class PlaylistScreenFragment : Fragment() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
+        binding.shareButton.setOnClickListener {
+            bottomSheetShareBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            share()
+        }
+
+
         binding.detailsButton.setOnClickListener {
             Log.e("error", currentPlaylist.toString())
             currentPlaylist?.let { it1 -> showPlaylistInfoSmall(it1) }
             bottomSheetShareBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
             binding.tvPlaylistShare.setOnClickListener {
+                bottomSheetShareBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 share()
             }
 
