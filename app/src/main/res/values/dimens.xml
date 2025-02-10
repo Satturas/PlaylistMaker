@@ -10,4 +10,9 @@
     <dimen name="search_margin_4">4dp</dimen>
     <dimen name="side_padding_24">24dp</dimen>
     <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="circularProgressViewMinSize">100dp</dimen>
+    <declare-styleable name="CustomImageView">
+        <attr name="imageResId"
+            format="reference" />
+    </declare-styleable>
 </resources>

@@ -223,7 +223,7 @@
             app:layout_constraintBottom_toTopOf="@id/songLength"
             app:layout_constraintEnd_toStartOf="@+id/right_border"
             app:layout_constraintStart_toStartOf="@+id/left_border"
-            app:layout_constraintTop_toBottomOf="@+id/playButton" />
+            app:layout_constraintTop_toBottomOf="@+id/customPlayButton" />
 
         <ImageView
             android:id="@+id/addPlaylistButton"
@@ -231,170 +231,181 @@
             android:layout_height="wrap_content"
             android:importantForAccessibility="no"
             app:layout_constraintBottom_toTopOf="@id/songLengthTitle"
-            app:layout_constraintEnd_toStartOf="@id/playButton"
+            app:layout_constraintEnd_toStartOf="@id/customPlayButton"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="@id/left_border"
             app:layout_constraintTop_toBottomOf="@id/bandTitle"
             app:layout_constraintVertical_bias="0.44"
             app:srcCompat="@drawable/vector_add_button" />
 
-        <ImageView
-            android:id="@+id/playButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.example.playlist_maker_dev.player.ui.PlaybackButtonView
+            android:id="@+id/customPlayButton"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
             android:layout_marginTop="30dp"
-            android:importantForAccessibility="no"
-            android:padding="8dp"
             app:layout_constraintBottom_toTopOf="@+id/songLengthTitle"
             app:layout_constraintEnd_toStartOf="@id/addToFavoriteButton"
             app:layout_constraintStart_toEndOf="@id/addPlaylistButton"
             app:layout_constraintTop_toBottomOf="@id/bandTitle"
-            app:srcCompat="@drawable/vector_play" />
+            app:imageResId="@drawable/vector_play"/>
 
-        <ImageView
-            android:id="@+id/addToFavoriteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:importantForAccessibility="no"
-            app:layout_constraintBottom_toTopOf="@id/songLengthTitle"
-            app:layout_constraintEnd_toStartOf="@id/right_border"
-            app:layout_constraintStart_toEndOf="@id/playButton"
-            app:layout_constraintTop_toBottomOf="@id/bandTitle"
-            app:layout_constraintVertical_bias="0.44"
-            app:srcCompat="@drawable/vector_add_favorite_button" />
+        <!--   <ImageView
+               android:id="@+id/playButton"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="30dp"
+               android:importantForAccessibility="no"
+               android:padding="8dp"
+               app:layout_constraintBottom_toTopOf="@+id/songLengthTitle"
+               app:layout_constraintEnd_toStartOf="@id/addToFavoriteButton"
+               app:layout_constraintStart_toEndOf="@id/addPlaylistButton"
+               app:layout_constraintTop_toBottomOf="@id/bandTitle"
+               app:srcCompat="@drawable/vector_play" />  -->
 
-        <TextView
-            android:id="@+id/bandTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:fontFamily="@font/ys_display_medium"
-            android:textColor="?attr/colorOnTertiary"
-            android:textFontWeight="400"
-            android:textSize="14sp"
-            app:layout_constrainedHeight="true"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toTopOf="@id/playButton"
-            app:layout_constraintEnd_toStartOf="@id/right_border"
-            app:layout_constraintStart_toStartOf="@id/left_border"
-            app:layout_constraintTop_toBottomOf="@id/songTitle" />
+           <ImageView
+               android:id="@+id/addToFavoriteButton"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:importantForAccessibility="no"
+               app:layout_constraintBottom_toTopOf="@id/songLengthTitle"
+               app:layout_constraintEnd_toStartOf="@id/right_border"
+               app:layout_constraintStart_toEndOf="@id/customPlayButton"
+               app:layout_constraintTop_toBottomOf="@id/bandTitle"
+               app:layout_constraintVertical_bias="0.44"
+               app:srcCompat="@drawable/vector_add_favorite_button" />
 
-        <TextView
-            android:id="@+id/songTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:fontFamily="@font/ys_display_medium"
-            android:textColor="?attr/colorOnTertiary"
-            android:textFontWeight="400"
-            android:textSize="22sp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toTopOf="@id/bandTitle"
-            app:layout_constraintEnd_toStartOf="@id/right_border"
-            app:layout_constraintStart_toStartOf="@id/left_border"
-            app:layout_constraintTop_toBottomOf="@id/imageCover" />
+           <TextView
+               android:id="@+id/bandTitle"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="12dp"
+               android:fontFamily="@font/ys_display_medium"
+               android:textColor="?attr/colorOnTertiary"
+               android:textFontWeight="400"
+               android:textSize="14sp"
+               app:layout_constrainedHeight="true"
+               app:layout_constrainedWidth="true"
+               app:layout_constraintBottom_toTopOf="@id/customPlayButton"
+               app:layout_constraintEnd_toStartOf="@id/right_border"
+               app:layout_constraintStart_toStartOf="@id/left_border"
+               app:layout_constraintTop_toBottomOf="@id/songTitle" />
 
-        <ImageView
-            android:id="@+id/imageCover"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:importantForAccessibility="no"
-            android:scaleType="centerCrop"
-            app:layout_constrainedHeight="true"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toTopOf="@id/songTitle"
-            app:layout_constraintDimensionRatio="h,1:1"
-            app:layout_constraintEnd_toStartOf="@id/right_border"
-            app:layout_constraintStart_toStartOf="@id/left_border"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_border"
-            app:layout_constraintVertical_chainStyle="spread_inside"
-            app:srcCompat="@drawable/vector_cover_placeholder" />
+           <TextView
+               android:id="@+id/songTitle"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="24dp"
+               android:fontFamily="@font/ys_display_medium"
+               android:textColor="?attr/colorOnTertiary"
+               android:textFontWeight="400"
+               android:textSize="22sp"
+               app:layout_constrainedWidth="true"
+               app:layout_constraintBottom_toTopOf="@id/bandTitle"
+               app:layout_constraintEnd_toStartOf="@id/right_border"
+               app:layout_constraintStart_toStartOf="@id/left_border"
+               app:layout_constraintTop_toBottomOf="@id/imageCover" />
 
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/toolbar_height"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:layout_constraintBottom_toTopOf="@id/toolbar_border"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/arrow_back_vector" />
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:id="@+id/overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#99000000"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:id="@+id/playlists_bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/adding_track_to_playlist_background"
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="500dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-        <View
-            android:layout_width="50dp"
-            android:layout_height="4dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:background="@color/menu_divider" />
-
-        <TextView
-            android:id="@+id/tv_add_toPlaylist"
-            android:layout_width="wrap_content"
-            android:layout_height="52dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"
-            android:fontFamily="@font/ys_display_medium"
-            android:gravity="center"
-            android:text="@string/add_to_playlist"
-            android:textColor="?attr/colorOnTertiary"
-            android:textFontWeight="500"
-            android:textSize="19sp" />
-
-        <Button
-            android:id="@+id/createNewPlaylistButton"
-            style="@style/placeholderButtonsStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="@string/new_playlist"
-            app:cornerRadius="18dp"
-            app:layout_constraintBottom_toTopOf="@id/top_border"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_add_to_playlist"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginVertical="@dimen/side_padding_16"
-            android:layout_weight="1"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+           <ImageView
+               android:id="@+id/imageCover"
+               android:layout_width="0dp"
+               android:layout_height="0dp"
+               android:importantForAccessibility="no"
+               android:scaleType="centerCrop"
+               app:layout_constrainedHeight="true"
+               app:layout_constrainedWidth="true"
+               app:layout_constraintBottom_toTopOf="@id/songTitle"
+               app:layout_constraintDimensionRatio="h,1:1"
+               app:layout_constraintEnd_toStartOf="@id/right_border"
+               app:layout_constraintStart_toStartOf="@id/left_border"
+               app:layout_constraintTop_toBottomOf="@id/toolbar_border"
+               app:layout_constraintVertical_chainStyle="spread_inside"
+               app:srcCompat="@drawable/vector_cover_placeholder" />
 
 
-    </LinearLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+           <androidx.appcompat.widget.Toolbar
+               android:id="@+id/toolbar"
+               android:layout_width="0dp"
+               android:layout_height="@dimen/toolbar_height"
+               android:minHeight="?attr/actionBarSize"
+               android:theme="?attr/actionBarTheme"
+               app:layout_constraintBottom_toTopOf="@id/toolbar_border"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent"
+               app:navigationIcon="@drawable/arrow_back_vector" />
+
+           <ProgressBar
+               android:id="@+id/progress_bar"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:visibility="gone"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent" />
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+       <View
+           android:id="@+id/overlay"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:background="#99000000"
+           android:visibility="gone" />
+
+       <LinearLayout
+           android:id="@+id/playlists_bottom_sheet"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:background="@drawable/adding_track_to_playlist_background"
+           android:orientation="vertical"
+           android:paddingHorizontal="16dp"
+           app:behavior_hideable="true"
+           app:behavior_peekHeight="500dp"
+           app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+           <View
+               android:layout_width="50dp"
+               android:layout_height="4dp"
+               android:layout_gravity="center"
+               android:layout_marginTop="8dp"
+               android:background="@color/menu_divider" />
+
+           <TextView
+               android:id="@+id/tv_add_toPlaylist"
+               android:layout_width="wrap_content"
+               android:layout_height="52dp"
+               android:layout_gravity="center_horizontal"
+               android:layout_marginTop="12dp"
+               android:fontFamily="@font/ys_display_medium"
+               android:gravity="center"
+               android:text="@string/add_to_playlist"
+               android:textColor="?attr/colorOnTertiary"
+               android:textFontWeight="500"
+               android:textSize="19sp" />
+
+           <Button
+               android:id="@+id/createNewPlaylistButton"
+               style="@style/placeholderButtonsStyle"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center_horizontal"
+               android:layout_marginTop="16dp"
+               android:text="@string/new_playlist"
+               app:cornerRadius="18dp"
+               app:layout_constraintBottom_toTopOf="@id/top_border"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent" />
+
+           <androidx.recyclerview.widget.RecyclerView
+               android:id="@+id/rv_add_to_playlist"
+               android:layout_width="match_parent"
+               android:layout_height="0dp"
+               android:layout_marginVertical="@dimen/side_padding_16"
+               android:layout_weight="1"
+               app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+       </LinearLayout>
+   </androidx.coordinatorlayout.widget.CoordinatorLayout>

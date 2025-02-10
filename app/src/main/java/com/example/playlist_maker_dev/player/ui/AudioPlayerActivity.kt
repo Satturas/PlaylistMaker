@@ -107,16 +107,16 @@ class AudioPlayerActivity : AppCompatActivity() {
 
                 AudioPlayerState.STATE_PREPARED -> {
                     binding.songTime.setText(R.string.timer_00)
-                    binding.playButton.setImageResource(R.drawable.vector_play)
+                    //binding.customPlayButton.setImageResource(R.drawable.vector_play)
                 }
 
                 AudioPlayerState.STATE_PLAYING -> {
-                    binding.playButton.setImageResource(R.drawable.vector_pause_button)
+                   // binding.playButton.setImageResource(R.drawable.vector_pause_button)
 
                 }
 
                 AudioPlayerState.STATE_PAUSED -> {
-                    binding.playButton.setImageResource(R.drawable.vector_play)
+                   // binding.playButton.setImageResource(R.drawable.vector_play)
                 }
 
                 else -> {}
@@ -136,7 +136,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             }
         }
 
-        binding.playButton.setOnClickListener {
+        binding.customPlayButton.setOnClickListener {
             if (viewModel.playerState.value == AudioPlayerState.STATE_PLAYING) {
                 viewModel.pausePlayer()
             } else {
