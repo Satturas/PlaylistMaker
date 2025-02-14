@@ -5,8 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="?attr/colorOnTertiaryContainer"
+    android:orientation="vertical"
     tools:context=".player.ui.AudioPlayerActivity">
 
     <androidx.fragment.app.FragmentContainerView
@@ -223,7 +223,7 @@
             app:layout_constraintBottom_toTopOf="@id/songLength"
             app:layout_constraintEnd_toStartOf="@+id/right_border"
             app:layout_constraintStart_toStartOf="@+id/left_border"
-            app:layout_constraintTop_toBottomOf="@+id/playButton" />
+            app:layout_constraintTop_toBottomOf="@+id/customPlayButton" />
 
         <ImageView
             android:id="@+id/addPlaylistButton"
@@ -231,25 +231,24 @@
             android:layout_height="wrap_content"
             android:importantForAccessibility="no"
             app:layout_constraintBottom_toTopOf="@id/songLengthTitle"
-            app:layout_constraintEnd_toStartOf="@id/playButton"
+            app:layout_constraintEnd_toStartOf="@id/customPlayButton"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="@id/left_border"
             app:layout_constraintTop_toBottomOf="@id/bandTitle"
             app:layout_constraintVertical_bias="0.44"
             app:srcCompat="@drawable/vector_add_button" />
 
-        <ImageView
-            android:id="@+id/playButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.example.playlist_maker_dev.player.ui.PlaybackButtonView
+            android:id="@+id/customPlayButton"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
             android:layout_marginTop="30dp"
-            android:importantForAccessibility="no"
-            android:padding="8dp"
+            app:imagePause="@drawable/vector_pause_button"
+            app:imagePlay="@drawable/vector_play"
             app:layout_constraintBottom_toTopOf="@+id/songLengthTitle"
             app:layout_constraintEnd_toStartOf="@id/addToFavoriteButton"
             app:layout_constraintStart_toEndOf="@id/addPlaylistButton"
-            app:layout_constraintTop_toBottomOf="@id/bandTitle"
-            app:srcCompat="@drawable/vector_play" />
+            app:layout_constraintTop_toBottomOf="@id/bandTitle" />
 
         <ImageView
             android:id="@+id/addToFavoriteButton"
@@ -258,7 +257,7 @@
             android:importantForAccessibility="no"
             app:layout_constraintBottom_toTopOf="@id/songLengthTitle"
             app:layout_constraintEnd_toStartOf="@id/right_border"
-            app:layout_constraintStart_toEndOf="@id/playButton"
+            app:layout_constraintStart_toEndOf="@id/customPlayButton"
             app:layout_constraintTop_toBottomOf="@id/bandTitle"
             app:layout_constraintVertical_bias="0.44"
             app:srcCompat="@drawable/vector_add_favorite_button" />
@@ -274,7 +273,7 @@
             android:textSize="14sp"
             app:layout_constrainedHeight="true"
             app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toTopOf="@id/playButton"
+            app:layout_constraintBottom_toTopOf="@id/customPlayButton"
             app:layout_constraintEnd_toStartOf="@id/right_border"
             app:layout_constraintStart_toStartOf="@id/left_border"
             app:layout_constraintTop_toBottomOf="@id/songTitle" />
