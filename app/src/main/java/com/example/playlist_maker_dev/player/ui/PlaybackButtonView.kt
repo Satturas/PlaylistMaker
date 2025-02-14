@@ -61,9 +61,7 @@ class PlaybackButtonView @JvmOverloads constructor(
 
             MotionEvent.ACTION_UP -> {
                 isPlaying = !isPlaying
-                imageBitmap =
-                    if (isPlaying) imageBitmapPause else imageBitmapPlay
-                invalidate()
+                redraw(isPlaying)
                 performClick()
                 return true
             }
@@ -76,9 +74,10 @@ class PlaybackButtonView @JvmOverloads constructor(
         return true
     }
 
-    fun redraw(isPlaying: Boolean) {
+    fun redraw(togglePlaying: Boolean) {
+        isPlaying = !isPlaying
         imageBitmap =
-            if (isPlaying) imageBitmapPause else imageBitmapPlay
+            if (togglePlaying) imageBitmapPause else imageBitmapPlay
         invalidate()
     }
 }
