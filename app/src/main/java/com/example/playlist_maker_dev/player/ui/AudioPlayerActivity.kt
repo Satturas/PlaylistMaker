@@ -107,16 +107,15 @@ class AudioPlayerActivity : AppCompatActivity() {
 
                 AudioPlayerState.STATE_PREPARED -> {
                     binding.songTime.setText(R.string.timer_00)
-                    //binding.customPlayButton.setImageResource(R.drawable.vector_play)
+                    binding.customPlayButton.redraw(false)
                 }
 
                 AudioPlayerState.STATE_PLAYING -> {
-                   // binding.playButton.setImageResource(R.drawable.vector_pause_button)
-
+                    binding.customPlayButton.redraw(true)
                 }
 
                 AudioPlayerState.STATE_PAUSED -> {
-                   // binding.playButton.setImageResource(R.drawable.vector_play)
+                    binding.customPlayButton.redraw(false)
                 }
 
                 else -> {}

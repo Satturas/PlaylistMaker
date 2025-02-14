@@ -19,20 +19,23 @@ class PlaybackButtonView @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = 0,
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
-    private val imageBitmap: Bitmap?
+    private var imageBitmap: Bitmap?
+    private val imageBitmapPlay: Bitmap?
+    private val imageBitmapPause: Bitmap?
     private var imageRect = RectF(0f, 0f, 0f, 0f)
+    private var isPlaying = false
 
     init {
         context.theme.obtainStyledAttributes(
             attrs,
-            R.styleable.CustomImageView,
+            R.styleable.PlayerButtonView,
             defStyleAttr,
             defStyleRes
         ).apply {
             try {
-
-                imageBitmap = getDrawable(R.styleable.CustomImageView_imageResId)?.toBitmap()
-
+                imageBitmapPlay = getDrawable(R.styleable.PlayerButtonView_imagePlay)?.toBitmap()
+                imageBitmapPause = getDrawable(R.styleable.PlayerButtonView_imagePause)?.toBitmap()
+                imageBitmap = imageBitmapPlay
             } finally {
                 recycle()
             }
@@ -46,7 +49,7 @@ class PlaybackButtonView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         imageBitmap?.let {
-            canvas.drawBitmap(imageBitmap, null, imageRect, null)
+            canvas.drawBitmap(it, null, imageRect, null)
         }
     }
 
@@ -55,11 +58,27 @@ class PlaybackButtonView @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {
                 return true
             }
+
             MotionEvent.ACTION_UP -> {
-                // Изменение состояния кнопки
+                isPlaying = !isPlaying
+                imageBitmap =
+                    if (isPlaying) imageBitmapPause else imageBitmapPlay
+                invalidate()
+                performClick()
                 return true
             }
         }
         return super.onTouchEvent(event)
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
+    }
+
+    fun redraw(isPlaying: Boolean) {
+        imageBitmap =
+            if (isPlaying) imageBitmapPause else imageBitmapPlay
+        invalidate()
     }
 }
