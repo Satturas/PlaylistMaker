@@ -14,15 +14,15 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 
-open class CreatingPlaylistViewModel(
-    protected val application: Application,
-    protected val playlistsInteractor: PlaylistsInteractor
+class CreatingPlaylistViewModel(
+    private val application: Application,
+    private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
 
     private var currentFilePath = ""
     private var currentFileUri = ""
 
-    open fun saveImageToPrivateStorage(uri: Uri) {
+    fun saveImageToPrivateStorage(uri: Uri) {
         val filePath =
             File(
                 application.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
@@ -41,11 +41,11 @@ open class CreatingPlaylistViewModel(
         currentFileUri = file.toURI().toString()
     }
 
-    open fun createPlaylist(name: String, description: String?) {
+    fun createPlaylist(name: String, description: String?) {
 
         val playlist = Playlist(
             0, name, description, currentFileUri,
-            mutableListOf(), 0, 0
+            mutableListOf(), 0
         )
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -53,4 +53,3 @@ open class CreatingPlaylistViewModel(
         }
     }
 }
-

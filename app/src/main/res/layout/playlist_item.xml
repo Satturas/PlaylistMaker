@@ -6,14 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
+    android:background="@null"
     app:cardCornerRadius="8dp"
     card_view:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?attr/colorOnTertiaryContainer">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/numberOfTracks"

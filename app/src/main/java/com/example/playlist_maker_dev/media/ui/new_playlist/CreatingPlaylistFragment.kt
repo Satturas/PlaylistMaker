@@ -19,14 +19,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.databinding.FragmentCreatingPlaylistBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-open class CreatingPlaylistFragment : Fragment() {
+class CreatingPlaylistFragment : Fragment() {
 
     private var _binding: FragmentCreatingPlaylistBinding? = null
-    protected val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     private var inputPlaylistNameValue: CharSequence = DEF_PLAYLIST_NAME
     private var inputPlaylistDescriptionValue: CharSequence = DEF_PLAYLIST_DESCRIPTION
@@ -71,8 +70,8 @@ open class CreatingPlaylistFragment : Fragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (
-                        binding.etFillPlaylistName.text?.isBlank() == true
-                        && binding.etFillPlaylistDescription.text?.isBlank() == true
+                        binding.etFillPlaylistName.text?.isNotBlank() == true
+                        && binding.etFillPlaylistDescription.text?.isNotBlank() == true
                         && binding.imageCover.drawable == null
                     ) {
                         requireActivity().supportFragmentManager.popBackStack()
@@ -143,24 +142,12 @@ open class CreatingPlaylistFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val mainLayout = requireActivity().findViewById<ConstraintLayout>(R.id.main_layout)
-        if (mainLayout != null)
-            mainLayout.visibility = View.GONE
-        val bottomPanel =
-            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        if (bottomPanel != null)
-            bottomPanel.visibility = View.GONE
+        requireActivity().findViewById<ConstraintLayout>(R.id.main_layout).visibility = View.GONE
     }
 
     override fun onDetach() {
         super.onDetach()
-        val mainLayout = requireActivity().findViewById<ConstraintLayout>(R.id.main_layout)
-        if (mainLayout != null)
-            mainLayout.visibility = View.VISIBLE
-        val bottomPanel =
-            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-        if (bottomPanel != null)
-            bottomPanel.visibility = View.VISIBLE
+        requireActivity().findViewById<ConstraintLayout>(R.id.main_layout).visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {

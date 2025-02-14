@@ -12,6 +12,5 @@ data class PlaylistEntity(
     val playlistCoverUrl: String?,
     val trackIdsList: String,
     val tracksQuantity: Int,
-    val addedAt: String,
-    val tracksLength: Int
+    val addedAt: String
 )
