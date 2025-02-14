@@ -13,7 +13,8 @@ class PlaylistDbConvertor {
             playlist.coverUrl,
             playlist.trackIdsList.joinToString(","),
             playlist.tracksQuantity,
-            System.currentTimeMillis().toString()
+            System.currentTimeMillis().toString(),
+            playlist.tracksLength
         )
     }
 
@@ -22,6 +23,7 @@ class PlaylistDbConvertor {
         else {
             playlist.trackIdsList.split(",").map { it.trim().toInt() }
         }
+
         return Playlist(
             playlist.playlistId,
             playlist.playlistName,
@@ -29,6 +31,7 @@ class PlaylistDbConvertor {
             playlist.playlistCoverUrl,
             tracksList,
             playlist.tracksQuantity,
+            playlist.tracksLength
         )
     }
 }

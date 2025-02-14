@@ -17,7 +17,8 @@ class TrackDbConvertor {
             track.releaseDate,
             track.country,
             track.previewUrl,
-            System.currentTimeMillis().toString()
+            System.currentTimeMillis().toString(),
+            track.isFavorite
         )
     }
 
@@ -33,7 +34,7 @@ class TrackDbConvertor {
             track.releaseDate,
             track.country,
             track.previewUrl,
-            true
+            track.isFavorite
         )
     }
 }

@@ -20,16 +20,7 @@ class PlaylistsFragment : Fragment() {
 
     private var _binding: FragmentMediaPlaylistsBinding? = null
     private val binding get() = _binding!!
-    private val playlistsList = mutableListOf<Playlist>()
     private var isClickAllowed = true
-
-    private val adapter: PlaylistAdapter by lazy {
-        PlaylistAdapter(mutableListOf()) { playlist ->
-            handlePlaylistClick(
-                playlist
-            )
-        }
-    }
 
     private val viewModel by viewModel<PlaylistsViewModel>()
 
@@ -45,19 +36,16 @@ class PlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.showPlaylists()
-
         binding.createNewPlaylistButton.setOnClickListener {
             findNavController().navigate(R.id.creatingPlaylistFragment)
         }
 
-        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        adapter.playlists = playlistsList
-        binding.recyclerView.adapter = adapter
-
         viewModel.playlistsState.observe(viewLifecycleOwner) {
             render(it)
         }
+
+        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        viewModel.showPlaylists()
     }
 
     override fun onDestroyView() {
@@ -65,10 +53,19 @@ class PlaylistsFragment : Fragment() {
         _binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.showPlaylists()
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun handlePlaylistClick(playlist: Playlist) {
         if (clickDebounce()) {
-            TODO()
+            findNavController().navigate(R.id.playlistScreenFragment, Bundle().apply {
+                putInt(
+                    PLAYLIST_ID_KEY, playlist.id
+                )
+            })
         }
     }
 
@@ -78,8 +75,8 @@ class PlaylistsFragment : Fragment() {
             isClickAllowed = false
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
             }
+            isClickAllowed = true
         }
         return current
     }
@@ -102,9 +99,11 @@ class PlaylistsFragment : Fragment() {
         binding.recyclerView.visibility = View.VISIBLE
         binding.placeholderImage.visibility = View.GONE
         binding.placeholderMessage.visibility = View.GONE
-        playlistsList.clear()
-        playlistsList.addAll(playlists)
-        adapter.playlists = playlists
+        val adapter = PlaylistAdapter(playlists) { playlist ->
+            handlePlaylistClick(
+                playlist
+            )
+        }
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
     }
@@ -112,5 +111,6 @@ class PlaylistsFragment : Fragment() {
     companion object {
         fun newInstance() = PlaylistsFragment()
         private const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val PLAYLIST_ID_KEY = "PLAYLIST_ID_KEY"
     }
 }

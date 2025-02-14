@@ -74,11 +74,11 @@ class AudioPlayerViewModel(
     fun onFavouriteClicked(track: Track) {
         viewModelScope.launch(Dispatchers.IO) {
             if (track.isFavorite) {
-                favouritesInteractor.removeTrackFromFavourites(track.trackId)
                 track.isFavorite = false
+                favouritesInteractor.removeTrackFromFavourites(track.trackId)
             } else {
-                favouritesInteractor.addTrackToFavourites(track)
                 track.isFavorite = true
+                favouritesInteractor.addTrackToFavourites(track)
             }
             _favouriteState.postValue(!track.isFavorite)
         }
@@ -93,7 +93,7 @@ class AudioPlayerViewModel(
     }
 
     fun trackIsInPlaylist(track: Track, playlist: Playlist): Boolean {
-        return track.trackId in playlist.trackIdsList
+        return playlist.trackIdsList.contains(track.trackId)
     }
 
     fun addTrackToPlaylist(track: Track, playlist: Playlist) {

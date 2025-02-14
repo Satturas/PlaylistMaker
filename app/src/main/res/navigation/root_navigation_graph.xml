@@ -42,10 +42,30 @@
         <action
             android:id="@+id/action_PlaylistsFragment_to_creatingPlaylistFragment"
             app:destination="@id/creatingPlaylistFragment" />
+        <action
+            android:id="@+id/action_PlaylistsFragment_to_playlistScreenFragment"
+            app:destination="@id/playlistScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/creatingPlaylistFragment"
         android:name="com.example.playlist_maker_dev.media.ui.new_playlist.CreatingPlaylistFragment"
         android:label="CreatingPlaylistFragment"
+        tools:layout="@layout/fragment_creating_playlist"/>
+    <fragment
+        android:id="@+id/playlistScreenFragment"
+        android:name="com.example.playlist_maker_dev.media.ui.playlist_screen.PlaylistScreenFragment"
+        android:label="PlaylistScreenFragment"
+        tools:layout="@layout/fragment_playlist">
+        <action
+            android:id="@+id/action_playlistScreenFragment_to_mediaFragment"
+            app:destination="@id/mediaFragment" />
+        <action
+            android:id="@+id/action_playlistScreenFragment_to_editPlaylistFragment"
+            app:destination="@id/editPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPlaylistFragment"
+        android:name="com.example.playlist_maker_dev.media.ui.edit_playlist.EditPlaylistFragment"
+        android:label="EditPlaylistFragment"
         tools:layout="@layout/fragment_creating_playlist"/>
 </navigation>

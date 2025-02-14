@@ -27,12 +27,19 @@ class MediaFavoriteTracksFragment : Fragment() {
     private val viewModel by viewModel<FavoriteTracksViewModel>()
 
     private val adapter: TrackAdapter by lazy {
-        TrackAdapter(mutableListOf()) { track ->
+        TrackAdapter(mutableListOf(), { track ->
+            handleTrackClick(
+                track
+            )
+        })
+
+        { track ->
             handleTrackClick(
                 track
             )
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
