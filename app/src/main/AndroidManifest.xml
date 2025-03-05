@@ -30,6 +30,10 @@
             android:name=".player.ui.AudioPlayerActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"/>
+
+        <service
+            android:name=".services.MusicService"
+            android:exported="false" />
     </application>
 
 </manifest>

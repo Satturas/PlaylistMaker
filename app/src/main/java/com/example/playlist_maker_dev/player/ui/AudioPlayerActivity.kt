@@ -1,9 +1,13 @@
 package com.example.playlist_maker_dev.player.ui
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
@@ -21,7 +26,9 @@ import com.example.playlist_maker_dev.media.ui.new_playlist.CreatingPlaylistFrag
 import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsState
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchFragment
+import com.example.playlist_maker_dev.services.MusicService
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -46,11 +53,27 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var currentTrack: Track
 
+    private val serviceConnection = object : ServiceConnection {
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicServiceBinder
+            viewModel.setAudioPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            viewModel.removeAudioPlayerControl()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAudioPlayerBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+        viewModel.playerState.observe(this) {
+            updateButtonAndProgress(it)
+        }
 
         adapter.playlists = playlistsList
         binding.rvAddToPlaylist.adapter = adapter
@@ -90,7 +113,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         if (track != null) {
             showPlayer(track)
-            viewModel.preparePlayer(track)
+            //viewModel.preparePlayer(track)
             viewModel.renderFavState(track)
 
             if (track.isFavorite) {
@@ -101,27 +124,28 @@ class AudioPlayerActivity : AppCompatActivity() {
             currentTrack = track
         }
 
-        viewModel.playerState.observe(this) { playerState ->
+        bindMusicService()
+
+        /*viewModel.playerState.observe(this) { playerState ->
 
             when (playerState) {
-
-                AudioPlayerState.STATE_PREPARED -> {
+                PlayerState.Prepared() -> {
                     binding.songTime.setText(R.string.timer_00)
                     binding.customPlayButton.redraw(false)
                 }
 
-                AudioPlayerState.STATE_PLAYING -> {
+                PlayerState.Playing() -> {
                     binding.customPlayButton.redraw(true)
                 }
 
-                AudioPlayerState.STATE_PAUSED -> {
+                PlayerState.Paused() -> {
                     binding.customPlayButton.redraw(false)
                 }
 
                 else -> {}
             }
 
-        }
+        }*/
 
         viewModel.currentSongTime.observe(this) { time ->
             binding.songTime.text = dateFormat.format(time)
@@ -136,11 +160,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
         binding.customPlayButton.setOnClickListener {
-            if (viewModel.playerState.value == AudioPlayerState.STATE_PLAYING) {
-                viewModel.pausePlayer()
-            } else {
-                viewModel.startPlayer()
-            }
+            viewModel.onPlayerButtonClicked()
         }
 
         binding.addToFavoriteButton.setOnClickListener {
@@ -169,6 +189,21 @@ class AudioPlayerActivity : AppCompatActivity() {
                 state = BottomSheetBehavior.STATE_HIDDEN
             }
         }
+    }
+
+    /*override fun onPause() {
+        super.onPause()
+        viewModel.pausePlayer()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.stopPlayer()
+    }*/
+
+    override fun onDestroy() {
+        unbindMusicService()
+        super.onDestroy()
     }
 
 
@@ -243,13 +278,20 @@ class AudioPlayerActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.pausePlayer()
+
+    private fun bindMusicService() {
+        val intent = Intent(this, MusicService::class.java).apply {
+            putExtra("track_url", currentTrack)
+        }
+
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.stopPlayer()
+    private fun unbindMusicService() {
+        unbindService(serviceConnection)
+    }
+
+    private fun updateButtonAndProgress(playerState: PlayerState) {
+        binding.customPlayButton.redraw(playerState.buttonState)
     }
 }
