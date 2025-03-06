@@ -281,7 +281,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun bindMusicService() {
         val intent = Intent(this, MusicService::class.java).apply {
-            putExtra("track_url", currentTrack)
+            putExtra("track_url", currentTrack.previewUrl)
         }
 
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
