@@ -137,7 +137,7 @@ class AudioPlayerViewModel(
 
     /*private fun startTimer() {
         timerJob = viewModelScope.launch {
-            while (_playerState.value == AudioPlayerState.STATE_PLAYING) {
+            while (_playerState.value == PlayerState.Playing()) {
                 delay(DELAY)
                 _currentSongTime.postValue(interactor.getCurrentSongTime())
             }

@@ -58,7 +58,7 @@ class MusicService : Service(), AudioPlayerControl {
 
     private fun initMediaPlayer() {
         if (songUrl.isEmpty()) return
-
+        mediaPlayer?.reset()
         mediaPlayer?.setDataSource(songUrl)
         mediaPlayer?.prepareAsync()
         mediaPlayer?.setOnPreparedListener {
@@ -66,6 +66,7 @@ class MusicService : Service(), AudioPlayerControl {
         }
         mediaPlayer?.setOnCompletionListener {
             _playerState.value = PlayerState.Prepared()
+            timerJob?.cancel()
         }
     }
 

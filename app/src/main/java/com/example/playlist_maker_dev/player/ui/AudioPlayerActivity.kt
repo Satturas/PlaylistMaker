@@ -8,6 +8,7 @@ import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlist_maker_dev.R
@@ -28,7 +28,6 @@ import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchFragment
 import com.example.playlist_maker_dev.services.MusicService
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -72,6 +71,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel.playerState.observe(this) {
+
             updateButtonAndProgress(it)
         }
 
@@ -147,9 +147,9 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         }*/
 
-        viewModel.currentSongTime.observe(this) { time ->
+        /*viewModel.currentSongTime.observe(this) { time ->
             binding.songTime.text = dateFormat.format(time)
-        }
+        }*/
 
         viewModel.favouriteState.observe(this) {
             if (it) {
@@ -293,5 +293,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun updateButtonAndProgress(playerState: PlayerState) {
         binding.customPlayButton.redraw(playerState.buttonState)
+        binding.songTime.text = playerState.progress
+
     }
 }
