@@ -1,18 +1,20 @@
 package com.example.playlist_maker_dev.player.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.commit
@@ -38,8 +40,6 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<AudioPlayerViewModel>()
 
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-
     private val playlistsList = mutableListOf<Playlist>()
 
     private val adapter: AddingToPlaylistAdapter by lazy {
@@ -64,6 +64,14 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
     }
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (!isGranted) {
+            Toast.makeText(this, "Can't start foreground service!", Toast.LENGTH_LONG).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -71,7 +79,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel.playerState.observe(this) {
-
             updateButtonAndProgress(it)
         }
 
@@ -122,6 +129,10 @@ class AudioPlayerActivity : AppCompatActivity() {
                 binding.addToFavoriteButton.setImageResource(R.drawable.vector_add_favorite_button)
             }
             currentTrack = track
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
         bindMusicService()
@@ -206,6 +217,22 @@ class AudioPlayerActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.showNotification(false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                viewModel.showNotification(true)
+            }
+        } else {
+            viewModel.showNotification(true)
+        }
+    }
 
     private fun showLoading() {
         binding.progressBar.isVisible = true
@@ -278,12 +305,12 @@ class AudioPlayerActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-
     private fun bindMusicService() {
         val intent = Intent(this, MusicService::class.java).apply {
             putExtra("track_url", currentTrack.previewUrl)
+            putExtra("track_title", currentTrack.trackName)
+            putExtra("artist_name", currentTrack.artistName)
         }
-
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
 

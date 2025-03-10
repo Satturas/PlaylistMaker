@@ -13,7 +13,6 @@ import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.services.AudioPlayerControl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
@@ -35,8 +34,6 @@ class AudioPlayerViewModel(
 
     private val _playlistsState = MutableLiveData<PlaylistsState>()
     val playlistsState: LiveData<PlaylistsState> = _playlistsState
-
-    private var timerJob: Job? = null
 
     init {
         _playerState.value = PlayerState.Default()
@@ -127,6 +124,14 @@ class AudioPlayerViewModel(
         }
     }
 
+    fun showNotification(needToShow: Boolean) {
+        if (!needToShow) {
+            audioPlayerControl?.hideForeground()
+        } else if (playerState.value is PlayerState.Playing) {
+            audioPlayerControl?.showForeground()
+        }
+    }
+
     private fun processResult(playlists: List<Playlist>) {
         renderState(PlaylistsState.FoundPlaylistsContent(playlists))
     }
@@ -150,7 +155,6 @@ class AudioPlayerViewModel(
     }
 
     companion object {
-        private const val DELAY = 300L
         private const val DEFAULT_CURRENT_POS = 0
     }
 }
