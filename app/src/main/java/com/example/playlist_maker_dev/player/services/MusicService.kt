@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev.services
+package com.example.playlist_maker_dev.player.services
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -66,7 +66,6 @@ class MusicService : Service(), AudioPlayerControl {
         releasePlayer()
         return super.onUnbind(intent)
     }
-
 
     private fun initMediaPlayer() {
         if (songUrl.isEmpty()) return

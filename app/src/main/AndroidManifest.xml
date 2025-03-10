@@ -35,7 +35,7 @@
             android:windowSoftInputMode="adjustPan"/>
 
         <service
-            android:name=".services.MusicService"
+            android:name=".player.services.MusicService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback"/>
     </application>

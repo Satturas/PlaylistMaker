@@ -26,13 +26,11 @@ import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
 import com.example.playlist_maker_dev.media.domain.models.Playlist
 import com.example.playlist_maker_dev.media.ui.new_playlist.CreatingPlaylistFragment
 import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsState
+import com.example.playlist_maker_dev.player.services.MusicService
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchFragment
-import com.example.playlist_maker_dev.services.MusicService
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
@@ -120,7 +118,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         if (track != null) {
             showPlayer(track)
-            //viewModel.preparePlayer(track)
+
             viewModel.renderFavState(track)
 
             if (track.isFavorite) {
@@ -136,31 +134,6 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
         bindMusicService()
-
-        /*viewModel.playerState.observe(this) { playerState ->
-
-            when (playerState) {
-                PlayerState.Prepared() -> {
-                    binding.songTime.setText(R.string.timer_00)
-                    binding.customPlayButton.redraw(false)
-                }
-
-                PlayerState.Playing() -> {
-                    binding.customPlayButton.redraw(true)
-                }
-
-                PlayerState.Paused() -> {
-                    binding.customPlayButton.redraw(false)
-                }
-
-                else -> {}
-            }
-
-        }*/
-
-        /*viewModel.currentSongTime.observe(this) { time ->
-            binding.songTime.text = dateFormat.format(time)
-        }*/
 
         viewModel.favouriteState.observe(this) {
             if (it) {
@@ -201,16 +174,6 @@ class AudioPlayerActivity : AppCompatActivity() {
             }
         }
     }
-
-    /*override fun onPause() {
-        super.onPause()
-        viewModel.pausePlayer()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        viewModel.stopPlayer()
-    }*/
 
     override fun onDestroy() {
         unbindMusicService()

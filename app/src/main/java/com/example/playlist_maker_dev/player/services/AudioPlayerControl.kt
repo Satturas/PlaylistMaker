@@ -1,4 +1,4 @@
-package com.example.playlist_maker_dev.services
+package com.example.playlist_maker_dev.player.services
 
 import com.example.playlist_maker_dev.player.ui.PlayerState
 import kotlinx.coroutines.flow.StateFlow
