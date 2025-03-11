@@ -7,8 +7,6 @@ import com.example.playlist_maker_dev.media.data.db.convertors.PlaylistDbConvert
 import com.example.playlist_maker_dev.media.data.db.convertors.TrackDbConvertor
 import com.example.playlist_maker_dev.media.domain.db.FavouritesRepository
 import com.example.playlist_maker_dev.media.domain.db.PlaylistsRepository
-import com.example.playlist_maker_dev.player.data.AudioPlayerRepositoryImpl
-import com.example.playlist_maker_dev.player.domain.AudioPlayerRepository
 import com.example.playlist_maker_dev.search.data.repository.SearchHistoryRepositoryImpl
 import com.example.playlist_maker_dev.search.data.repository.TracksRepositoryImpl
 import com.example.playlist_maker_dev.search.domain.repository.SearchHistoryRepository
@@ -34,10 +32,6 @@ val repositoryModule = module {
 
     single<MediaPlayer> {
         MediaPlayer()
-    }
-
-    single<AudioPlayerRepository> {
-        AudioPlayerRepositoryImpl(get())
     }
 
     single<FavouritesRepository> {

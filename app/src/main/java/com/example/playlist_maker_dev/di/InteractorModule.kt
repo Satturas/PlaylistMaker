@@ -5,8 +5,6 @@ import com.example.playlist_maker_dev.media.domain.db.FavouritesInteractor
 import com.example.playlist_maker_dev.media.domain.db.PlaylistsInteractor
 import com.example.playlist_maker_dev.media.domain.impl.FavouritesInteractorImpl
 import com.example.playlist_maker_dev.media.domain.impl.PlaylistsInteractorImpl
-import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
-import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractorImpl
 import com.example.playlist_maker_dev.search.domain.api.SearchHistoryInteractor
 import com.example.playlist_maker_dev.search.domain.api.TracksInteractor
 import com.example.playlist_maker_dev.search.domain.impl.SearchHistoryInteractorImpl
@@ -27,10 +25,6 @@ val interactorModule = module {
 
     single<SettingsInteractor> {
         SettingsInteractorImpl(get())
-    }
-
-    single<AudioPlayerInteractor> {
-        AudioPlayerInteractorImpl(get())
     }
 
     single<FavouritesInteractor> {

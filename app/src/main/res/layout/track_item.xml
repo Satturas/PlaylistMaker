@@ -53,7 +53,7 @@
                 android:textFontWeight="400"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:maxWidth="200dp"
+                android:maxWidth="170dp"
                 tools:text="The Beatles" />
 
             <ImageView

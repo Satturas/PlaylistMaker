@@ -1,13 +1,20 @@
 package com.example.playlist_maker_dev.player.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.commit
@@ -19,20 +26,17 @@ import com.example.playlist_maker_dev.databinding.ActivityAudioPlayerBinding
 import com.example.playlist_maker_dev.media.domain.models.Playlist
 import com.example.playlist_maker_dev.media.ui.new_playlist.CreatingPlaylistFragment
 import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsState
+import com.example.playlist_maker_dev.player.services.MusicService
 import com.example.playlist_maker_dev.search.domain.models.Track
 import com.example.playlist_maker_dev.search.ui.SearchFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAudioPlayerBinding
 
     private val viewModel by viewModel<AudioPlayerViewModel>()
-
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private val playlistsList = mutableListOf<Playlist>()
 
@@ -46,11 +50,35 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private lateinit var currentTrack: Track
 
+    private val serviceConnection = object : ServiceConnection {
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicServiceBinder
+            viewModel.setAudioPlayerControl(binder.getService())
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            viewModel.removeAudioPlayerControl()
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (!isGranted) {
+            Toast.makeText(this, "Can't start foreground service!", Toast.LENGTH_LONG).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAudioPlayerBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
+
+        viewModel.playerState.observe(this) {
+            updateButtonAndProgress(it)
+        }
 
         adapter.playlists = playlistsList
         binding.rvAddToPlaylist.adapter = adapter
@@ -90,7 +118,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
         if (track != null) {
             showPlayer(track)
-            viewModel.preparePlayer(track)
+
             viewModel.renderFavState(track)
 
             if (track.isFavorite) {
@@ -101,31 +129,11 @@ class AudioPlayerActivity : AppCompatActivity() {
             currentTrack = track
         }
 
-        viewModel.playerState.observe(this) { playerState ->
-
-            when (playerState) {
-
-                AudioPlayerState.STATE_PREPARED -> {
-                    binding.songTime.setText(R.string.timer_00)
-                    binding.customPlayButton.redraw(false)
-                }
-
-                AudioPlayerState.STATE_PLAYING -> {
-                    binding.customPlayButton.redraw(true)
-                }
-
-                AudioPlayerState.STATE_PAUSED -> {
-                    binding.customPlayButton.redraw(false)
-                }
-
-                else -> {}
-            }
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
-        viewModel.currentSongTime.observe(this) { time ->
-            binding.songTime.text = dateFormat.format(time)
-        }
+        bindMusicService()
 
         viewModel.favouriteState.observe(this) {
             if (it) {
@@ -136,11 +144,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
         binding.customPlayButton.setOnClickListener {
-            if (viewModel.playerState.value == AudioPlayerState.STATE_PLAYING) {
-                viewModel.pausePlayer()
-            } else {
-                viewModel.startPlayer()
-            }
+            viewModel.onPlayerButtonClicked()
         }
 
         binding.addToFavoriteButton.setOnClickListener {
@@ -171,6 +175,27 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        unbindMusicService()
+        super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.showNotification(false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                viewModel.showNotification(true)
+            }
+        } else {
+            viewModel.showNotification(true)
+        }
+    }
 
     private fun showLoading() {
         binding.progressBar.isVisible = true
@@ -243,13 +268,22 @@ class AudioPlayerActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.pausePlayer()
+    private fun bindMusicService() {
+        val intent = Intent(this, MusicService::class.java).apply {
+            putExtra("track_url", currentTrack.previewUrl)
+            putExtra("track_title", currentTrack.trackName)
+            putExtra("artist_name", currentTrack.artistName)
+        }
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.stopPlayer()
+    private fun unbindMusicService() {
+        unbindService(serviceConnection)
+    }
+
+    private fun updateButtonAndProgress(playerState: PlayerState) {
+        binding.customPlayButton.redraw(playerState.buttonState)
+        binding.songTime.text = playerState.progress
+
     }
 }

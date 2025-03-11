@@ -8,35 +8,51 @@ import com.example.playlist_maker_dev.media.domain.db.FavouritesInteractor
 import com.example.playlist_maker_dev.media.domain.db.PlaylistsInteractor
 import com.example.playlist_maker_dev.media.domain.models.Playlist
 import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsState
-import com.example.playlist_maker_dev.player.domain.AudioPlayerInteractor
+import com.example.playlist_maker_dev.player.services.AudioPlayerControl
 import com.example.playlist_maker_dev.search.domain.models.Track
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
-    private val interactor: AudioPlayerInteractor,
     private val favouritesInteractor: FavouritesInteractor,
     private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
 
-    private val _playerState = MutableLiveData<AudioPlayerState>()
-    val playerState: LiveData<AudioPlayerState> get() = _playerState
+    private val _playerState = MutableLiveData<PlayerState>()
+    val playerState: LiveData<PlayerState> get() = _playerState
+
+    private var audioPlayerControl: AudioPlayerControl? = null
 
     private val _favouriteState = MutableLiveData<Boolean>()
     val favouriteState: LiveData<Boolean> get() = _favouriteState
 
-    private val _currentSongTime = MutableLiveData(DEFAULT_CURRENT_POS)
-    val currentSongTime: LiveData<Int> get() = _currentSongTime
-
     private val _playlistsState = MutableLiveData<PlaylistsState>()
     val playlistsState: LiveData<PlaylistsState> = _playlistsState
 
-    private var timerJob: Job? = null
-
     init {
-        _playerState.value = AudioPlayerState.STATE_DEFAULT
+        _playerState.value = PlayerState.Default()
+    }
+
+    fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
+        this.audioPlayerControl = audioPlayerControl
+
+        viewModelScope.launch {
+            audioPlayerControl.getPlayerState().collect {
+                _playerState.postValue(it)
+            }
+        }
+    }
+
+    fun onPlayerButtonClicked() {
+        if (playerState.value is PlayerState.Playing) {
+            audioPlayerControl?.pausePlayer()
+        } else {
+            audioPlayerControl?.startPlayer()
+        }
+    }
+
+    fun removeAudioPlayerControl() {
+        audioPlayerControl = null
     }
 
     fun renderFavState(track: Track) {
@@ -45,30 +61,6 @@ class AudioPlayerViewModel(
                 _favouriteState.postValue(!it)
             }
         }
-    }
-
-    fun preparePlayer(track: Track?) = interactor.preparePlayer(track) { state ->
-        if (state == AudioPlayerState.STATE_PREPARED) {
-            timerJob?.cancel()
-            _playerState.value = AudioPlayerState.STATE_PREPARED
-        }
-    }
-
-    fun startPlayer() {
-        interactor.startPlayer()
-        _playerState.value = AudioPlayerState.STATE_PLAYING
-        startTimer()
-    }
-
-    fun pausePlayer() {
-        interactor.pausePlayer()
-        _playerState.value = AudioPlayerState.STATE_PAUSED
-        timerJob?.cancel()
-    }
-
-    fun stopPlayer() {
-        interactor.stopPlayer()
-        _playerState.value = AudioPlayerState.STATE_STOPPED
     }
 
     fun onFavouriteClicked(track: Track) {
@@ -102,6 +94,14 @@ class AudioPlayerViewModel(
         }
     }
 
+    fun showNotification(needToShow: Boolean) {
+        if (!needToShow) {
+            audioPlayerControl?.hideForeground()
+        } else if (playerState.value is PlayerState.Playing) {
+            audioPlayerControl?.showForeground()
+        }
+    }
+
     private fun processResult(playlists: List<Playlist>) {
         renderState(PlaylistsState.FoundPlaylistsContent(playlists))
     }
@@ -110,17 +110,8 @@ class AudioPlayerViewModel(
         _playlistsState.postValue(state)
     }
 
-    private fun startTimer() {
-        timerJob = viewModelScope.launch {
-            while (_playerState.value == AudioPlayerState.STATE_PLAYING) {
-                delay(DELAY)
-                _currentSongTime.postValue(interactor.getCurrentSongTime())
-            }
-        }
-    }
-
-    companion object {
-        private const val DELAY = 300L
-        private const val DEFAULT_CURRENT_POS = 0
+    override fun onCleared() {
+        super.onCleared()
+        audioPlayerControl = null
     }
 }
