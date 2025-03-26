@@ -1,10 +1,14 @@
 package com.example.playlist_maker_dev.search.ui
 
+import androidx.appcompat.widget.ActivityChooserView.InnerLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -33,16 +39,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.playlist_maker_dev.R
 
 @Composable
-fun SearchScreen() {
-    MyScaffold()
+fun SearchScreen(viewModel: SearchViewModel = viewModel()) {
+    val context = LocalContext.current
+    val searchState by viewModel.searchState.observeAsState()
+    MyScaffold(searchState)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyScaffold() {
+fun MyScaffold(state: SearchState?) {
 
     var text by remember { mutableStateOf("") }
 
@@ -93,19 +102,21 @@ fun MyScaffold() {
                     ClearSearchRequestButton(true)
                 }
             }
-            LazyColumn(
+
+            /*LazyColumn(
                 // consume insets as scaffold doesn't do it by default
                 modifier = Modifier.consumeWindowInsets(innerPadding),
                 contentPadding = innerPadding
             ) {
-                items(count = 100) {
+                items(count = 10) {
                     Box(
                         Modifier
                             .fillMaxWidth()
                             .height(61.dp)
                     )
                 }
-            }
+            }*/
+            ShowTracks(true, state = state,  viewModel = viewModel())
         }
     )
 }
@@ -146,4 +157,40 @@ fun ClearSearchRequestButton(isVisible: Boolean) {
         painter = painterResource(id = R.drawable.delete_icon_vector),
         contentDescription = null,
     )
+}
+
+@Composable
+fun ShowTracks(
+    isVisible: Boolean,
+    state: SearchState?,
+    viewModel: SearchViewModel
+) {
+    if (!isVisible) return
+
+    val tracks = when (state) {
+        is SearchState.FoundTracksContent -> {
+            state.foundTracks
+        }
+
+        is SearchState.SearchHistoryTracksContent-> {
+            state.searchHistoryTracks
+        }
+
+        else -> null
+    }
+
+    if (tracks == null) return
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(count = 10) {
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(61.dp)
+            )
+        }
+    }
 }

@@ -3,11 +3,13 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     id("kotlin-kapt")
+
+
 }
 
 android {
     namespace = "com.example.playlist_maker_dev"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.playlist_maker_dev"
@@ -38,6 +40,8 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+
 }
 
 dependencies {
@@ -60,6 +64,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.runtime.livedata)
     kapt(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -69,4 +74,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.material3.android)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 }
+
