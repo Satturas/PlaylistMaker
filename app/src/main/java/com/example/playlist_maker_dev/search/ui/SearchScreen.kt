@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,13 +27,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.playlist_maker_dev.R
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun SearchScreen() {
@@ -76,17 +82,14 @@ fun MyScaffold() {
                         painter = painterResource(id = R.drawable.search_image_vector),
                         contentDescription = null,
                     )
-                    TextField(
-                        value = text,
-                        onValueChange = { newText ->
-                            text = newText
-                        },
-                        label = { Text(stringResource(id = R.string.search_text)) },
-                        singleLine = true,
+                    Text(
                         modifier = Modifier
-                            .weight(1F)
-                            .background(colorResource(id = R.color.search_field)),
+                            .padding(start = 8.dp),
+                        text = stringResource(R.string.search_text),
+                        fontSize = 16.sp,
+                        color = colorResource(id = R.color.search_image)
                     )
+                    SimpleTextField()
                 }
             }
             LazyColumn(
@@ -95,7 +98,10 @@ fun MyScaffold() {
                 contentPadding = innerPadding
             ) {
                 items(count = 100) {
-                    Box(Modifier.fillMaxWidth().height(61.dp))
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(61.dp))
                 }
             }
         }
@@ -113,12 +119,19 @@ private fun SearhScreenPreview() {
 fun SimpleTextField() {
     var text by remember { mutableStateOf("") }
 
-    TextField(
+    BasicTextField(
+        modifier = Modifier
+            .fillMaxWidth(),
         value = text,
-        onValueChange = { newText ->
-            text = newText
+        onValueChange = { newValue: String ->
+            text = newValue
         },
-        label = { Text("Введите текст") },
         singleLine = true,
+        textStyle = TextStyle(
+            color = colorResource(R.color.black),
+            fontSize = 16.sp,
+            textAlign = TextAlign.Start
+        ),
+        cursorBrush = SolidColor(colorResource(R.color.background)),
     )
 }
