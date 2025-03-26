@@ -2,11 +2,9 @@ package com.example.playlist_maker_dev.search.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,8 +14,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,18 +23,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.playlist_maker_dev.R
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.example.playlist_maker_dev.R
 
 @Composable
 fun SearchScreen() {
@@ -74,7 +69,9 @@ fun MyScaffold() {
                     .background(colorResource(id = R.color.search_field))
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
                 ) {
                     Image(
                         modifier = Modifier
@@ -89,7 +86,11 @@ fun MyScaffold() {
                         fontSize = 16.sp,
                         color = colorResource(id = R.color.search_image)
                     )
-                    SimpleTextField()
+                    SimpleTextField(
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                    ClearSearchRequestButton(true)
                 }
             }
             LazyColumn(
@@ -101,7 +102,8 @@ fun MyScaffold() {
                     Box(
                         Modifier
                             .fillMaxWidth()
-                            .height(61.dp))
+                            .height(61.dp)
+                    )
                 }
             }
         }
@@ -116,12 +118,11 @@ private fun SearhScreenPreview() {
 }
 
 @Composable
-fun SimpleTextField() {
+fun SimpleTextField(modifier: Modifier) {
     var text by remember { mutableStateOf("") }
 
     BasicTextField(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = modifier,
         value = text,
         onValueChange = { newValue: String ->
             text = newValue
@@ -133,5 +134,16 @@ fun SimpleTextField() {
             textAlign = TextAlign.Start
         ),
         cursorBrush = SolidColor(colorResource(R.color.background)),
+    )
+}
+
+@Composable
+fun ClearSearchRequestButton(isVisible: Boolean) {
+    if (!isVisible) return
+
+    Image(
+        modifier = Modifier.padding(end = 10.dp),
+        painter = painterResource(id = R.drawable.delete_icon_vector),
+        contentDescription = null,
     )
 }
