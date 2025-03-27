@@ -1,37 +1,40 @@
 package com.example.playlist_maker_dev.search.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.ColorImage
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import coil3.compose.AsyncImagePreviewHandler
-import coil3.compose.LocalAsyncImagePreviewHandler
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.request.transformations
 import coil3.transform.RoundedCornersTransformation
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.search.domain.models.Track
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
 
 
 @Composable
@@ -41,12 +44,10 @@ fun TrackItem(
     val context = LocalContext.current
 
     Row(
-        modifier = Modifier
+        modifier = Modifier.background(color = colorResource(id = R.color.white_light_black1A1))
     ) {
-        TrackCover(track)
-
+        TrackInfo(track)
     }
-
 }
 
 @Preview
@@ -54,10 +55,10 @@ fun TrackItem(
 private fun TrackItemPreview() {
     val testTrack = Track(
         trackId = 15,
-        trackName = "Компромисс",
+        trackName = "Комромисс",
         artistName = "Би-2",
-        "4220",
-        "https://geometria.ru/upload/geometria/exclusive/597423/30598267.jpg",
+        "4:22",
+        "https://geometria.ru/uplglglgljlgjljgklgjlgjlload/geometria/exclusive/597423/30598267.jpg",
         "metropolitan orchestra",
         "rock",
         "2017",
@@ -69,10 +70,11 @@ private fun TrackItemPreview() {
 }
 
 @Composable
-fun TrackCover(track: Track) {
+fun TrackInfo(track: Track) {
     Row(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(8.dp)
+            .fillMaxWidth()
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -87,9 +89,69 @@ fun TrackCover(track: Track) {
                 .clip(CircleShape)
                 .size(45.dp)
         )
-        Column {
-            Text(text = track.trackName)
+        Column(
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .align(Alignment.CenterVertically)
+        ) {
+            Text(
+                text = track.trackName,
+                fontFamily = FontFamily(Font(R.font.ys_display_regular)),
+                fontWeight = FontWeight(400),
+                fontSize = 16.sp,
+                color = colorResource(id = R.color.black_white),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .sizeIn(0.dp, 19.dp, 250.dp, 19.dp),
+            )
+            Row {
+                Text(
+                    text = track.artistName,
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .align(Alignment.CenterVertically)
+                        .sizeIn(0.dp, 13.dp, 170.dp, 13.dp),
+                    fontFamily = FontFamily(Font(R.font.ys_display_regular)),
+                    fontWeight = FontWeight(400),
+                    fontSize = 11.sp,
+                    color = colorResource(id = R.color.greyAEA_white),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Start
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.vector_point_separator),
+                    contentDescription = null,
+                    alignment = Alignment.Center,
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .align(Alignment.CenterVertically)
+
+                )
+                Text(
+                    text = track.trackTimeMillis,
+                    fontFamily = FontFamily(Font(R.font.ys_display_regular)),
+                    fontWeight = FontWeight(400),
+                    fontSize = 11.sp,
+                    color = colorResource(id = R.color.greyAEA_white),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Start
+
+                )
+            }
 
         }
+        Image(
+            painter = painterResource(id = R.drawable.forward_arrow_vector),
+            contentDescription = null,
+            alignment = Alignment.CenterEnd,
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .fillMaxWidth()
+                .padding(end = 16.dp)
+
+        )
     }
 }

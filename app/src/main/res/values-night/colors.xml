@@ -11,5 +11,7 @@
     <color name="switch_track">#9FBBF3</color>
     <color name="track">#3772E7</color>
     <color name="menu_divider">#FFFFFFFF</color>
-
+    <color name="black_white">#FFFFFFFF</color>
+    <color name="greyAEA_white">#FFFFFFFF</color>
+    <color name="white_light_black1A1">#1A1B22</color>
 </resources>

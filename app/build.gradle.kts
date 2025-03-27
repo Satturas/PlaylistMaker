@@ -77,5 +77,6 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+    implementation (libs.androidx.ui.text.google.fonts)
 }
 
