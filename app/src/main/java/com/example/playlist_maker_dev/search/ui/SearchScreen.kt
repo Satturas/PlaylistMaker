@@ -1,13 +1,10 @@
 package com.example.playlist_maker_dev.search.ui
 
-import androidx.appcompat.widget.ActivityChooserView.InnerLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -41,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.playlist_maker_dev.R
+import com.example.playlist_maker_dev.presentation.LocalTypography
 
 @Composable
 fun SearchScreen(viewModel: SearchViewModel = viewModel()) {
@@ -58,7 +56,12 @@ fun MyScaffold(state: SearchState?) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.search_text)) },
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.search_text),
+                        style = LocalTypography.current.h1_22Medium500
+                    )
+                },
                 /*navigationIcon = {
                     IconButton(onClick = { /* "Open nav drawer" */ }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -116,7 +119,7 @@ fun MyScaffold(state: SearchState?) {
                     )
                 }
             }*/
-            ShowTracks(true, state = state,  viewModel = viewModel())
+            ShowTracks(true, state = state, viewModel = viewModel())
         }
     )
 }
@@ -172,7 +175,7 @@ fun ShowTracks(
             state.foundTracks
         }
 
-        is SearchState.SearchHistoryTracksContent-> {
+        is SearchState.SearchHistoryTracksContent -> {
             state.searchHistoryTracks
         }
 
