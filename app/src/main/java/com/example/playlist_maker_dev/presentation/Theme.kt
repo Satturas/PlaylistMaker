@@ -26,13 +26,13 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 data class CustomColors(
-    val title: TitleColors,
+    val topAppBar: TopAppBarColors,
     val editText: EditTextColors,
     val lazyColumn: LazyColumnColors,
     val button: ButtonColors
 )
 
-data class TitleColors(
+data class TopAppBarColors(
     val primaryColors: SimpleViewStateColors
 )
 
@@ -68,10 +68,10 @@ data class ButtonStateColors(
 
 
 private val LightCustomColors = CustomColors(
-    title = TitleColors(
+    topAppBar= TopAppBarColors(
         primaryColors = SimpleViewStateColors(
-            background = TitleBackgroundLight,
-            textColor = TitleTextLight
+            background = TopAppBarBackgroundLight,
+            textColor = TopAppBarTextLight
         )
     ),
     editText = EditTextColors(
@@ -102,10 +102,10 @@ private val LightCustomColors = CustomColors(
 )
 
 private val DarkCustomColors = CustomColors(
-    title = TitleColors(
+    topAppBar = TopAppBarColors(
         primaryColors = SimpleViewStateColors(
-            background = TitleBackgroundDark,
-            textColor = TitleTextDark
+            background = TopAppBarBackgroundDark,
+            textColor = TopAppBarTextDark
         )
     ),
     editText = EditTextColors(

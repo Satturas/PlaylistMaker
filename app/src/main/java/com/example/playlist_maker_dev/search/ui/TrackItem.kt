@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +35,7 @@ import coil3.request.crossfade
 import coil3.request.transformations
 import coil3.transform.RoundedCornersTransformation
 import com.example.playlist_maker_dev.R
+import com.example.playlist_maker_dev.presentation.LocalTypography
 import com.example.playlist_maker_dev.search.domain.models.Track
 
 
@@ -96,6 +98,7 @@ fun TrackInfo(track: Track) {
         ) {
             Text(
                 text = track.trackName,
+//style = LocalTypography.current.body16Regular400,
                 fontFamily = FontFamily(Font(R.font.ys_display_regular)),
                 fontWeight = FontWeight(400),
                 fontSize = 16.sp,

@@ -22,12 +22,12 @@ val NeutralWhite = Color(0xFFFFFFFF)
 val NeutralBlack = Color(0xFF000000)
 
 //Primary Title Light
-val TitleBackgroundLight = YpWhite
-val TitleTextLight = YpBlack
+val TopAppBarBackgroundLight = YpWhite
+val TopAppBarTextLight = YpBlack
 
 //Primary Title Dark
-val TitleBackgroundDark= YpBlack
-val TitleTextDark = YpWhite
+val TopAppBarBackgroundDark= YpBlack
+val TopAppBarTextDark = YpWhite
 
 //Primary EditText Light
 val EditTextBackgroundLight = YpLightGrey
