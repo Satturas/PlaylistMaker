@@ -59,7 +59,7 @@ fun MyScaffold(state: SearchState?) {
                 title = {
                     Text(
                         text = stringResource(id = R.string.search_text),
-                        style = LocalTypography.current.h1_22Medium500
+                        //style = LocalTypography.current.h1_22Medium500
                     )
                 },
                 /*navigationIcon = {
@@ -119,7 +119,7 @@ fun MyScaffold(state: SearchState?) {
                     )
                 }
             }*/
-            ShowTracks(true, state = state, viewModel = viewModel())
+            ShowTracks(true, state = state)
         }
     )
 }
@@ -165,8 +165,7 @@ fun ClearSearchRequestButton(isVisible: Boolean) {
 @Composable
 fun ShowTracks(
     isVisible: Boolean,
-    state: SearchState?,
-    viewModel: SearchViewModel
+    state: SearchState?
 ) {
     if (!isVisible) return
 
@@ -188,12 +187,9 @@ fun ShowTracks(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(count = 10) {
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .height(61.dp)
-            )
+        items(tracks.size) { item ->
+            TrackItem(track = tracks[item])
         }
     }
 }
+

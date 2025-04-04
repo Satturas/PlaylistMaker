@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -23,10 +24,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    //private var _binding: FragmentSearchBinding? = null
+    //private val binding get() = _binding!!
 
-    private var inputValue: CharSequence = SEARCH_DEF
+    //private var inputValue: CharSequence = SEARCH_DEF
     private val tracksList = mutableListOf<Track>()
     private var historyOfTracksList = mutableListOf<Track>()
     private lateinit var textWatcher: TextWatcher
@@ -34,7 +35,7 @@ class SearchFragment : Fragment() {
 
     private val viewModel by viewModel<SearchViewModel>()
 
-    private val adapter: TrackAdapter by lazy {
+    /*private val adapter: TrackAdapter by lazy {
         TrackAdapter(mutableListOf(), { track ->
             handleTrackClick(
                 track
@@ -60,34 +61,39 @@ class SearchFragment : Fragment() {
                 track
             )
         }
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding.root
+        //_binding = FragmentSearchBinding.inflate(inflater, container, false)
+        //return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                SearchScreen()
+            }
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (savedInstanceState != null) {
+        /*if (savedInstanceState != null) {
             inputValue = savedInstanceState.getString(SEARCH_USER_INPUT).toString()
-        }
+        }*/
 
-        binding.inputEditTextSearchTracks.setText(inputValue)
+        //binding.inputEditTextSearchTracks.setText(inputValue)
 
         viewModel.showHistoryOfTracks()
 
-        viewModel.searchState.observe(viewLifecycleOwner) {
-            render(it)
-        }
+        /*viewModel.searchState.observe(viewLifecycleOwner) {
+            render(it)*/
+       // }
 
-        binding.searchDeleteButton.setOnClickListener {
+        /*binding.searchDeleteButton.setOnClickListener {
             binding.inputEditTextSearchTracks.setText(R.string.emptyString)
             val inputMethodManager =
                 requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -128,12 +134,12 @@ class SearchFragment : Fragment() {
             searchHistoryAdapter.notifyDataSetChanged()
             viewModel.saveHistoryOfTracks(historyOfTracksList)
             hideSearchHistory(true)
-        }
+        }*/
 
-        if (savedInstanceState != null) inputValue =
-            savedInstanceState.getCharSequence(SEARCH_USER_INPUT, SEARCH_DEF)
+        /*if (savedInstanceState != null) inputValue =
+            savedInstanceState.getCharSequence(SEARCH_USER_INPUT, SEARCH_DEF)*/
 
-        textWatcher = object : TextWatcher {
+        /*textWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -155,15 +161,15 @@ class SearchFragment : Fragment() {
         textWatcher.let { binding.inputEditTextSearchTracks.addTextChangedListener(it) }
 
         adapter.tracks = tracksList
-        binding.rvTracks.adapter = adapter
+        binding.rvTracks.adapter = adapter*/
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        //_binding = null
     }
 
-    private fun render(state: SearchState) {
+    /*private fun render(state: SearchState) {
         when (state) {
             is SearchState.NothingFound -> showNothingFound()
             is SearchState.Loading -> showLoading()
@@ -171,16 +177,16 @@ class SearchFragment : Fragment() {
             is SearchState.FoundTracksContent -> showTracks(state.foundTracks)
             is SearchState.Error -> showNetworkError()
         }
-    }
+    }*/
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putCharSequence(SEARCH_USER_INPUT, inputValue)
+        //outState.putCharSequence(SEARCH_USER_INPUT, inputValue)
     }
 
-    private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
+    //private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
 
-    private fun showNothingFound() {
+    /*private fun showNothingFound() {
         binding.rvTracks.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         hideSearchHistory(true)
@@ -293,7 +299,7 @@ class SearchFragment : Fragment() {
             searchHistoryAdapter.notifyDataSetChanged()
             if (binding.inputEditTextSearchTracks.text.isEmpty()) viewModel.showHistoryOfTracks()
         }
-    }
+    }*/
 
     companion object {
         private const val SEARCH_USER_INPUT = "search_user_input"
