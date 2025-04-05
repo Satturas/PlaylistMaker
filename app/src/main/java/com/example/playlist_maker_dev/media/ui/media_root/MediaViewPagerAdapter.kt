@@ -1,13 +1,6 @@
 package com.example.playlist_maker_dev.media.ui.media_root
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Lifecycle
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.playlist_maker_dev.media.ui.media_fav_tracks.MediaFavoriteTracksFragment
-import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsFragment
-
-class MediaViewPagerAdapter(
+/*class MediaViewPagerAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle
 ) : FragmentStateAdapter(fragmentManager, lifecycle) {
@@ -22,4 +15,4 @@ class MediaViewPagerAdapter(
             else -> PlaylistsFragment.newInstance()
         }
     }
-}
+}*/

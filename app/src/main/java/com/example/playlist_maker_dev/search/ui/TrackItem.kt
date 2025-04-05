@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -35,13 +34,12 @@ import coil3.request.crossfade
 import coil3.request.transformations
 import coil3.transform.RoundedCornersTransformation
 import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.presentation.LocalTypography
 import com.example.playlist_maker_dev.search.domain.models.Track
 
 
 @Composable
 fun TrackItem(
-    track: Track
+    track: Track, onClick: @Composable () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -68,7 +66,7 @@ private fun TrackItemPreview() {
         "https://geometria.ru/upload/geometria/exclusive/597423/30598267.jpg",
         true
     )
-    TrackItem(testTrack)
+    TrackItem(testTrack, {})
 }
 
 @Composable

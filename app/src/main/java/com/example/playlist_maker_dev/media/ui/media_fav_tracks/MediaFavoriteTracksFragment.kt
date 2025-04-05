@@ -1,44 +1,36 @@
 package com.example.playlist_maker_dev.media.ui.media_fav_tracks
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import com.example.playlist_maker_dev.databinding.FragmentMediaFavoriteTracksBinding
-import com.example.playlist_maker_dev.media.ui.media_root.MediaState
-import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
 import com.example.playlist_maker_dev.search.domain.models.Track
-import com.example.playlist_maker_dev.search.ui.SearchFragment.Companion.AUDIO_PLAYER
-import com.example.playlist_maker_dev.search.ui.TrackAdapter
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaFavoriteTracksFragment : Fragment() {
 
-    private var _binding: FragmentMediaFavoriteTracksBinding? = null
-    private val binding get() = _binding!!
+    //private var _binding: FragmentMediaFavoriteTracksBinding? = null
+    // private val binding get() = _binding!!
     private val favouriteTracksList = mutableListOf<Track>()
-    private var isClickAllowed = true
+
+    // private var isClickAllowed = true
     private val viewModel by viewModel<FavoriteTracksViewModel>()
 
-    private val adapter: TrackAdapter by lazy {
-        TrackAdapter(mutableListOf(), { track ->
-            handleTrackClick(
-                track
-            )
-        })
+    /* private val adapter: TrackAdapter by lazy {
+         TrackAdapter(mutableListOf(), { track ->
+             handleTrackClick(
+                 track
+             )
+         })
 
-        { track ->
-            handleTrackClick(
-                track
-            )
-        }
-    }
+         { track ->
+             handleTrackClick(
+                 track
+             )
+         }
+     }*/
 
 
     override fun onCreateView(
@@ -46,11 +38,16 @@ class MediaFavoriteTracksFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentMediaFavoriteTracksBinding.inflate(inflater, container, false)
-        return binding.root
+        //_binding = FragmentMediaFavoriteTracksBinding.inflate(inflater, container, false)
+        //return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MediaFavoriteTracksScreen()
+            }
+        }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.mediaState.observe(viewLifecycleOwner) {
@@ -97,7 +94,7 @@ class MediaFavoriteTracksFragment : Fragment() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun handleTrackClick(track: Track) {
+    fun handleTrackClick(track: Track) {
         if (clickDebounce()) {
             val intent = Intent(
                 requireContext(),
@@ -125,5 +122,5 @@ class MediaFavoriteTracksFragment : Fragment() {
     companion object {
         fun newInstance() = MediaFavoriteTracksFragment()
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
+    }*/
 }

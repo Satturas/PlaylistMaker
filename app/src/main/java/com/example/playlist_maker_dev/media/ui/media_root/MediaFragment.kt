@@ -4,31 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.databinding.FragmentMediaBinding
-import com.google.android.material.tabs.TabLayoutMediator
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaFragment : Fragment() {
 
-    private var _binding: FragmentMediaBinding? = null
+    /*private var _binding: FragmentMediaBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var tabMediator: TabLayoutMediator
+    private lateinit var tabMediator: TabLayoutMediator*/
 
-    private val viewModel by viewModel<MediaViewModel>()
+    //private val viewModel by viewModel<MediaViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMediaBinding.inflate(inflater, container, false)
-        return binding.root
+        //_binding = FragmentMediaBinding.inflate(inflater, container, false)
+        // return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MediaScreen()
+            }
+        }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewPager.adapter = MediaViewPagerAdapter(
@@ -49,5 +51,5 @@ class MediaFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         tabMediator.detach()
-    }
+    }*/
 }

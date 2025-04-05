@@ -196,9 +196,9 @@ fun ShowTracks(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(tracks.size) { item ->
-            TrackItem(track = tracks[item])
-        }
+        //items(tracks.size) { item ->
+        //    TrackItem(track = tracks[item])
+        //}
     }
 }
 
