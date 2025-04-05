@@ -1,19 +1,20 @@
 package com.example.playlist_maker_dev.settings.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlist_maker_dev.settings.domain.SettingsInteractor
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class SettingsViewModel(
     private val interactor: SettingsInteractor
 ) : ViewModel() {
 
-    private val isDarkThemeEnabled = MutableLiveData<Boolean>()
-    val darkThemeEnabled: LiveData<Boolean> get() = isDarkThemeEnabled
+    private var _isDarkThemeEnabled = MutableStateFlow<Boolean>(false)
+    val isDarkThemeEnabled: StateFlow<Boolean> get() = _isDarkThemeEnabled.asStateFlow()
 
     init {
-        isDarkThemeEnabled.value = interactor.getSharedPreferencesThemeValue()
+        _isDarkThemeEnabled.value = interactor.getSharedPreferencesThemeValue()
     }
 
     fun writeToSupport() = interactor.writeToSupport()
@@ -22,9 +23,11 @@ class SettingsViewModel(
 
     fun shareTextToOtherApps() = interactor.shareTextToOtherApps()
 
+    fun getCurrentTheme() = interactor.getSharedPreferencesThemeValue()
+
     fun switchTheme(isDarkTheme: Boolean) {
         interactor.editSharedPreferencesThemeValue(isDarkTheme)
         interactor.switchTheme(isDarkTheme)
-        isDarkThemeEnabled.value = isDarkTheme
+        _isDarkThemeEnabled.value = isDarkTheme
     }
 }

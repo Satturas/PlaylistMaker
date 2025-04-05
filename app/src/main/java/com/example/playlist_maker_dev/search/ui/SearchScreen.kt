@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -38,18 +39,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.presentation.LocalTypography
+
 
 @Composable
 fun SearchScreen(viewModel: SearchViewModel = viewModel()) {
     val context = LocalContext.current
     val searchState by viewModel.searchState.observeAsState()
-    MyScaffold(searchState)
+    MyScaffold(searchState, viewModel)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyScaffold(state: SearchState?) {
+fun MyScaffold(state: SearchState?, viewModel: SearchViewModel) {
 
     var text by remember { mutableStateOf("") }
 
@@ -81,63 +82,71 @@ fun MyScaffold(state: SearchState?) {
                     .background(colorResource(id = R.color.search_field))
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .padding(start = 14.dp),
-                        painter = painterResource(id = R.drawable.search_image_vector),
-                        contentDescription = null,
-                    )
-                    Text(
-                        modifier = Modifier
-                            .padding(start = 8.dp),
-                        text = stringResource(R.string.search_text),
-                        fontSize = 16.sp,
-                        color = colorResource(id = R.color.search_image)
-                    )
-                    SimpleTextField(
-                        modifier = Modifier
-                            .weight(1f)
-                    )
-                    ClearSearchRequestButton(true)
-                }
-            }
-
-            /*LazyColumn(
-                // consume insets as scaffold doesn't do it by default
-                modifier = Modifier.consumeWindowInsets(innerPadding),
-                contentPadding = innerPadding
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
-                items(count = 10) {
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .height(61.dp)
-                    )
+                    /*Image(
+                    modifier = Modifier
+                        .padding(start = 14.dp),
+                    painter = painterResource(id = R.drawable.search_image_vector),
+                    contentDescription = null,
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(start = 8.dp),
+                    text = stringResource(R.string.search_text),
+                    fontSize = 16.sp,
+                    color = colorResource(id = R.color.search_image)
+                )*/
+                    SimpleTextField(modifier = Modifier, viewModel = viewModel)
                 }
-            }*/
-            ShowTracks(true, state = state)
+                //ClearSearchRequestButton(true)
+            }
         }
     )
+
+
+
+/*LazyColumn(
+    // consume insets as scaffold doesn't do it by default
+    modifier = Modifier.consumeWindowInsets(innerPadding),
+    contentPadding = innerPadding
+) {
+    items(count = 10) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .height(61.dp)
+        )
+    }
+}*/
+ShowTracks(true, state = state)
 }
+
+
 
 
 @Preview
 @Composable
-private fun SearhScreenPreview() {
+private fun SearchScreenPreview() {
     SearchScreen()
 }
 
 @Composable
-fun SimpleTextField(modifier: Modifier) {
+fun SimpleTextField(modifier: Modifier, viewModel: SearchViewModel) {
     var text by remember { mutableStateOf("") }
 
     BasicTextField(
-        modifier = modifier,
+        modifier = Modifier
+            .fillMaxWidth()
+            .onFocusChanged {
+                if (it.isFocused && text.isEmpty()) {
+                    viewModel.showHistoryOfTracks()
+                }
+            },
         value = text,
+
         onValueChange = { newValue: String ->
             text = newValue
         },

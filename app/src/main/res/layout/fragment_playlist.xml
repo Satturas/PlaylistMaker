@@ -214,7 +214,7 @@
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
         app:behavior_hideable="false"
-        app:behavior_peekHeight="200dp"
+        app:behavior_peekHeight="500dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
