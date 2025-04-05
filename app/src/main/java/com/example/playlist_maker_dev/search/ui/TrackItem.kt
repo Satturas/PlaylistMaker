@@ -1,7 +1,9 @@
 package com.example.playlist_maker_dev.search.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,7 +27,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
@@ -37,44 +38,24 @@ import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.search.domain.models.Track
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TrackItem(
-    track: Track, onClick: @Composable () -> Unit
+    track: Track,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
 
     Row(
-        modifier = Modifier.background(color = colorResource(id = R.color.white_light_black1A1))
-    ) {
-        TrackInfo(track)
-    }
-}
-
-@Preview
-@Composable
-private fun TrackItemPreview() {
-    val testTrack = Track(
-        trackId = 15,
-        trackName = "Комромисс",
-        artistName = "Би-2",
-        "4:22",
-        "https://geometria.ru/uplglglgljlgjljgklgjlgjlload/geometria/exclusive/597423/30598267.jpg",
-        "metropolitan orchestra",
-        "rock",
-        "2017",
-        "USA",
-        "https://geometria.ru/upload/geometria/exclusive/597423/30598267.jpg",
-        true
-    )
-    TrackItem(testTrack, {})
-}
-
-@Composable
-fun TrackInfo(track: Track) {
-    Row(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
+            .background(color = colorResource(id = R.color.white_light_black1A1))
+            .combinedClickable(
+                onClick = { onClick() },
+                onLongClick = { onLongClick() }
+            )
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)

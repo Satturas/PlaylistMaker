@@ -82,6 +82,7 @@ dependencies {
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.core)
     implementation(libs.koin.androidx.compose.v350)
+    implementation (libs.androidx.fragment.compose)
 
 }
 

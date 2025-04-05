@@ -1,25 +1,12 @@
 package com.example.playlist_maker_dev.search.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import androidx.compose.ui.platform.ComposeView
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.databinding.FragmentSearchBinding
-import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
-import com.example.playlist_maker_dev.search.domain.models.Track
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -28,12 +15,11 @@ class SearchFragment : Fragment() {
     //private val binding get() = _binding!!
 
     //private var inputValue: CharSequence = SEARCH_DEF
-    private val tracksList = mutableListOf<Track>()
-    private var historyOfTracksList = mutableListOf<Track>()
-    private lateinit var textWatcher: TextWatcher
-    private var isClickAllowed = true
+    //private val tracksList = mutableListOf<Track>()
+    // private var historyOfTracksList = mutableListOf<Track>()
+    // private lateinit var textWatcher: TextWatcher
+    // private var isClickAllowed = true
 
-    private val viewModel by viewModel<SearchViewModel>()
 
     /*private val adapter: TrackAdapter by lazy {
         TrackAdapter(mutableListOf(), { track ->
@@ -62,6 +48,7 @@ class SearchFragment : Fragment() {
             )
         }
     }*/
+    private val viewModel by viewModel<SearchViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,7 +59,7 @@ class SearchFragment : Fragment() {
         //return binding.root
         return ComposeView(requireContext()).apply {
             setContent {
-                SearchScreen()
+                SearchScreen(viewModel)
             }
         }
     }
@@ -87,11 +74,11 @@ class SearchFragment : Fragment() {
 
         //binding.inputEditTextSearchTracks.setText(inputValue)
 
-        viewModel.showHistoryOfTracks()
+        // viewModel.showHistoryOfTracks()
 
         /*viewModel.searchState.observe(viewLifecycleOwner) {
             render(it)*/
-       // }
+        // }
 
         /*binding.searchDeleteButton.setOnClickListener {
             binding.inputEditTextSearchTracks.setText(R.string.emptyString)
@@ -164,10 +151,10 @@ class SearchFragment : Fragment() {
         binding.rvTracks.adapter = adapter*/
     }
 
-    override fun onDestroyView() {
+    /*override fun onDestroyView() {
         super.onDestroyView()
         //_binding = null
-    }
+    }*/
 
     /*private fun render(state: SearchState) {
         when (state) {
@@ -179,10 +166,10 @@ class SearchFragment : Fragment() {
         }
     }*/
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        //outState.putCharSequence(SEARCH_USER_INPUT, inputValue)
-    }
+    /* override fun onSaveInstanceState(outState: Bundle) {
+         super.onSaveInstanceState(outState)
+         //outState.putCharSequence(SEARCH_USER_INPUT, inputValue)
+     }*/
 
     //private fun clearButtonVisibility(s: CharSequence?): Boolean = !s.isNullOrEmpty()
 

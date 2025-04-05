@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.media.ui.media_fav_tracks.MediaFavoriteTracksScreen
+import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -105,7 +106,7 @@ fun MediaScreen() {
         ) { page ->
             when (page) {
                 0 -> MediaFavoriteTracksScreen()
-                1 -> MediaFavoriteTracksScreen()
+                1 -> PlaylistsScreen()
             }
         }
     }

@@ -1,26 +1,18 @@
 package com.example.playlist_maker_dev.media.ui.playlists
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.databinding.FragmentMediaPlaylistsBinding
-import com.example.playlist_maker_dev.media.domain.models.Playlist
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
 
-    private var _binding: FragmentMediaPlaylistsBinding? = null
-    private val binding get() = _binding!!
-    private var isClickAllowed = true
+    //private var _binding: FragmentMediaPlaylistsBinding? = null
+    //private val binding get() = _binding!!
+    //private var isClickAllowed = true
 
     private val viewModel by viewModel<PlaylistsViewModel>()
 
@@ -29,11 +21,16 @@ class PlaylistsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentMediaPlaylistsBinding.inflate(inflater, container, false)
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                PlaylistsScreen()
+            }
+        }
+        //_binding = FragmentMediaPlaylistsBinding.inflate(inflater, container, false)
+        //return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.createNewPlaylistButton.setOnClickListener {
@@ -107,10 +104,12 @@ class PlaylistsFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
     }
+    */
 
     companion object {
         fun newInstance() = PlaylistsFragment()
         private const val CLICK_DEBOUNCE_DELAY = 1000L
         const val PLAYLIST_ID_KEY = "PLAYLIST_ID_KEY"
+
     }
 }

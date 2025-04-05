@@ -1,5 +1,6 @@
 package com.example.playlist_maker_dev.media.ui.media_fav_tracks
 
+import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,16 +37,19 @@ import com.example.playlist_maker_dev.media.ui.media_root.MediaState
 import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
 import com.example.playlist_maker_dev.search.ui.SearchFragment.Companion.AUDIO_PLAYER
 import com.example.playlist_maker_dev.search.ui.TrackItem
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun MediaFavoriteTracksScreen(viewModel: FavoriteTracksViewModel = koinViewModel()) {
-
+    val context = LocalContext.current
     val isTrackListVisible by viewModel.isTrackListVisible.collectAsState()
     val mediaState by viewModel.mediaState.collectAsState()
     val isClickAllowed = remember { mutableStateOf(true) }
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier
@@ -55,7 +60,8 @@ fun MediaFavoriteTracksScreen(viewModel: FavoriteTracksViewModel = koinViewModel
             TrackList(
                 isTrackListVisible,
                 mediaState = mediaState,
-                isClickAllowed = isClickAllowed
+                isClickAllowed = isClickAllowed,
+                context, scope
             )
             ShowNothingInFavorite(
                 !isTrackListVisible,
@@ -69,7 +75,9 @@ fun MediaFavoriteTracksScreen(viewModel: FavoriteTracksViewModel = koinViewModel
 fun TrackList(
     visible: Boolean,
     mediaState: MediaState,
-    isClickAllowed: MutableState<Boolean>
+    isClickAllowed: MutableState<Boolean>,
+    context: Context,
+    scope: CoroutineScope
 ) {
 
     if (!visible) return
@@ -84,33 +92,26 @@ fun TrackList(
             TrackItem(
                 track = tracks[track],
                 onClick = {
-                    if (clickDebounce(isClickAllowed)) {
-                        LocalContext.current.startActivity(
+                    if (isClickAllowed.value) {
+                        isClickAllowed.value = false
+                        context.startActivity(
                             Intent(
-                                LocalContext.current,
+                                context,
                                 AudioPlayerActivity::class.java
                             ).apply {
-                                putExtra(AUDIO_PLAYER, track)
+                                putExtra(AUDIO_PLAYER, tracks[track])
                             })
+                        scope.launch {
+                            delay(1000L)
+                            isClickAllowed.value = true
+                        }
                     }
+
                 }
             )
         }
     }
 }
-
-@Composable
-private fun clickDebounce(isClickAllowed: MutableState<Boolean>): Boolean {
-    if (isClickAllowed.value) {
-        isClickAllowed.value = false
-        LaunchedEffect(Unit) {
-            delay(1000L)
-            isClickAllowed.value = true
-        }
-    }
-    return isClickAllowed.value
-}
-
 
 @Composable
 fun ShowNothingInFavorite(visible: Boolean, text: String) {
