@@ -12,9 +12,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,6 +41,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -101,6 +106,7 @@ fun MyScaffold(
                     .fillMaxWidth()
                     .padding(innerPadding),
             ) {
+
                 SearchField(
                     viewModel,
                     searchInputValue,
@@ -109,12 +115,24 @@ fun MyScaffold(
                     keyboardController?.hide()
                     searchInputValue.value = ""
                 }
+
                 ShowTracks(
                     searchState is SearchState.FoundTracksContent || searchState is SearchState.SearchHistoryTracksContent,
                     searchState,
                     viewModel,
                     isClickAllowed, context, scope
                 )
+
+                ShowLoading(visible = searchState is SearchState.Loading)
+
+                ShowNothingFound(
+                    visible = searchState is SearchState.NothingFound,
+                    stringResource(id = R.string.nothing_found)
+                )
+
+                ShowNetworkError(visible = searchState is SearchState.Error) {
+                    viewModel.searchDebounce(searchInputValue.value)
+                }
             }
         })
 }
@@ -239,6 +257,7 @@ fun ShowTracks(
     context: Context,
     scope: CoroutineScope
 ) {
+
     if (!visible) return
 
     val tracks = when (state) {
@@ -280,6 +299,99 @@ fun ShowTracks(
 
                 }
 
+            )
+        }
+    }
+}
+
+@Composable
+fun ShowLoading(visible: Boolean) {
+
+    if (!visible) return
+
+    Box(
+        modifier = Modifier
+            .padding(top = 106.dp)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(44.dp),
+            color = colorResource(R.color.background)
+        )
+    }
+}
+
+@Composable
+fun ShowNothingFound(visible: Boolean, text: String) {
+
+    if (!visible) return
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 106.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            alignment = Alignment.Center,
+            painter = painterResource(R.drawable.vector_nothing_found),
+            contentDescription = null,
+        )
+        Text(
+            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.side_padding_16)),
+            text = text,
+            fontFamily = FontFamily(Font(R.font.ys_display_medium)),
+            fontWeight = FontWeight(400),
+            fontSize = 19.sp,
+            color = colorResource(id = R.color.black_white),
+        )
+    }
+}
+
+@Composable
+fun ShowNetworkError(visible: Boolean, onClick: () -> Unit) {
+
+    if (!visible) return
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 106.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            alignment = Alignment.Center,
+            painter = painterResource(id = R.drawable.vector_search_no_internet),
+            contentDescription = null,
+        )
+        Text(
+            text = stringResource(id = R.string.nothing_found),
+            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.side_padding_16)),
+            fontFamily = FontFamily(Font(R.font.ys_display_medium)),
+            fontWeight = FontWeight(400),
+            fontSize = 19.sp,
+            color = colorResource(id = R.color.black_white),
+        )
+        Text(
+            text = stringResource(id = R.string.check_net),
+            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.side_padding_16)),
+            fontFamily = FontFamily(Font(R.font.ys_display_medium)),
+            fontWeight = FontWeight(400),
+            fontSize = 19.sp,
+            color = colorResource(id = R.color.black_white),
+        )
+
+        Button(
+            onClick = onClick,
+            shape = RoundedCornerShape(18.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.blackA1_white)
+            ),
+        ) {
+            Text(
+                text = stringResource(id = R.string.reload),
+                color = colorResource(id = R.color.white_light_black1A1)
             )
         }
     }
