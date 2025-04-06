@@ -131,7 +131,7 @@ fun MyScaffold(
                 )
 
                 ShowNetworkError(visible = searchState is SearchState.Error) {
-                    viewModel.searchDebounce(searchInputValue.value)
+                    viewModel.searchAfterNetworkFailure(searchInputValue.value)
                 }
             }
         })
@@ -383,16 +383,17 @@ fun ShowNetworkError(visible: Boolean, onClick: () -> Unit) {
         )
 
         Button(
-            onClick = onClick,
             shape = RoundedCornerShape(18.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.blackA1_white)
             ),
+            onClick = onClick
         ) {
             Text(
                 text = stringResource(id = R.string.reload),
                 color = colorResource(id = R.color.white_light_black1A1)
             )
+
         }
     }
 }

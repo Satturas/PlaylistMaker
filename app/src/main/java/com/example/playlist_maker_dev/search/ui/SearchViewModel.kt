@@ -32,6 +32,10 @@ class SearchViewModel(
         }
     }
 
+    fun searchAfterNetworkFailure(input: String) {
+        searchTracks(input)
+    }
+
     fun showHistoryOfTracks() {
         _searchState.value = SearchState.Loading
         viewModelScope.launch {
