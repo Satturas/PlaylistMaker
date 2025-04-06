@@ -1,7 +1,7 @@
 package com.example.playlist_maker_dev.media.ui.playlists
 
 import android.content.Context
-import android.content.Intent
+import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,8 +37,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.media.ui.playlist_screen.PlaylistScreenFragment
 import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsFragment.Companion.PLAYLIST_ID_KEY
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -47,12 +47,14 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun PlaylistsScreen(viewModel: PlaylistsViewModel = koinViewModel()) {
+fun PlaylistsScreen(navController: NavController, viewModel: PlaylistsViewModel = koinViewModel()) {
 
     val playlistsState by viewModel.playlistsState.collectAsState()
     val isClickAllowed = remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+
+    viewModel.showPlaylists()
 
     Box(
         modifier = Modifier
@@ -61,13 +63,15 @@ fun PlaylistsScreen(viewModel: PlaylistsViewModel = koinViewModel()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.height(dimensionResource(R.dimen.side_padding_24)))
 
-            AddingPlaylistButton { }
+            AddingPlaylistButton {
+                navController.navigate(R.id.creatingPlaylistFragment)
+            }
 
             ShowPlaylists(
                 playlistsState is PlaylistsState.FoundPlaylistsContent,
                 playlistsState = playlistsState,
                 isClickAllowed = isClickAllowed,
-                scope, context
+                scope, navController
             )
             ShowNoPlaylists(
                 playlistsState is PlaylistsState.NoPlaylists
@@ -100,7 +104,7 @@ fun ShowPlaylists(
     playlistsState: PlaylistsState,
     isClickAllowed: MutableState<Boolean>,
     scope: CoroutineScope,
-    context: Context
+    navController: NavController
 ) {
 
     if (!visible) return
@@ -120,13 +124,10 @@ fun ShowPlaylists(
                 onClick = {
                     if (isClickAllowed.value) {
                         isClickAllowed.value = false
-                        context.startActivity(
-                            Intent(
-                                context,
-                                PlaylistScreenFragment::class.java
-                            ).apply {
-                                putExtra(PLAYLIST_ID_KEY, playlists[playlist].id)
-                            })
+
+                        navController.navigate(R.id.playlistScreenFragment, Bundle().apply {
+                            putInt(PLAYLIST_ID_KEY, playlists[playlist].id)
+                        })
                         scope.launch {
                             delay(1000L)
                             isClickAllowed.value = true

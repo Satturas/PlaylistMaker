@@ -43,7 +43,7 @@ fun PlaylistItem(
             .fillMaxWidth()
             .wrapContentHeight()
             .combinedClickable(
-                onClick = { },
+                onClick = { onClick() },
                 onLongClick = { onLongClick() }
             )
     ) {

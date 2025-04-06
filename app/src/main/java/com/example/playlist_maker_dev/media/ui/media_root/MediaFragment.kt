@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 
 class MediaFragment : Fragment() {
 
@@ -14,10 +15,10 @@ class MediaFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        val navController = findNavController()
         return ComposeView(requireContext()).apply {
             setContent {
-                MediaScreen()
+                MediaScreen(navController)
             }
         }
     }

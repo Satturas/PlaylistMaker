@@ -29,6 +29,5 @@ class MediaFavoriteTracksFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.fillData()
-
     }
 }

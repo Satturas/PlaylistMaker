@@ -50,6 +50,8 @@ fun MediaFavoriteTracksScreen(viewModel: FavoriteTracksViewModel = koinViewModel
     val isClickAllowed = remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
 
+    viewModel.fillData()
+
     Box(
         modifier = Modifier
             .fillMaxSize()

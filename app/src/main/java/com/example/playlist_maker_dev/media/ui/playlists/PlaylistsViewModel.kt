@@ -18,7 +18,7 @@ class PlaylistsViewModel(private val playlistsInteractor: PlaylistsInteractor) :
         showPlaylists()
     }
 
-    private fun showPlaylists() {
+    fun showPlaylists() {
         viewModelScope.launch(Dispatchers.IO) {
             playlistsInteractor.getPlaylists().collect { playlists ->
                 processResult(playlists)
