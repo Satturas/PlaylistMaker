@@ -366,27 +366,29 @@ fun ShowNetworkError(visible: Boolean, onClick: () -> Unit) {
             contentDescription = null,
         )
         Text(
-            text = stringResource(id = R.string.nothing_found),
+            text = stringResource(id = R.string.something_went_wrong),
             modifier = Modifier.padding(top = dimensionResource(id = R.dimen.side_padding_16)),
             fontFamily = FontFamily(Font(R.font.ys_display_medium)),
             fontWeight = FontWeight(400),
             fontSize = 19.sp,
             color = colorResource(id = R.color.black_white),
+            textAlign = TextAlign.Center
         )
-        Text(
+        /*Text(
             text = stringResource(id = R.string.check_net),
             modifier = Modifier.padding(top = dimensionResource(id = R.dimen.side_padding_16)),
             fontFamily = FontFamily(Font(R.font.ys_display_medium)),
             fontWeight = FontWeight(400),
             fontSize = 19.sp,
             color = colorResource(id = R.color.black_white),
-        )
+        )*/
 
         Button(
             shape = RoundedCornerShape(18.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.blackA1_white)
             ),
+            modifier = Modifier.padding(top = 24.dp),
             onClick = onClick
         ) {
             Text(
