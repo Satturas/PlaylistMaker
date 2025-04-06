@@ -32,6 +32,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.example.playlist_maker_dev.R
 import com.example.playlist_maker_dev.media.ui.media_root.MediaState
 import com.example.playlist_maker_dev.player.ui.AudioPlayerActivity
@@ -86,7 +88,6 @@ fun TrackList(
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        //verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(tracks.size) { track ->
             TrackItem(

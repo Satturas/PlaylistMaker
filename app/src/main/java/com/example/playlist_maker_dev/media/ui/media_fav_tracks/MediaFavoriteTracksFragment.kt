@@ -56,14 +56,16 @@ class MediaFavoriteTracksFragment : Fragment() {
 
         adapter.tracks = favouriteTracksList
         binding.rvFavTracks.adapter = adapter
-    }
+    }*/
 
     override fun onResume() {
         super.onResume()
         viewModel.fillData()
+
+
     }
 
-    override fun onDestroyView() {
+    /*override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }

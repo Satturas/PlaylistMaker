@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.os.bundleOf
 import androidx.fragment.compose.AndroidFragment
 import com.example.playlist_maker_dev.R
+import com.example.playlist_maker_dev.media.ui.new_playlist.CreatingPlaylistFragment
 import com.example.playlist_maker_dev.media.ui.playlist_screen.PlaylistScreenFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -49,7 +50,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun PlaylistsScreen(viewModel: PlaylistsViewModel = koinViewModel()) {
 
-    val isPlaylistsListVisible by viewModel.isPlaylistsListVisible.collectAsState()
+    //val isPlaylistsListVisible by viewModel.isPlaylistsListVisible.collectAsState()
     val playlistsState by viewModel.playlistsState.collectAsState()
     val isClickAllowed = remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
@@ -57,21 +58,21 @@ fun PlaylistsScreen(viewModel: PlaylistsViewModel = koinViewModel()) {
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(Modifier.height(dimensionResource(R.dimen.side_padding_24)))
 
-            AddingPlaylistButton {}
+            AddingPlaylistButton { }
 
             ShowPlaylists(
-                isPlaylistsListVisible,
+                playlistsState is PlaylistsState.FoundPlaylistsContent,
                 playlistsState = playlistsState,
                 isClickAllowed = isClickAllowed,
                 scope, context
             )
             ShowNoPlaylists(
-                !isPlaylistsListVisible
+                playlistsState is PlaylistsState.NoPlaylists
             )
         }
     }
@@ -171,6 +172,11 @@ fun ShowNoPlaylists(visible: Boolean) {
             color = colorResource(id = R.color.black_white),
         )
     }
+}
+
+@Composable
+fun Navigate() {
+    AndroidFragment(CreatingPlaylistFragment::class.java)
 }
 
 

@@ -13,7 +13,7 @@ class FavoriteTracksViewModel(
     private val favouritesInteractor: FavouritesInteractor
 ) : ViewModel() {
 
-    private val _mediaState = MutableStateFlow<MediaState>(MediaState.NothingInFavourite)
+    private val _mediaState = MutableStateFlow<MediaState>(MediaState.Default)
     val mediaState: StateFlow<MediaState> = _mediaState
 
     private val _isTrackListVisible = MutableStateFlow(false)
@@ -23,7 +23,7 @@ class FavoriteTracksViewModel(
         fillData()
     }
 
-    private fun fillData() {
+    fun fillData() {
         viewModelScope.launch {
             favouritesInteractor
                 .getFavouriteTracks()

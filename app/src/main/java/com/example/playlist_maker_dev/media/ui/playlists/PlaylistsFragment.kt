@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.playlist_maker_dev.R
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -24,8 +26,13 @@ class PlaylistsFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 PlaylistsScreen()
+                AddingPlaylistButton(onClick = {
+                    findNavController().navigate(R.id.creatingPlaylistFragment)
+                })
             }
         }
+
+
         //_binding = FragmentMediaPlaylistsBinding.inflate(inflater, container, false)
         //return binding.root
     }

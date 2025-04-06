@@ -2,9 +2,11 @@ package com.example.playlist_maker_dev.search.ui
 
 import android.content.Context
 import android.content.Intent
+import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -58,6 +61,7 @@ import com.example.playlist_maker_dev.search.ui.SearchFragment.Companion.AUDIO_P
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.internal.notifyAll
 
 
 @Composable
@@ -144,8 +148,9 @@ fun SearchField(
     viewModel: SearchViewModel,
     searchInputValue: MutableState<String>,
     hasFocus: MutableState<Boolean>,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     Box(
         modifier = Modifier,
         contentAlignment = Alignment.Center
@@ -176,7 +181,11 @@ fun SearchField(
                     .padding(start = 8.dp)
                     .weight(1f),
             )
-            ClearSearchButton(isVisible = searchInputValue.value.isNotEmpty(), onClick = onClick)
+            ClearSearchButton(isVisible = searchInputValue.value.isNotEmpty()) {
+                searchInputValue.value = ""
+                viewModel.showHistoryOfTracks()
+                keyboardController?.hide()
+            }
         }
     }
 }
@@ -270,6 +279,35 @@ fun SearchHistoryTitle(visible: Boolean) {
 }
 
 @Composable
+fun SearchHistoryClearButton(visible: Boolean, onClick: () -> Unit) {
+
+    if (!visible) return
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(
+            shape = RoundedCornerShape(18.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.blackA1_white)
+            ),
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .wrapContentSize(),
+            onClick = onClick,
+
+            ) {
+            Text(
+                text = stringResource(id = R.string.clear_search_history),
+                color = colorResource(id = R.color.white_light_black1A1)
+            )
+        }
+    }
+
+}
+
+@Composable
 fun ShowTracks(
     visible: Boolean,
     state: SearchState?,
@@ -322,7 +360,13 @@ fun ShowTracks(
 
             )
         }
+        item {
+            SearchHistoryClearButton(state is SearchState.SearchHistoryTracksContent) {
+                viewModel.clearHistory()
+            }
+        }
     }
+
 }
 
 @Composable
@@ -416,7 +460,6 @@ fun ShowNetworkError(visible: Boolean, onClick: () -> Unit) {
                 text = stringResource(id = R.string.reload),
                 color = colorResource(id = R.color.white_light_black1A1)
             )
-
         }
     }
 }

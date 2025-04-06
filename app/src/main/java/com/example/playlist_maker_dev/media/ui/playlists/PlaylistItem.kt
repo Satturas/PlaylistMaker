@@ -3,14 +3,14 @@ package com.example.playlist_maker_dev.media.ui.playlists
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -43,7 +43,7 @@ fun PlaylistItem(
             .fillMaxWidth()
             .wrapContentHeight()
             .combinedClickable(
-                onClick = {  },
+                onClick = { },
                 onLongClick = { onLongClick() }
             )
     ) {
@@ -57,7 +57,8 @@ fun PlaylistItem(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .clip(CircleShape)
+                .fillMaxWidth()
+                .aspectRatio(1F)
         )
         Text(
             text = playlist.name,
@@ -69,6 +70,7 @@ fun PlaylistItem(
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .sizeIn(0.dp, 16.dp, 160.dp, 16.dp)
+                .padding(top = 4.dp)
         )
         Text(
             text = playlist.tracksQuantity.toString(),
@@ -80,6 +82,7 @@ fun PlaylistItem(
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .sizeIn(0.dp, 16.dp, 160.dp, 16.dp)
+                .padding(top = 4.dp)
         )
     }
 }
