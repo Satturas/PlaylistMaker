@@ -218,6 +218,7 @@ class SearchFragment : Fragment() {
         adapter.notifyDataSetChanged()
     }
 
+
     private fun showNetworkError() {
         hideSearchHistory(true)
         binding.progressBar.visibility = View.GONE
