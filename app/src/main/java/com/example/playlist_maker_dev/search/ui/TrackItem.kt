@@ -77,7 +77,6 @@ fun TrackItem(
         ) {
             Text(
                 text = track.trackName,
-//style = LocalTypography.current.body16Regular400,
                 fontFamily = FontFamily(Font(R.font.ys_display_regular)),
                 fontWeight = FontWeight(400),
                 fontSize = 16.sp,

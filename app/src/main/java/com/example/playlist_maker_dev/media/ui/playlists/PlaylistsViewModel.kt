@@ -14,14 +14,11 @@ class PlaylistsViewModel(private val playlistsInteractor: PlaylistsInteractor) :
     private val _playlistsState = MutableStateFlow<PlaylistsState>(PlaylistsState.NoPlaylists)
     val playlistsState: StateFlow<PlaylistsState> = _playlistsState
 
-    private val _isPlaylistsListVisible = MutableStateFlow(false)
-    val isPlaylistsListVisible: StateFlow<Boolean> = _isPlaylistsListVisible
-
     init {
         showPlaylists()
     }
 
-    fun showPlaylists() {
+    private fun showPlaylists() {
         viewModelScope.launch(Dispatchers.IO) {
             playlistsInteractor.getPlaylists().collect { playlists ->
                 processResult(playlists)

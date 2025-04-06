@@ -1,6 +1,7 @@
 package com.example.playlist_maker_dev.media.ui.playlists
 
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +19,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,20 +37,18 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.bundleOf
-import androidx.fragment.compose.AndroidFragment
 import com.example.playlist_maker_dev.R
-import com.example.playlist_maker_dev.media.ui.new_playlist.CreatingPlaylistFragment
 import com.example.playlist_maker_dev.media.ui.playlist_screen.PlaylistScreenFragment
+import com.example.playlist_maker_dev.media.ui.playlists.PlaylistsFragment.Companion.PLAYLIST_ID_KEY
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun PlaylistsScreen(viewModel: PlaylistsViewModel = koinViewModel()) {
 
-    //val isPlaylistsListVisible by viewModel.isPlaylistsListVisible.collectAsState()
     val playlistsState by viewModel.playlistsState.collectAsState()
     val isClickAllowed = remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
@@ -122,13 +120,14 @@ fun ShowPlaylists(
                 onClick = {
                     if (isClickAllowed.value) {
                         isClickAllowed.value = false
-                        val args =
-                            bundleOf(PlaylistsFragment.PLAYLIST_ID_KEY to playlists[playlist].id)
-                        AndroidFragment(
-                            clazz = PlaylistScreenFragment::class.java,
-                            arguments = args
-                        )
-                        LaunchedEffect(Unit) {
+                        context.startActivity(
+                            Intent(
+                                context,
+                                PlaylistScreenFragment::class.java
+                            ).apply {
+                                putExtra(PLAYLIST_ID_KEY, playlists[playlist].id)
+                            })
+                        scope.launch {
                             delay(1000L)
                             isClickAllowed.value = true
                         }
@@ -174,10 +173,6 @@ fun ShowNoPlaylists(visible: Boolean) {
     }
 }
 
-@Composable
-fun Navigate() {
-    AndroidFragment(CreatingPlaylistFragment::class.java)
-}
 
 
 

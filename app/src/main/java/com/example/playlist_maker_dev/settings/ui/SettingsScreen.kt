@@ -23,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -157,6 +156,5 @@ fun SettingsButton(text: String, icon: Int, onClick: () -> Unit) {
             colorFilter = ColorFilter.tint(colorResource(id = R.color.greyAEA_white)),
             contentDescription = null
         )
-
     }
 }

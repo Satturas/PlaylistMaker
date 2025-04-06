@@ -2,7 +2,6 @@ package com.example.playlist_maker_dev.search.ui
 
 import android.content.Context
 import android.content.Intent
-import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -61,7 +60,6 @@ import com.example.playlist_maker_dev.search.ui.SearchFragment.Companion.AUDIO_P
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.internal.notifyAll
 
 
 @Composable
@@ -439,14 +437,6 @@ fun ShowNetworkError(visible: Boolean, onClick: () -> Unit) {
             color = colorResource(id = R.color.black_white),
             textAlign = TextAlign.Center
         )
-        /*Text(
-            text = stringResource(id = R.string.check_net),
-            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.side_padding_16)),
-            fontFamily = FontFamily(Font(R.font.ys_display_medium)),
-            fontWeight = FontWeight(400),
-            fontSize = 19.sp,
-            color = colorResource(id = R.color.black_white),
-        )*/
 
         Button(
             shape = RoundedCornerShape(18.dp),

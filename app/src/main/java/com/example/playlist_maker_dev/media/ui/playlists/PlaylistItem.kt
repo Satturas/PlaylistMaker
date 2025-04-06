@@ -33,7 +33,7 @@ import com.example.playlist_maker_dev.media.domain.models.Playlist
 @Composable
 fun PlaylistItem(
     playlist: Playlist,
-    onClick: @Composable () -> Unit,
+    onClick: () -> Unit,
     onLongClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
