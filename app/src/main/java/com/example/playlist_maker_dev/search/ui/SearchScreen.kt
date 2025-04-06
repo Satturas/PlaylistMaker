@@ -116,6 +116,8 @@ fun MyScaffold(
                     searchInputValue.value = ""
                 }
 
+                SearchHistoryTitle(searchState is SearchState.SearchHistoryTracksContent)
+
                 ShowTracks(
                     searchState is SearchState.FoundTracksContent || searchState is SearchState.SearchHistoryTracksContent,
                     searchState,
@@ -245,6 +247,25 @@ fun ClearSearchButton(isVisible: Boolean, onClick: () -> Unit) {
         painter = painterResource(id = R.drawable.delete_icon_vector),
         colorFilter = ColorFilter.tint(colorResource(R.color.greyAEA_black1A1)),
         contentDescription = null
+    )
+}
+
+@Composable
+fun SearchHistoryTitle(visible: Boolean) {
+
+    if (!visible) return
+
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 24.dp)
+            .padding(bottom = 16.dp),
+        text = stringResource(id = R.string.you_have_searched),
+        fontFamily = FontFamily(Font(R.font.ys_display_medium)),
+        fontWeight = FontWeight(500),
+        fontSize = 19.sp,
+        color = colorResource(id = R.color.black_white),
+        textAlign = TextAlign.Center
     )
 }
 

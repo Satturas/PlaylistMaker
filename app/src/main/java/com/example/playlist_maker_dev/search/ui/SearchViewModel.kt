@@ -15,7 +15,7 @@ class SearchViewModel(
     private val tracksInteractor: TracksInteractor
 ) : ViewModel() {
 
-    private val _searchState = MutableStateFlow<SearchState>(SearchState.Loading)
+    private val _searchState = MutableStateFlow<SearchState>(SearchState.Default)
     val searchState: StateFlow<SearchState> = _searchState
 
     private var latestSearchText: String? = null
