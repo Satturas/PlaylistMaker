@@ -28,7 +28,7 @@ class SettingsRepositoryImpl(
 
     override fun writeToSupport() {
         Intent().apply {
-            action = Intent.ACTION_SEND
+            action = Intent.ACTION_SENDTO
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, context.getString(R.string.user_email))
             putExtra(

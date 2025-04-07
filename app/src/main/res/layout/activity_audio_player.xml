@@ -381,7 +381,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/new_playlist"
             app:cornerRadius="18dp"
-            app:layout_constraintBottom_toTopOf="@id/top_border"
+            app:layout_constraintBottom_toTopOf="@id/toolbar_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
