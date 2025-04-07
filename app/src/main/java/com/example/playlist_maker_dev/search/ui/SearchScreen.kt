@@ -78,7 +78,7 @@ fun SearchScreen(viewModel: SearchViewModel = viewModel()) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyScaffold(
+private fun MyScaffold(
     viewModel: SearchViewModel,
     searchInputValue: MutableState<String>,
     hasFocus: MutableState<Boolean>,
@@ -144,7 +144,7 @@ fun MyScaffold(
 }
 
 @Composable
-fun SearchField(
+private fun SearchField(
     viewModel: SearchViewModel,
     searchInputValue: MutableState<String>,
     hasFocus: MutableState<Boolean>,
@@ -157,7 +157,7 @@ fun SearchField(
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = dimensionResource(id = R.dimen.padding_16))
                 .padding(vertical = 8.dp)
                 .height(36.dp)
                 .fillMaxWidth()
@@ -191,7 +191,7 @@ fun SearchField(
 }
 
 @Composable
-fun SearchTextField(
+private fun SearchTextField(
     viewModel: SearchViewModel,
     searchInputValue: MutableState<String>,
     hasFocus: MutableState<Boolean>,
@@ -245,7 +245,7 @@ fun SearchTextField(
 }
 
 @Composable
-fun ClearSearchButton(isVisible: Boolean, onClick: () -> Unit) {
+private fun ClearSearchButton(isVisible: Boolean, onClick: () -> Unit) {
 
     if (!isVisible) return
 
@@ -262,7 +262,7 @@ fun ClearSearchButton(isVisible: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun SearchHistoryTitle(visible: Boolean) {
+private fun SearchHistoryTitle(visible: Boolean) {
 
     if (!visible) return
 
@@ -270,7 +270,7 @@ fun SearchHistoryTitle(visible: Boolean) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 24.dp)
-            .padding(bottom = 16.dp),
+            .padding(bottom = dimensionResource(id = R.dimen.padding_16)),
         text = stringResource(id = R.string.you_have_searched),
         fontFamily = FontFamily(Font(R.font.ys_display_medium)),
         fontWeight = FontWeight(500),
@@ -281,7 +281,7 @@ fun SearchHistoryTitle(visible: Boolean) {
 }
 
 @Composable
-fun SearchHistoryClearButton(visible: Boolean, onClick: () -> Unit) {
+private fun SearchHistoryClearButton(visible: Boolean, onClick: () -> Unit) {
 
     if (!visible) return
     Column(
@@ -310,7 +310,7 @@ fun SearchHistoryClearButton(visible: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun ShowTracks(
+private fun ShowTracks(
     visible: Boolean,
     state: SearchState?,
     viewModel: SearchViewModel,
@@ -372,7 +372,7 @@ fun ShowTracks(
 }
 
 @Composable
-fun ShowLoading(visible: Boolean) {
+private fun ShowLoading(visible: Boolean) {
 
     if (!visible) return
 
@@ -390,7 +390,7 @@ fun ShowLoading(visible: Boolean) {
 }
 
 @Composable
-fun ShowNothingFound(visible: Boolean, text: String) {
+private fun ShowNothingFound(visible: Boolean, text: String) {
 
     if (!visible) return
 
@@ -417,7 +417,7 @@ fun ShowNothingFound(visible: Boolean, text: String) {
 }
 
 @Composable
-fun ShowNetworkError(visible: Boolean, onClick: () -> Unit) {
+private fun ShowNetworkError(visible: Boolean, onClick: () -> Unit) {
 
     if (!visible) return
 

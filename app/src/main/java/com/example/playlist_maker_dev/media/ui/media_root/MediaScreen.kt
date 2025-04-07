@@ -18,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -52,7 +53,7 @@ fun MediaScreen(navController: NavController) {
                     modifier = Modifier
                         .tabIndicatorOffset(tabs[selectedTabIndex])
                         .height(2.dp)
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = dimensionResource(id = R.dimen.padding_16))
                         .fillMaxSize()
                         .background(colorResource(id = R.color.blackA1_white))
                 )

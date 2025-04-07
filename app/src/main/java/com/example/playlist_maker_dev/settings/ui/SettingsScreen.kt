@@ -48,7 +48,7 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyScaffold(viewModel: SettingsViewModel, isDarkThemeEnabled: MutableState<Boolean>) {
+private fun MyScaffold(viewModel: SettingsViewModel, isDarkThemeEnabled: MutableState<Boolean>) {
     Scaffold(
         containerColor = colorResource(id = R.color.white_light_black1A1),
         topBar = {
@@ -98,7 +98,7 @@ fun MyScaffold(viewModel: SettingsViewModel, isDarkThemeEnabled: MutableState<Bo
 }
 
 @Composable
-fun SwitchTheme(viewModel: SettingsViewModel, isDarkThemeEnabled: MutableState<Boolean>) {
+private fun SwitchTheme(viewModel: SettingsViewModel, isDarkThemeEnabled: MutableState<Boolean>) {
     Row(
         modifier = Modifier
             .height(61.dp)
@@ -132,7 +132,7 @@ fun SwitchTheme(viewModel: SettingsViewModel, isDarkThemeEnabled: MutableState<B
 }
 
 @Composable
-fun SettingsButton(text: String, icon: Int, onClick: () -> Unit) {
+private fun SettingsButton(text: String, icon: Int, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .height(61.dp)

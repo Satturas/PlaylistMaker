@@ -73,7 +73,7 @@ fun MediaFavoriteTracksScreen(viewModel: FavoriteTracksViewModel = koinViewModel
 }
 
 @Composable
-fun TrackList(
+private fun TrackList(
     visible: Boolean,
     mediaState: MediaState,
     isClickAllowed: MutableState<Boolean>,
@@ -114,7 +114,7 @@ fun TrackList(
 }
 
 @Composable
-fun ShowNothingInFavorite(visible: Boolean, text: String) {
+private fun ShowNothingInFavorite(visible: Boolean, text: String) {
 
     if (!visible) return
 

@@ -81,7 +81,7 @@ fun PlaylistsScreen(navController: NavController, viewModel: PlaylistsViewModel 
 }
 
 @Composable
-fun AddingPlaylistButton(
+private fun AddingPlaylistButton(
     onClick: () -> Unit
 ) {
     Button(
@@ -99,7 +99,7 @@ fun AddingPlaylistButton(
 }
 
 @Composable
-fun ShowPlaylists(
+private fun ShowPlaylists(
     visible: Boolean,
     playlistsState: PlaylistsState,
     isClickAllowed: MutableState<Boolean>,
@@ -114,9 +114,9 @@ fun ShowPlaylists(
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(dimensionResource(id = R.dimen.padding_16)),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_16))
     ) {
         items(playlists.size) { playlist ->
             PlaylistItem(
@@ -141,7 +141,7 @@ fun ShowPlaylists(
 
 
 @Composable
-fun ShowNoPlaylists(visible: Boolean) {
+private fun ShowNoPlaylists(visible: Boolean) {
 
     if (!visible) return
 

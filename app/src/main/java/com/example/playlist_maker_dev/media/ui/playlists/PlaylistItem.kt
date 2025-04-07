@@ -60,29 +60,23 @@ fun PlaylistItem(
                 .fillMaxWidth()
                 .aspectRatio(1F)
         )
-        Text(
-            text = playlist.name,
-            fontFamily = FontFamily(Font(R.font.ys_display_regular)),
-            fontWeight = FontWeight(400),
-            fontSize = 12.sp,
-            color = colorResource(id = R.color.blackA1_white),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .sizeIn(0.dp, 16.dp, 160.dp, 16.dp)
-                .padding(top = 4.dp)
-        )
-        Text(
-            text = playlist.tracksQuantity.toString(),
-            fontFamily = FontFamily(Font(R.font.ys_display_regular)),
-            fontWeight = FontWeight(400),
-            fontSize = 12.sp,
-            color = colorResource(id = R.color.blackA1_white),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .sizeIn(0.dp, 16.dp, 160.dp, 16.dp)
-                .padding(top = 4.dp)
-        )
+        PlaylistDescriprionText(playlist.name)
+        PlaylistDescriprionText(playlist.tracksQuantity.toString())
     }
+}
+
+@Composable
+fun PlaylistDescriprionText(text: String) {
+    Text(
+        text = text,
+        fontFamily = FontFamily(Font(R.font.ys_display_regular)),
+        fontWeight = FontWeight(400),
+        fontSize = 12.sp,
+        color = colorResource(id = R.color.blackA1_white),
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier
+            .sizeIn(0.dp, 16.dp, 160.dp, 16.dp)
+            .padding(top = 4.dp)
+    )
 }
