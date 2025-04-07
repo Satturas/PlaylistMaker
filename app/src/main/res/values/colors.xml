@@ -20,5 +20,10 @@
     <color name="button_disabled">#AEAFB4</color>
     <color name="playlist_background">#E6E8EB</color>
     <color name="playlist_titles">#1A1B22</color>
-
+    <color name="black_white">#FF000000</color>
+    <color name="greyAEA_white">#AEAFB4</color>
+    <color name="white_light_black1A1">#FFFFFFFF</color>
+    <color name="blackA1_white">#FF000000</color>
+    <color name="search_field_background">#E6E8EB</color>
+    <color name="greyAEA_black1A1">#AEAFB4</color>
 </resources>
