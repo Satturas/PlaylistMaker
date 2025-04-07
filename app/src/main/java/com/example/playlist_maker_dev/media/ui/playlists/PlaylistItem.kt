@@ -61,7 +61,7 @@ fun PlaylistItem(
                 .aspectRatio(1F)
         )
         PlaylistDescriprionText(playlist.name)
-        PlaylistDescriprionText(playlist.tracksQuantity.toString())
+        PlaylistDescriprionText("${playlist.tracksQuantity.toString()} треков")
     }
 }
 
